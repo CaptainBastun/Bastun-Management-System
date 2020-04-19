@@ -6,9 +6,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class AircraftCabin
+    public abstract class AircraftCabin
     {
-        public AircraftCabin()
+        protected AircraftCabin()
         {
             this.Passengers = new List<Passenger>();
         }
@@ -31,6 +31,8 @@
         public int ZoneCharlieCapacity { get; set; }
 
         public int ZoneDeltaCapacity { get; set; }
+
+        protected abstract void SetCabinData();
 
     }
 }

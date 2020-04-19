@@ -13,15 +13,13 @@
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IFlightService _flightsService;
-        private readonly IAircraftCabinService _cabinService;
-        private readonly IAircraftBaggageHoldService _baggageHoldService;
+        private readonly IAircraftCabinBaggageHoldService _cabinBaggageHoldService;
 
-        public AircraftService(ApplicationDbContext dbContext,IFlightService flightsService, IAircraftCabinService cabinService, IAircraftBaggageHoldService baggageHoldService)
+        public AircraftService(ApplicationDbContext dbContext,IFlightService flightsService,IAircraftCabinBaggageHoldService cabinBaggageHoldService)
         {
             _dbContext = dbContext;
             _flightsService = flightsService;
-            _cabinService = cabinService;
-            _baggageHoldService = baggageHoldService;
+            _cabinBaggageHoldService = cabinBaggageHoldService;
         }
 
         public bool CheckAircraftRegistration(string registration)
@@ -38,42 +36,21 @@
         {
             var outboundFlightToRegisterAircraftTo = await _flightsService.GetOutboundFlightByFlightNumber(aircraftInputModel.FlightNumber);
             bool isContainerized = IsAircraftGoingToBeContainerized(aircraftInputModel.Type.ToString());
-
-            if (outboundFlightToRegisterAircraftTo != null)
-            {
-                var newAircraft = new Aircraft
-                {
-                    AircraftRegistration = aircraftInputModel.AircraftRegistration,
-                    Version = aircraftInputModel.Version,
-                    Type = aircraftInputModel.Type,
-                    OutboundFlightId = outboundFlightToRegisterAircraftTo.FlightId,
-                };
-
-                newAircraft.IsAicraftContainerized = this.IsAircraftGoingToBeContainerized(newAircraft.Type.ToString());
-                this._dbContext.Aircraft.Add(newAircraft);
-                this._dbContext.SaveChanges();
-
-                this.AddCabinAndBaggageHoldToAircraft(aircraftInputModel.AircraftRegistration);
-            }
+     
         }
-
 
         public Aircraft GetAicraftByRegistration(string registration)
         {
             return _dbContext.Aircraft.FirstOrDefault(ac => ac.AircraftRegistration == registration);
         }
 
-       
-        private void AddCabinAndBaggageHoldToAircraft(string registration)
+        private async Task AddCabinToAircraft(string registration)
         {
-            var aircraft = this.GetAicraftByRegistration(registration);
+            var aircraft = GetAicraftByRegistration(registration);
 
-            var cabin  = this._cabinService.AddCabinToAircraft(aircraft);
-            var baggageHold = this._baggageHoldService.AddBaggageHoldToAircraft(aircraft);
+            await _cabinBaggageHoldService.AddCabinAndBaggageHoldToAircraft(aircraft);
 
-            aircraft.Cabin = cabin;
-            aircraft.BaggageHold = baggageHold;
-            this._dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
         }
 
         public string IsAircraftOfACertainType(OutboundFlight flight)
