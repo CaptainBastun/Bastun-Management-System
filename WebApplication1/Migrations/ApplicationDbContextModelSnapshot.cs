@@ -127,12 +127,18 @@ namespace BMS.Migrations
                     b.Property<int>("CompartmentTwoTotalWeight")
                         .HasColumnType("int");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("BaggageHoldId");
 
                     b.HasIndex("AircraftId")
                         .IsUnique();
 
-                    b.ToTable("AircraftBaggageHolds");
+                    b.ToTable("AircraftBaggageHold");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AircraftBaggageHold");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.AircraftCabin", b =>
@@ -144,6 +150,10 @@ namespace BMS.Migrations
 
                     b.Property<int>("AircraftId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ZoneAlphaCapacity")
                         .HasColumnType("int");
@@ -163,6 +173,8 @@ namespace BMS.Migrations
                         .IsUnique();
 
                     b.ToTable("AircraftCabins");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AircraftCabin");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.ArrivalMovement", b =>
@@ -732,6 +744,76 @@ namespace BMS.Migrations
                     b.HasDiscriminator().HasValue("ContainerLoadingInstruction");
                 });
 
+            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHold738", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+
+                    b.HasDiscriminator().HasValue("BaggageHold738");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHold752", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+
+                    b.HasDiscriminator().HasValue("BaggageHold752");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHold763", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+
+                    b.HasDiscriminator().HasValue("BaggageHold763");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHold788", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+
+                    b.HasDiscriminator().HasValue("BaggageHold788");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHoldA320", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+
+                    b.HasDiscriminator().HasValue("BaggageHoldA320");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin320", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
+
+                    b.HasDiscriminator().HasValue("Cabin320");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin738", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
+
+                    b.HasDiscriminator().HasValue("Cabin738");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin752", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
+
+                    b.HasDiscriminator().HasValue("Cabin752");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin763", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
+
+                    b.HasDiscriminator().HasValue("Cabin763");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin788", b =>
+                {
+                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
+
+                    b.HasDiscriminator().HasValue("Cabin788");
+                });
+
             modelBuilder.Entity("BMS.Data.Models.InboundFlight", b =>
                 {
                     b.HasBaseType("BMS.Data.Models.Flights.Flight");
@@ -860,7 +942,7 @@ namespace BMS.Migrations
                     b.HasOne("BMS.Data.Models.Aircraft", "Aircraft")
                         .WithOne("BaggageHold")
                         .HasForeignKey("BMS.Data.Models.AircraftBaggageHold", "AircraftId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -869,7 +951,7 @@ namespace BMS.Migrations
                     b.HasOne("BMS.Data.Models.Aircraft", "Aircraft")
                         .WithOne("Cabin")
                         .HasForeignKey("BMS.Data.Models.AircraftCabin", "AircraftId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -923,7 +1005,7 @@ namespace BMS.Migrations
                     b.HasOne("BMS.Data.Models.Aircraft", "Aircraft")
                         .WithOne("FuelForm")
                         .HasForeignKey("BMS.Data.Models.FuelForm", "AircraftId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -961,7 +1043,7 @@ namespace BMS.Migrations
                     b.HasOne("BMS.Data.Models.Aircraft", "Aircraft")
                         .WithOne("WeightForm")
                         .HasForeignKey("BMS.Data.WeightForm", "AircraftId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

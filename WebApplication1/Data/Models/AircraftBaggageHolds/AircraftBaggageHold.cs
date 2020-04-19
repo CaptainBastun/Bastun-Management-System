@@ -5,7 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Threading.Tasks;
-    public class AircraftBaggageHold
+    public abstract class AircraftBaggageHold
     {
         [Key]
         public int BaggageHoldId { get; set; }
@@ -36,5 +36,7 @@
         public int CompartmentFiveCapacity { get; set; }
 
         public int CompartmentFiveTotalWeight { get; set; }
+
+        protected abstract void SetHoldData();
     }
 }

@@ -18,23 +18,23 @@
             builder.HasOne(x => x.FuelForm)
                .WithOne(x => x.Aircraft)
                .HasForeignKey<FuelForm>(x => x.AircraftId)
-               .OnDelete(DeleteBehavior.Restrict);
+               .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.WeightForm)
                 .WithOne(x => x.Aircraft)
                 .HasForeignKey<WeightForm>(x => x.AircraftId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(x => x.Cabin)
                 .WithOne(x => x.Aircraft)
                 .HasForeignKey<AircraftCabin>(x => x.AircraftId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             builder.HasOne(x => x.BaggageHold)
                 .WithOne(x => x.Aircraft)
                 .HasForeignKey<AircraftBaggageHold>(x => x.AircraftId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

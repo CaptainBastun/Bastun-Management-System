@@ -54,8 +54,8 @@
                     OutboundFlightId = outbound.FlightId
                 };
                 listOfContainers.Add(container);
-                this.dbContext.Containers.Add(container);
-                this.dbContext.SaveChanges();
+                _dbContext.Containers.Add(container);
+                _dbContext.SaveChanges();
             }
 
             return listOfContainers;
@@ -68,7 +68,32 @@
 
         public List<ContainerInfo> CreateContainerInfo(string[] splitMessage, List<Container> containers)
         {
-            throw new NotImplementedException();
+            var listOfContainerInfo = new List<ContainerInfo>();
+            int index = 0;
+
+            for (int i = 2; i < splitMessage.Length - 1; i++)
+            {
+                string currContainerInfo = splitMessage[i];
+                string[] splitDataForCurrContainer =
+                    currContainerInfo.Split(new string[] { "/", "-" }, StringSplitOptions.RemoveEmptyEntries);
+
+                var currentContainer = containers[index];
+                var currentContainerInfo = new ContainerInfo
+                {
+                    ContainerPosition = splitDataForCurrContainer[0],
+                    ContainerNumberAndType = splitDataForCurrContainer[1],
+                    ContainerTotalWeight = int.Parse(splitDataForCurrContainer[2]),
+                    ContainerId = currentContainer.ContainerId,
+                    Container = currentContainer
+                };
+                listOfContainerInfo.Add(currentContainerInfo);
+
+                _dbContext.ContainerInfos.Add(currentContainerInfo);
+                _dbContext.SaveChanges();
+                index++;
+            }
+
+            return listOfContainerInfo;
         }
 
         public string GetCorrectLoadingInstruction(string aircraftType)

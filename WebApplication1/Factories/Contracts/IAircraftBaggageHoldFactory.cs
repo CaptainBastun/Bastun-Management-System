@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace BMS.Factories.Contracts
+﻿namespace BMS.Factories.Contracts
 {
-    interface IAircraftBaggageHoldFactory
+    using BMS.Data.Models;
+
+    public interface IAircraftBaggageHoldFactory
     {
+        AircraftBaggageHold CreateBaggageHold(string aircraftType);
     }
 }
