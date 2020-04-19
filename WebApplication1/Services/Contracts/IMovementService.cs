@@ -1,5 +1,6 @@
 ﻿namespace BMS.Services.Contracts
 {
+    using BMS.Data.DTO.MovementsDTO;
     using BMS.Data.Models;
     using System;
     using System.Collections.Generic;
@@ -8,12 +9,12 @@
 
     public interface IMovementService
     {
-        void CreateArrivalMovement(DateTime[] dates, string supplementaryInformation, InboundFlight inboundFlight);
+        Task CreateArrivalMovement(ArrivalMovementDTO movementDTO, InboundFlight inbound);
 
-        void CreateDepartureMovement(DateTime[] dates, string supplementaryInformation, int totalPax, OutboundFlight outboundFlight);
+        Task CreateDepartureMovement(DepartureMovementDTO movementDTO, OutboundFlight outbound);
 
-        ArrivalMovement GetArrivalMovementByFlightNumber(string flightNumber);
+        Task<ArrivalMovement> GetArrivalMovementByFlightNumber(string flightNumber);
 
-        DepartureMovement GetDepartureMovementByFlightNumber(string flightNumber);
+        Task<DepartureMovement> GetDepartureMovementByFlightNumber(string flightNumber);
     }
 }

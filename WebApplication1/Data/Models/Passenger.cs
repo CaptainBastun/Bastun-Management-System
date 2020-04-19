@@ -3,12 +3,10 @@
     using BMS.Data.Models.Contracts;
     using BMS.Data.Models.Enums;
     using BMS.GlobalData.ErrorMessages;
-    using BMS.GlobalData.Validation;
+    using BMS.GlobalData.PAXConstants;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class Passenger : IPassenger
     {
@@ -34,7 +32,7 @@
         public int Age { get; set; }
 
         [Required(ErrorMessage = InvalidPAXErrorMessages.PAXGenderIsRequired)]
-        [RegularExpression(PAXInputDataValidation.PAXGenderValidation, ErrorMessage = InvalidPAXErrorMessages.PAXGenderIsInvalid)]
+        [RegularExpression(PAXInputValidation.PAXGenderValidation, ErrorMessage = InvalidPAXErrorMessages.PAXGenderIsInvalid)]
         public Gender Gender { get; set; }
 
         public PAXWeight Weight { get; set; }

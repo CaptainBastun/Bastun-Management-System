@@ -13,13 +13,13 @@ namespace BMS.Controllers
     [Authorize]
     public class FlightsController : Controller
     {
-        private readonly IFlightService flightService;
-        private readonly IAircraftService aircraftService;
+        private readonly IFlightService _flightService;
+        private readonly IAircraftService _aircraftService;
 
         public FlightsController(IFlightService flightService, IAircraftService aircraftService)
         {
-            this.flightService = flightService;
-            this.aircraftService = aircraftService;
+            _flightService = flightService;
+            _aircraftService = aircraftService;
         }
 
         [HttpGet]
@@ -30,18 +30,14 @@ namespace BMS.Controllers
 
 
         [HttpPost]
-        public IActionResult RegisterFlight(FlightInputModel flightInputModel)
+        public async Task<IActionResult> RegisterFlight(FlightInputModel flightInputModel)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                this.flightService.RegisterInboundFlight(flightInputModel);
-                this.flightService.RegisterOutboundFlight(flightInputModel);
-                return this.RedirectToAction("RegisterAircraft");
-            } 
-            else
-            {
-                return this.View(flightInputModel);
+                await _flightService.CreateFlights(flightInputModel);
             }
+
+            return View();
         }
 
         [HttpGet]
@@ -53,15 +49,13 @@ namespace BMS.Controllers
         [HttpPost]
         public IActionResult RegisterAircraft(AircraftInputModel aircraftInputModel)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                this.aircraftService.RegisterAircraft(aircraftInputModel);
-                return this.RedirectToAction("Arrival", "Movements");
+                _aircraftService.RegisterAircraft(aircraftInputModel);
+                return RedirectToAction("DetermineCorrectLoadingInstruction", "Operations");
             }
-            else
-            {
-                return this.View(aircraftInputModel);
-            }
+
+            return View();
         }
 
        

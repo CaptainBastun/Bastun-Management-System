@@ -14,96 +14,62 @@
 
     public class FlightsService : IFlightService
     {
-        private readonly ApplicationDbContext dbContext;
-        public FlightsService(ApplicationDbContext dbContext)
+        private readonly ApplicationDbContext _DbContext;
+        private readonly IMapper _mapper;
+
+        public FlightsService(ApplicationDbContext dbContext, IMapper mapper)
         {
-        
-            this.dbContext = dbContext;
+            _DbContext = dbContext;
+            _mapper = mapper;
         }
 
 
 
         public bool CheckIfFlightIsInbound(string flightNumber)
         {
-            return this.dbContext.InboundFlights.Any(x => x.FlightNumber == flightNumber);
+            return _DbContext.InboundFlights.Any(x => x.FlightNumber == flightNumber);
         }
 
         public bool CheckIfFlightIsOutbound(string flightNumber)
         {
-            return this.dbContext.OutboundFlights.Any(x => x.FlightNumber == flightNumber);
+            return _DbContext.OutboundFlights.Any(x => x.FlightNumber == flightNumber);
         }
 
         public void GetAllFlights()
         {
-            throw new NotImplementedException();
+           
         }
 
-        public InboundFlight GetInboundFlightByFlightNumber(string inboundFlightNumber)
+        public async Task<InboundFlight> GetInboundFlightByFlightNumber(string inboundFlightNumber)
         {
-            var inboundFlightToReturn = this.dbContext.InboundFlights.FirstOrDefault(x => x.FlightNumber == inboundFlightNumber);
-
-            if (inboundFlightToReturn != null)
-            {
-                return inboundFlightToReturn;
-            }
-            else
-            {
-                return null;
-            }
+            return await _DbContext.InboundFlights.FirstOrDefaultAsync(x => x.FlightNumber == inboundFlightNumber);
         }
 
-        public OutboundFlight GetOutboundFlightByFlightNumber(string outboundFlightNumber)
+        public async Task<OutboundFlight> GetOutboundFlightByFlightNumber(string outboundFlightNumber)
         {
-            var outboundFlightToReturn = this.dbContext.OutboundFlights.FirstOrDefault(x => x.FlightNumber == outboundFlightNumber);
-
-            if (outboundFlightToReturn != null)
-            {
-                return outboundFlightToReturn;
-            }
-            else
-            {
-                return null;
-            }
+            return await _DbContext.OutboundFlights.FirstOrDefaultAsync(obF => obF.FlightNumber == outboundFlightNumber);
         }
 
-        public void RegisterInboundFlight(FlightInputModel inboundFlightInputModel)
+        public async Task CreateFlights(FlightInputModel flightInputModel)
         {
             string[] splitFlightNumbers =
-                inboundFlightInputModel
+                flightInputModel
                 .FlightNumber
                 .Split("/", StringSplitOptions.RemoveEmptyEntries);
 
             string inboundFlightNumber = splitFlightNumbers[0];
-            var newInboundFlight = new InboundFlight
-            {
-                FlightNumber = inboundFlightNumber,
-                Origin = inboundFlightInputModel.Origin,
-                STA = inboundFlightInputModel.STA,
-            };
-            this.dbContext.InboundFlights.Add(newInboundFlight);
-            this.dbContext.SaveChanges();
-        }
-
-        public void RegisterOutboundFlight(FlightInputModel outboundFlightInputModel)
-        {
-            string[] splitFlightNumbers =
-                outboundFlightInputModel
-                .FlightNumber
-                .Split("/", StringSplitOptions.RemoveEmptyEntries);
-
             string outboundFlightNumber = splitFlightNumbers[1];
 
-            var newOutboundFlight = new OutboundFlight
-            {
-                FlightNumber = outboundFlightNumber,
-                HandlingStation = outboundFlightInputModel.HandlingStation,
-                BookedPAX = outboundFlightInputModel.BookedPax,
-                STD = outboundFlightInputModel.STD,
-                Destination = outboundFlightInputModel.Destination
-            };
+            var newInboundFlight = _mapper.Map<InboundFlight>(flightInputModel);
+            var newOutboundFlight = _mapper.Map<OutboundFlight>(flightInputModel);
 
-            this.dbContext.OutboundFlights.Add(newOutboundFlight);
-            this.dbContext.SaveChanges();
+            newInboundFlight.FlightNumber = inboundFlightNumber;
+            newOutboundFlight.FlightNumber = outboundFlightNumber;
+
+            _DbContext.InboundFlights.Add(newInboundFlight);
+            _DbContext.OutboundFlights.Add(newOutboundFlight);
+            await _DbContext.SaveChangesAsync();
         }
-    }
+
+    } 
 }

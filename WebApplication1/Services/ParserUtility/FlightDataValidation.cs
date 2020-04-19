@@ -55,40 +55,40 @@
 
         private bool IsDateAndStationValid(string flightNumber,string date, string station)
         {
-            bool isFlightInbound = this.flightService.CheckIfFlightIsInbound(flightNumber);
-            bool isFlightOutbound = this.flightService.CheckIfFlightIsOutbound(flightNumber);
+            //bool isFlightInbound = this.flightService.CheckIfFlightIsInbound(flightNumber);
+            //bool isFlightOutbound = this.flightService.CheckIfFlightIsOutbound(flightNumber);
 
-            if (isFlightInbound)
-            {
-                var inboundFlightByFlightNumber = this.flightService.GetInboundFlightByFlightNumber(flightNumber);
+            //if (isFlightInbound)
+            //{
+            //    var inboundFlightByFlightNumber = this.flightService.GetInboundFlightByFlightNumber(flightNumber);
 
-                if (inboundFlightByFlightNumber != null)
-                {
-                    if (inboundFlightByFlightNumber.STA.Day.ToString() != date || inboundFlightByFlightNumber.Origin != station)
-                    {
-                        return false;
-                    } 
-                    else
-                    {
-                        return true;
-                    }
-                }
-            } 
-            else if(isFlightInbound)
-            {
-                var outboundFlightByFlightNumber = this.flightService.GetOutboundFlightByFlightNumber(flightNumber);
-                if (outboundFlightByFlightNumber != null)
-                {
-                    if (outboundFlightByFlightNumber.STD.Day.ToString() != date || outboundFlightByFlightNumber.Destination != station)
-                    {
-                        return false;
-                    } 
-                    else
-                    {
-                        return true;
-                    }
-                }
-            }
+            //    if (inboundFlightByFlightNumber != null)
+            //    {
+            //        if (inboundFlightByFlightNumber.STA.Day.ToString() != date || inboundFlightByFlightNumber.Origin != station)
+            //        {
+            //            return false;
+            //        } 
+            //        else
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //} 
+            //else if(isFlightInbound)
+            //{
+            //    var outboundFlightByFlightNumber = this.flightService.GetOutboundFlightByFlightNumber(flightNumber);
+            //    if (outboundFlightByFlightNumber != null)
+            //    {
+            //        if (outboundFlightByFlightNumber.STD.Day.ToString() != date || outboundFlightByFlightNumber.Destination != station)
+            //        {
+            //            return false;
+            //        } 
+            //        else
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //}
 
             return true;
         }

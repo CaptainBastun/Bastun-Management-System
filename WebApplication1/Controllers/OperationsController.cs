@@ -38,9 +38,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult DetermineCorrectLoadingInstruction(string flightNumber)
+        public async Task<IActionResult> DetermineCorrectLoadingInstruction(string flightNumber)
         {
-            var flight = this.flightService.GetOutboundFlightByFlightNumber(flightNumber);
+            var flight = await this.flightService.GetOutboundFlightByFlightNumber(flightNumber);
             string type = this.aircraftService.IsAircraftOfACertainType(flight);
             string correctLoadingInstruction = this.loadControlService.GetCorrectLoadingInstruction(type);
 

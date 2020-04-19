@@ -1,7 +1,6 @@
 ﻿namespace BMS.Services
 {
     using BMS.Data.Models;
-    using BMS.GlobalData.Validation;
     using BMS.Models.MovementsInputModels;
     using BMS.Services.Contracts;
     using System;
@@ -20,13 +19,14 @@
 
     public class MessageParser : IMessageParser
     {
-        private readonly IMovementService movementService;
-        private readonly IMessageService messageService;
-        private readonly IFlightDataValidation flightDataValidation;
-        private readonly IFlightService flightService;
+        private readonly IMovementService _movementService;
+        private readonly IMessageService _messageService;
+        private readonly IFlightDataValidation _flightDataValidation;
+        private readonly IFlightService _flightsService;
         private readonly IContainerService containerService;
-        private readonly IParserMovementUtility parserMovementUtility;
-        private readonly IParserCPMUtility parserCPMUtility;
+        private readonly IParserMovementUtility _parserMovementUtility;
+        private readonly IParserCPMUtility _parserCPMUtility;
+        private readonly ILoadControlService _loadControlService;
         private readonly Regex regex = new Regex("maika ti");
         private readonly Regex ldmFlightInfoRegex = new Regex(FlightInfoConstants.IsLDMFlightInfoValid);
         private readonly Regex loadDistributionRegex = new Regex(FlightInfoConstants.IsLDMLoadInfoValid);
@@ -36,15 +36,16 @@
         //TODO: Refactor this
         public MessageParser(IMovementService movementService, IMessageService messageService, IFlightDataValidation flightDataValidation, 
             IFlightService flightService,
-            IContainerService containerService,IParserMovementUtility parserMovementUtility,IParserCPMUtility parserCPMUtility)
+            IContainerService containerService, IParserMovementUtility parserMovementUtility, IParserCPMUtility parserCPMUtility, ILoadControlService loadControlService)
         {
-            this.movementService = movementService;
-            this.messageService = messageService;
-            this.flightDataValidation = flightDataValidation;
-            this.flightService = flightService;
+            this._movementService = movementService;
+            this._messageService = messageService;
+            this._flightDataValidation = flightDataValidation;
+            this._flightsService = flightService;
             this.containerService = containerService;
-            this.parserMovementUtility = parserMovementUtility;
-            this.parserCPMUtility = parserCPMUtility;
+            this._parserMovementUtility = parserMovementUtility;
+            this._parserCPMUtility = parserCPMUtility;
+            this._loadControlService = loadControlService;
         }
 
         public bool ParseArrivalMovement(string messageContent)
@@ -52,20 +53,22 @@
             string[] splitMessage =
                 messageContent.Split("\r\n", StringSplitOptions.None);
 
-            if (this.flightDataValidation.IsArrivalMovementFlightDataValid(splitMessage))
+            if (this._flightDataValidation.IsArrivalMovementFlightDataValid(splitMessage))
             {
-                string[] flightData = this.parserMovementUtility.GetMovementFlightData(splitMessage[1]); 
-                var inboundFlightByFlightNumber = this.flightService.GetInboundFlightByFlightNumber(flightData[0]);
-                string[] arrivalMovementTimes = this.parserMovementUtility.GetTimes(splitMessage[2]); 
-                DateTime[] validMovementTime = this.parserMovementUtility.ParseMovementTimes(arrivalMovementTimes, inboundFlightByFlightNumber);
-                string supplementaryInformation = this.ParseSupplementaryInformation(splitMessage[3]);
-                this.movementService.CreateArrivalMovement(validMovementTime, supplementaryInformation, inboundFlightByFlightNumber);
-                return true; 
+                //string[] flightData = this.parserMovementUtility.GetMovementFlightData(splitMessage[1]); 
+                //var inboundFlightByFlightNumber = this.flightService.GetInboundFlightByFlightNumber(flightData[0]);
+                //string[] arrivalMovementTimes = this.parserMovementUtility.GetTimes(splitMessage[2]); 
+                //DateTime[] validMovementTime = this.parserMovementUtility.ParseMovementTimes(arrivalMovementTimes, inboundFlightByFlightNumber);
+                //string supplementaryInformation = this.ParseSupplementaryInformation(splitMessage[3]);
+                //this.movementService.CreateArrivalMovement(validMovementTime, supplementaryInformation, inboundFlightByFlightNumber);
+                //return true; 
             } 
             else
             {
                 return false;
             }
+
+            return true;
         }
 
         public bool ParseInboundCPM(string messageContent)
@@ -76,15 +79,15 @@
                 messageContent
                 .Split("\r\n", StringSplitOptions.None);
 
-            if (this.flightDataValidation.IsCPMFlightDataValid(splitMessageContent))
+            if (this._flightDataValidation.IsCPMFlightDataValid(splitMessageContent))
             {
-                var inbound = this.flightService.GetInboundFlightByFlightNumber(this.GetFlightNumber(splitMessageContent[1]));
-                string supplementaryInformation = this.ParseSupplementaryInformation(splitMessageContent[splitMessageContent.Length - 1]);
-                int amountOfInboundContainers = this.parserCPMUtility.GetContainerCount(splitMessageContent);
-                var listOfContainersForCurrentMessage = this.containerService.AddContainersToInboundFlight(inbound,amountOfInboundContainers);
-                var listofContainerInfo =  this.containerService.CreateContainerInfo(splitMessageContent, listOfContainersForCurrentMessage);
-                var dto = new CPMDTO(listofContainerInfo, supplementaryInformation);
-                this.messageService.CreateInboundCPM(inbound, dto);
+                //var inbound = this.flightService.GetInboundFlightByFlightNumber(this.GetFlightNumber(splitMessageContent[1]));
+                //string supplementaryInformation = this.ParseSupplementaryInformation(splitMessageContent[splitMessageContent.Length - 1]);
+                //int amountOfInboundContainers = this.parserCPMUtility.GetContainerCount(splitMessageContent);
+                //var listOfContainersForCurrentMessage = this.containerService.AddContainersToInboundFlight(inbound,amountOfInboundContainers);
+                //var listofContainerInfo =  this.containerService.CreateContainerInfo(splitMessageContent, listOfContainersForCurrentMessage);
+                //var dto = new CPMDTO(listofContainerInfo, supplementaryInformation);
+                //this.messageService.CreateInboundCPM(inbound, dto);
             } 
             else
             {
@@ -96,23 +99,23 @@
 
         public bool ParseDepartureMovement(string messageContent)
         {
-            string[] splitMessage = messageContent
-                .Split("\r\n", StringSplitOptions.None);
+            //string[] splitMessage = messageContent
+            //    .Split("\r\n", StringSplitOptions.None);
 
-            if (this.flightDataValidation.IsDepartureMovementFlightDataValid(splitMessage))
-            {
-                string[] flightData = this.parserMovementUtility.GetMovementFlightData(splitMessage[1]);
-               var outboundFlightByFlightNumber = this.flightService.GetOutboundFlightByFlightNumber(flightData[0]);
-               string supplementaryInformation = this.ParseSupplementaryInformation(splitMessage[splitMessage.Length - 1]);
-               int totalPax = this.ParseTotalPax(splitMessage[3]); 
-               string[] times = this.parserMovementUtility.GetTimes(splitMessage[2]);
-               DateTime[] timesForDeparture = this.parserMovementUtility.ParseMovementTimes(times, outboundFlightByFlightNumber);
-               this.movementService.CreateDepartureMovement(timesForDeparture, supplementaryInformation, totalPax, outboundFlightByFlightNumber);
-            }
-            else
-            {
-                return false;
-            }
+            //if (this.flightDataValidation.IsDepartureMovementFlightDataValid(splitMessage))
+            //{
+            //    string[] flightData = this.parserMovementUtility.GetMovementFlightData(splitMessage[1]);
+            //   var outboundFlightByFlightNumber = this.flightService.GetOutboundFlightByFlightNumber(flightData[0]);
+            //   string supplementaryInformation = this.ParseSupplementaryInformation(splitMessage[splitMessage.Length - 1]);
+            //   int totalPax = this.ParseTotalPax(splitMessage[3]); 
+            //   string[] times = this.parserMovementUtility.GetTimes(splitMessage[2]);
+            //   DateTime[] timesForDeparture = this.parserMovementUtility.ParseMovementTimes(times, outboundFlightByFlightNumber);
+            //   this.movementService.CreateDepartureMovement(timesForDeparture, supplementaryInformation, totalPax, outboundFlightByFlightNumber);
+            //}
+            //else
+            //{
+            //    return false;
+            //}
 
             return true;
         }
@@ -167,24 +170,24 @@
 
         public bool ParseOutboundCPM(string messageContent)
         {
-            string[] splitMessageContent =
-                messageContent
-                .Split("\r\n", StringSplitOptions.None);
+            //string[] splitMessageContent =
+            //    messageContent
+            //    .Split("\r\n", StringSplitOptions.None);
    
-            if (this.flightDataValidation.IsCPMFlightDataValid(splitMessageContent))
-            {
-                var outbound = this.flightService.GetOutboundFlightByFlightNumber(this.GetFlightNumber(splitMessageContent[1]));
-                string supplementaryInformation = this.ParseSupplementaryInformation(splitMessageContent[splitMessageContent.Length - 1]);
-                int amountOfInboundContainers = this.parserCPMUtility.GetContainerCount(splitMessageContent);
-                var listOfContainersForCurrentMessage = this.containerService.AddContainersToOutboundFlight(outbound, amountOfInboundContainers);
-                var listofContainerInfo = this.containerService.CreateContainerInfo(splitMessageContent, listOfContainersForCurrentMessage);
-                var cpmDTO = new CPMDTO(listofContainerInfo, supplementaryInformation);
-                this.messageService.CreateOutboundCPM(outbound, cpmDTO);
-            }
-            else
-            {
-               return false;
-            }
+            //if (this.flightDataValidation.IsCPMFlightDataValid(splitMessageContent))
+            //{
+            //    var outbound = this.flightService.GetOutboundFlightByFlightNumber(this.GetFlightNumber(splitMessageContent[1]));
+            //    string supplementaryInformation = this.ParseSupplementaryInformation(splitMessageContent[splitMessageContent.Length - 1]);
+            //    int amountOfInboundContainers = this.parserCPMUtility.GetContainerCount(splitMessageContent);
+            //    var listOfContainersForCurrentMessage = this.containerService.AddContainersToOutboundFlight(outbound, amountOfInboundContainers);
+            //    var listofContainerInfo = this.containerService.CreateContainerInfo(splitMessageContent, listOfContainersForCurrentMessage);
+            //    var cpmDTO = new CPMDTO(listofContainerInfo, supplementaryInformation);
+            //    this.messageService.CreateOutboundCPM(outbound, cpmDTO);
+            //}
+            //else
+            //{
+            //   return false;
+            //}
 
             return true;
         }
@@ -192,120 +195,120 @@
 
         public bool ParseInboundLDM(string messageContent)
         {
-            string[] splitMessage =
-                messageContent
-                .Split("\r\n", StringSplitOptions.None);
+            //string[] splitMessage =
+            //    messageContent
+            //    .Split("\r\n", StringSplitOptions.None);
          
-            if (this.flightDataValidation.IsLDMFlightDataValid(splitMessage))
-            {
-                var ldmFlightInfoMatch = ldmFlightInfoRegex.Match(splitMessage[1]);
-                if (ldmFlightInfoMatch.Success)
-                {
-                    string inboundFlightNumber = ldmFlightInfoMatch.Groups["flt"].Value;
-                    string crewConfiguration = ldmFlightInfoMatch.Groups["crewConfig"].Value;
-                    var loadMatch = loadDistributionRegex.Match(splitMessage[2]);
-                    if (loadMatch.Success)
-                    {
-                        int[] paxFigures = this.ParsePAXFigures(splitMessage[2]);
-                        int totalWeightInCompartments = this.ParseLDMTotalWeight(loadMatch.Groups["ttlWghtInCpt"].Value);
-                        var weightInEachCompartment = this.ParseWeightsInCompartments(loadMatch.Groups["wghtByCompartment"].Value);
-                        var loadSummaryMatch = loadSummaryRegex.Match(splitMessage[3]);
-                        if (loadSummaryMatch.Success)
-                        {
-                            int[] loadSummaryInfo = this.ParseLoadSummaryInfo(splitMessage[3]);
-                            var inboundFlight = this.flightService.GetInboundFlightByFlightNumber(inboundFlightNumber);
+            //if (this.flightDataValidation.IsLDMFlightDataValid(splitMessage))
+            //{
+            //    var ldmFlightInfoMatch = ldmFlightInfoRegex.Match(splitMessage[1]);
+            //    if (ldmFlightInfoMatch.Success)
+            //    {
+            //        string inboundFlightNumber = ldmFlightInfoMatch.Groups["flt"].Value;
+            //        string crewConfiguration = ldmFlightInfoMatch.Groups["crewConfig"].Value;
+            //        var loadMatch = loadDistributionRegex.Match(splitMessage[2]);
+            //        if (loadMatch.Success)
+            //        {
+            //            int[] paxFigures = this.ParsePAXFigures(splitMessage[2]);
+            //            int totalWeightInCompartments = this.ParseLDMTotalWeight(loadMatch.Groups["ttlWghtInCpt"].Value);
+            //            var weightInEachCompartment = this.ParseWeightsInCompartments(loadMatch.Groups["wghtByCompartment"].Value);
+            //            var loadSummaryMatch = loadSummaryRegex.Match(splitMessage[3]);
+            //            if (loadSummaryMatch.Success)
+            //            {
+            //                int[] loadSummaryInfo = this.ParseLoadSummaryInfo(splitMessage[3]);
+            //                var inboundFlight = this.flightService.GetInboundFlightByFlightNumber(inboundFlightNumber);
                             
-                            if (inboundFlight != null)
-                            {
-                                var dto = new LDMDTO(crewConfiguration, paxFigures, totalWeightInCompartments, weightInEachCompartment, loadSummaryInfo);
-                                this.messageService.CreateInboundLDM(inboundFlight, dto);
-                            }
-                            else
-                            {
-                                return false;
-                            }
+            //                if (inboundFlight != null)
+            //                {
+            //                    var dto = new LDMDTO(crewConfiguration, paxFigures, totalWeightInCompartments, weightInEachCompartment, loadSummaryInfo);
+            //                    this.messageService.CreateInboundLDM(inboundFlight, dto);
+            //                }
+            //                else
+            //                {
+            //                    return false;
+            //                }
                         
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+            //            }
+            //            else
+            //            {
+            //                return false;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            return false;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        return false;
+            //    }
 
-            } 
-            else
-            {
-                return false;
-            }
+            //} 
+            //else
+            //{
+            //    return false;
+            //}
 
             return true;
         }
 
         public bool ParseOutboundLDM(string messageContent)
         {
-            string[] splitMessage =
-                   messageContent
-                   .Split("\r\n", StringSplitOptions.None);
+            //string[] splitMessage =
+            //       messageContent
+            //       .Split("\r\n", StringSplitOptions.None);
 
-            if (this.flightDataValidation.IsLDMFlightDataValid(splitMessage))
-            {
-                var ldmFlightInfoMatch = ldmFlightInfoRegex.Match(splitMessage[1]);
-                if (ldmFlightInfoMatch.Success)
-                {
-                    string outboundFlightNumber = ldmFlightInfoMatch.Groups["flt"].Value;
-                    string crewConfiguration = ldmFlightInfoMatch.Groups["crewConfig"].Value;
-                    var loadMatch = loadDistributionRegex.Match(splitMessage[2]);
-                    if (loadMatch.Success)
-                    {
-                        int[] paxFigures = this.ParsePAXFigures(splitMessage[2]);
-                        int totalWeightInCompartments = this.ParseLDMTotalWeight(loadMatch.Groups["ttlWghtInCpt"].Value);
-                        var weightInEachCompartment = this.ParseWeightsInCompartments(loadMatch.Groups["wghtByCompartment"].Value);
-                        var loadSummaryMatch = loadSummaryRegex.Match(splitMessage[3]);
-                        if (loadSummaryMatch.Success)
-                        {
-                            int[] loadSummaryInfo = this.ParseLoadSummaryInfo(splitMessage[3]);
-                            var outboundFlight = this.flightService.GetOutboundFlightByFlightNumber(outboundFlightNumber);
+            //if (this.flightDataValidation.IsLDMFlightDataValid(splitMessage))
+            //{
+            //    var ldmFlightInfoMatch = ldmFlightInfoRegex.Match(splitMessage[1]);
+            //    if (ldmFlightInfoMatch.Success)
+            //    {
+            //        string outboundFlightNumber = ldmFlightInfoMatch.Groups["flt"].Value;
+            //        string crewConfiguration = ldmFlightInfoMatch.Groups["crewConfig"].Value;
+            //        var loadMatch = loadDistributionRegex.Match(splitMessage[2]);
+            //        if (loadMatch.Success)
+            //        {
+            //            int[] paxFigures = this.ParsePAXFigures(splitMessage[2]);
+            //            int totalWeightInCompartments = this.ParseLDMTotalWeight(loadMatch.Groups["ttlWghtInCpt"].Value);
+            //            var weightInEachCompartment = this.ParseWeightsInCompartments(loadMatch.Groups["wghtByCompartment"].Value);
+            //            var loadSummaryMatch = loadSummaryRegex.Match(splitMessage[3]);
+            //            if (loadSummaryMatch.Success)
+            //            {
+            //                int[] loadSummaryInfo = this.ParseLoadSummaryInfo(splitMessage[3]);
+            //                var outboundFlight = this.flightService.GetOutboundFlightByFlightNumber(outboundFlightNumber);
 
-                            if (outboundFlight != null)
-                            {
-                                var dto = new LDMDTO(crewConfiguration, paxFigures, totalWeightInCompartments, weightInEachCompartment, loadSummaryInfo);
-                                this.messageService.CreateOutboundLDM(outboundFlight, dto);
-                            }
-                            else
-                            {
-                                return false;
-                            }
+            //                if (outboundFlight != null)
+            //                {
+            //                    var dto = new LDMDTO(crewConfiguration, paxFigures, totalWeightInCompartments, weightInEachCompartment, loadSummaryInfo);
+            //                    this.messageService.CreateOutboundLDM(outboundFlight, dto);
+            //                }
+            //                else
+            //                {
+            //                    return false;
+            //                }
 
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
-                }
+            //            }
+            //            else
+            //            {
+            //                return false;
+            //            }
+            //        }
+            //        else
+            //        {
+            //            return false;
+            //        }
+            //    }
+            //    else
+            //    {
+            //        return false;
+            //    }
 
-            }
-            else
-            {
-                return false;
-            }
+            //}
+            //else
+            //{
+            //    return false;
+            //}
 
             return true;
         }

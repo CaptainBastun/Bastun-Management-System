@@ -1,6 +1,9 @@
 ﻿namespace BMS.Services
 {
+    using AutoMapper;
+    using BMS.Data.DTO.MovementsDTO;
     using BMS.Data.Models;
+    using BMS.Data.Models.Contracts.FlightContracts;
     using BMS.Services.Contracts;
     using System;
     using System.Collections.Generic;
@@ -10,75 +13,49 @@
 
     public class MovementsService : IMovementService
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly IFlightService flightService;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly IFlightService _flightService;
+        private readonly IMapper _mapper;
 
-        public MovementsService(ApplicationDbContext dbContext, IFlightService flightService)
+        public MovementsService(ApplicationDbContext dbContext, IFlightService flightService, IMapper mapper)
         {
-            this.dbContext = dbContext;
-            this.flightService = flightService;
+            _dbContext = dbContext;
+            _flightService = flightService;
+            _mapper = mapper;
         }
 
-        public void CreateArrivalMovement(DateTime[] dates,string supplementaryInformation,InboundFlight inboundFlight)
+        public async Task CreateArrivalMovement(ArrivalMovementDTO movementDTO,InboundFlight inbound)
         {
-            var arrivalMovement = new ArrivalMovement
-            {
-                InboundFlightId = inboundFlight.FlightId,
-                InboundFlight = inboundFlight,
-                SupplementaryInformation = supplementaryInformation,
-                TouchdownTime = dates[0],
-                OnBlockTime = dates[1],
-                DateOfMovement = DateTime.UtcNow
-            };
-            
-            this.dbContext.ArrivalMovements.Add(arrivalMovement);
-            this.dbContext.SaveChanges();
+            var newArrivalMovement = _mapper.Map<ArrivalMovement>(movementDTO);
 
-            inboundFlight.ArrivalMovementId = arrivalMovement.Id;
-            this.dbContext.SaveChanges();
+            newArrivalMovement.InboundFlight = inbound;
+            newArrivalMovement.InboundFlightId = inbound.FlightId;
+
+            _dbContext.ArrivalMovements.Add(newArrivalMovement);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public void CreateDepartureMovement(DateTime[] dates, string supplementaryInformation, int totalPax, OutboundFlight outboundFlight)
+        public async Task CreateDepartureMovement(DepartureMovementDTO movementDTO,OutboundFlight outbound)
         {
-            var departureMovement = new DepartureMovement
-            {
-                OffBlockTime = dates[0],
-                TakeoffTime = dates[1],
-                SupplementaryInformation = supplementaryInformation,
-                TotalPAX = totalPax,
-                OutboundFlightId = outboundFlight.FlightId,
-                OutboundFlight = outboundFlight,
-                DateOfMovement = DateTime.UtcNow
-            };
-            this.dbContext.DepartureMovements.Add(departureMovement);
-            this.dbContext.SaveChanges();
+            var newDepartureMovement = _mapper.Map<DepartureMovement>(movementDTO);
 
-            outboundFlight.DepartureMovementId = departureMovement.Id;
-            this.dbContext.SaveChanges();
+            newDepartureMovement.OutboundFlight = outbound;
+            newDepartureMovement.OutboundFlightId = outbound.FlightId;
+
+            _dbContext.DepartureMovements.Add(newDepartureMovement);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public ArrivalMovement GetArrivalMovementByFlightNumber(string flightNumber)
+        public async Task<ArrivalMovement> GetArrivalMovementByFlightNumber(string flightNumber)
         {
-            var inboundFlight = this.flightService.GetInboundFlightByFlightNumber(flightNumber);
-
-            if (inboundFlight != null)
-            {
-                return inboundFlight.ArrivalMovement;
-            }
-
-            return null;
+            var inboundFlight = await this._flightService.GetInboundFlightByFlightNumber(flightNumber);
+            return inboundFlight.ArrivalMovement;
         }
 
-        public DepartureMovement GetDepartureMovementByFlightNumber(string flightNumber)
+        public async Task<DepartureMovement> GetDepartureMovementByFlightNumber(string flightNumber)
         {
-            var outboundFlight = this.flightService.GetOutboundFlightByFlightNumber(flightNumber);
-
-            if (outboundFlight != null)
-            {
-                return outboundFlight.DepartureMovement;
-            }
-
-            return null;
+            var outboundFlight = await _flightService.GetOutboundFlightByFlightNumber(flightNumber);
+            return outboundFlight.DepartureMovement;
         }
     }
 }

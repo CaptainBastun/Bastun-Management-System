@@ -25,7 +25,22 @@
 
         public string GetPaxZoneBySeatNumber(string paxSeatNumber)
         {
-            
+            return null;
+        }
+
+        public int SetPaxAge(string paxGender)
+        {
+            int result = 0;
+            switch (paxGender)
+            {
+                case "M":
+                    result = 88;
+                    break;
+                default:
+                    break;
+            }
+
+            return result;
         }
     }
 }

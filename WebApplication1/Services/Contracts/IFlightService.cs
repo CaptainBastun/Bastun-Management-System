@@ -8,13 +8,11 @@
     using System.Threading.Tasks;
     public interface IFlightService
     {
-        InboundFlight GetInboundFlightByFlightNumber(string inboundFlightNumber);
+        Task<InboundFlight> GetInboundFlightByFlightNumber(string inboundFlightNumber);
 
-        OutboundFlight GetOutboundFlightByFlightNumber(string outboundFlightNumber);
+        Task<OutboundFlight> GetOutboundFlightByFlightNumber(string outboundFlightNumber);
 
-        void RegisterInboundFlight(FlightInputModel inboundFlightInputModel);
-
-        void RegisterOutboundFlight(FlightInputModel outboundFlightInputModel);
+        Task CreateFlights(FlightInputModel flightInputModel);
 
         bool CheckIfFlightIsInbound(string flightNumber);
 

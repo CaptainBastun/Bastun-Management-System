@@ -14,5 +14,7 @@
         void AddPAXToZoneBravo(PAXInputModel paxInputModel);
 
         void AddPAXToZoneCharlie(PAXInputModel pAXInputModel);
+
+        int SetPaxAge(string paxGender);
     }
 }

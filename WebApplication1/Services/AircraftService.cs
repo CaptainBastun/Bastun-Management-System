@@ -11,37 +11,33 @@
 
     public class AircraftService : IAircraftService
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly IFlightService flightService;
-        private readonly IAircraftCabinService cabinService;
-        private readonly IAircraftBaggageHoldService baggageHoldService;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly IFlightService _flightsService;
+        private readonly IAircraftCabinService _cabinService;
+        private readonly IAircraftBaggageHoldService _baggageHoldService;
 
-        public AircraftService(ApplicationDbContext dbContext,IFlightService flightService, IAircraftCabinService cabinService, IAircraftBaggageHoldService baggageHoldService)
+        public AircraftService(ApplicationDbContext dbContext,IFlightService flightsService, IAircraftCabinService cabinService, IAircraftBaggageHoldService baggageHoldService)
         {
-            this.dbContext = dbContext;
-            this.flightService = flightService;
-            this.cabinService = cabinService;
-            this.baggageHoldService = baggageHoldService;
+            _dbContext = dbContext;
+            _flightsService = flightsService;
+            _cabinService = cabinService;
+            _baggageHoldService = baggageHoldService;
         }
 
         public bool CheckAircraftRegistration(string registration)
         {
-            return this.dbContext.Aircraft.Any(x => x.AircraftRegistration == registration);
+            return _dbContext.Aircraft.Any(x => x.AircraftRegistration == registration);
         }
 
         public bool IsAircraftGoingToBeContainerized(string aircraftType)
         {
-            if (aircraftType == "B763" || aircraftType == "B788")
-            {
-                return true;
-            }
-
-            return false;
+            return aircraftType == "B763" || aircraftType == "B788";
         }
 
-        public void RegisterAircraft(AircraftInputModel aircraftInputModel)
+        public async Task RegisterAircraft(AircraftInputModel aircraftInputModel)
         {
-            var outboundFlightToRegisterAircraftTo = this.flightService.GetOutboundFlightByFlightNumber(aircraftInputModel.FlightNumber);
+            var outboundFlightToRegisterAircraftTo = await _flightsService.GetOutboundFlightByFlightNumber(aircraftInputModel.FlightNumber);
+            bool isContainerized = IsAircraftGoingToBeContainerized(aircraftInputModel.Type.ToString());
 
             if (outboundFlightToRegisterAircraftTo != null)
             {
@@ -54,8 +50,8 @@
                 };
 
                 newAircraft.IsAicraftContainerized = this.IsAircraftGoingToBeContainerized(newAircraft.Type.ToString());
-                this.dbContext.Aircraft.Add(newAircraft);
-                this.dbContext.SaveChanges();
+                this._dbContext.Aircraft.Add(newAircraft);
+                this._dbContext.SaveChanges();
 
                 this.AddCabinAndBaggageHoldToAircraft(aircraftInputModel.AircraftRegistration);
             }
@@ -64,10 +60,7 @@
 
         public Aircraft GetAicraftByRegistration(string registration)
         {
-
-            var aircrafToReturn = this.dbContext.Aircraft.FirstOrDefault(x => x.AircraftRegistration == registration);
-
-            return aircrafToReturn;
+            return _dbContext.Aircraft.FirstOrDefault(ac => ac.AircraftRegistration == registration);
         }
 
        
@@ -75,12 +68,12 @@
         {
             var aircraft = this.GetAicraftByRegistration(registration);
 
-            var cabin  = this.cabinService.AddCabinToAircraft(aircraft);
-            var baggageHold = this.baggageHoldService.AddBaggageHoldToAircraft(aircraft);
+            var cabin  = this._cabinService.AddCabinToAircraft(aircraft);
+            var baggageHold = this._baggageHoldService.AddBaggageHoldToAircraft(aircraft);
 
             aircraft.Cabin = cabin;
             aircraft.BaggageHold = baggageHold;
-            this.dbContext.SaveChanges();
+            this._dbContext.SaveChanges();
         }
 
         public string IsAircraftOfACertainType(OutboundFlight flight)
@@ -88,14 +81,9 @@
             string type = string.Empty;
             if (flight.Aircraft.Type.ToString() == "B763" || flight.Aircraft.Type.ToString() == "B788")
             {
-                type = flight.Aircraft.Type.ToString();
-            }
-            else
-            {
-                return null;
+                type =  flight.Aircraft.Type.ToString();
             }
             return type;
-           
         }
     }
 }

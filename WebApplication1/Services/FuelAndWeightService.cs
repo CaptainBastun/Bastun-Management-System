@@ -24,20 +24,20 @@
         }
         public void AddFuelForm(FuelFormInputModel fuelFormInputModel)
         {
-            var outboundFlight = this.flightService.GetOutboundFlightByFlightNumber(fuelFormInputModel.FlightNumber);
-            if (outboundFlight.Aircraft != null)
-            {
-                var newFuelForm = this.mapper.Map<FuelForm>(fuelFormInputModel);
+            //var outboundFlight = this.flightService.GetOutboundFlightByFlightNumber(fuelFormInputModel.FlightNumber);
+            //if (outboundFlight.Aircraft != null)
+            //{
+            //    var newFuelForm = this.mapper.Map<FuelForm>(fuelFormInputModel);
 
-                newFuelForm.Aircraft = outboundFlight.Aircraft;
-                newFuelForm.AircraftId = outboundFlight.AircraftId;
+            //    newFuelForm.Aircraft = outboundFlight.Aircraft;
+            //    newFuelForm.AircraftId = outboundFlight.AircraftId;
 
-                this.dbContext.FuelForms.Add(newFuelForm);
-                this.dbContext.SaveChanges();
+            //    this.dbContext.FuelForms.Add(newFuelForm);
+            //    this.dbContext.SaveChanges();
 
-                outboundFlight.Aircraft.FuelForm = newFuelForm;
-                outboundFlight.Aircraft.FuelFormId = newFuelForm.Id;
-            }
+            //    outboundFlight.Aircraft.FuelForm = newFuelForm;
+            //    outboundFlight.Aircraft.FuelFormId = newFuelForm.Id;
+            //}
         }
 
         public void AddWeightForm(WeightFormInputModel weightInputModel)
