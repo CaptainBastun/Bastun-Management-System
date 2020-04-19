@@ -59,6 +59,11 @@ namespace BMS.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "Password confirmation is not the same as password")]
             public string ConfirmPassword { get; set; }
 
+            [Required(ErrorMessage = "Email address is required")]
+            [DataType(DataType.EmailAddress)]
+            [EmailAddress]
+            public string Email { get; set; }
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -73,7 +78,7 @@ namespace BMS.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new IdentityUser { UserName = Input.UserName }; 
+                var user = new IdentityUser { UserName = Input.UserName, Email = Input.Email }; 
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

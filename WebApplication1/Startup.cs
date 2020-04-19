@@ -1,30 +1,29 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.EntityFrameworkCore;
-using WebApplication1.Data;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using AutoMapper;
-using BMS.Services.Contracts;
-using BMS.Services;
-using BMS.Services.Utility.UtilityContracts;
-using BMS.Services.Utility;
-using BMS.Services.ParserUtility.UtilityContracts;
-using BMS.Services.ParserUtility;
-using BMS.Services.ParserUtility.ParserMovementUtility;
-using Microsoft.AspNetCore.Http;
-using Wkhtmltopdf.NetCore;
-
 namespace WebApplication1
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity.UI;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.HttpsPolicy;
+    using Microsoft.EntityFrameworkCore;
+    using WebApplication1.Data;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
+    using AutoMapper;
+    using BMS.Services.Contracts;
+    using BMS.Services;
+    using BMS.Services.Utility.UtilityContracts;
+    using BMS.Services.Utility;
+    using BMS.Services.ParserUtility.UtilityContracts;
+    using BMS.Services.ParserUtility;
+    using BMS.Services.ParserUtility.ParserMovementUtility;
+    using Microsoft.AspNetCore.Http;
+    using Wkhtmltopdf.NetCore;
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -53,10 +52,13 @@ namespace WebApplication1
             services.AddTransient<IParserMovementUtility, ParserDepMVTUtility>();
             services.AddTransient<IParserCPMUtility, ParserCPMUtility>();
             services.AddTransient<IFuelAndWeightService, FuelAndWeightService>();
+            services.AddTransient<IEmailSenderService>(serviceProvider => 
+                  new EmailSender(this.Configuration["SendGrid:BMS_SendGridApiKey"]));
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            services.AddDefaultIdentity<IdentityUser>(options => 
+            options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.Configure<IdentityOptions>(options =>
             {

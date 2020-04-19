@@ -16,16 +16,18 @@ namespace WebApplication1.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IEmailSenderService emailSender;
 
-
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IEmailSenderService emailSender)
         {
             _logger = logger;
+            this.emailSender = emailSender;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
+              this.emailSender.Send();
             //TODO: create logic for merging inbound/outbound flights as one and displaying to view
             return this.View();
         }

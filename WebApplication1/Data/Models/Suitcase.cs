@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using System.ComponentModel.DataAnnotations;
     using BMS.GlobalData.ErrorMessages;
+    using BMS.GlobalData.PAXConstants;
 
     public class Suitcase
     {
@@ -18,7 +19,7 @@
         [Key]
         public string SuitcaseId { get; set; }
 
-        [Range(1,32, ErrorMessage = InvalidErrorMessages.PAXSuitcaseWeightIsInvalid)]
+        [Range(PAXSuitcaseWeightConstants.SuitcaseMinWeight, PAXSuitcaseWeightConstants.SuitcaseMaxWeight, ErrorMessage = InvalidErrorMessages.PAXSuitcaseWeightIsInvalid)]
         public int Weight { get; set; }
 
         

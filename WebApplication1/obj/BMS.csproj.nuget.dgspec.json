@@ -87,6 +87,10 @@
               "target": "Package",
               "version": "[3.1.2, )"
             },
+            "SendGrid": {
+              "target": "Package",
+              "version": "[9.14.0, )"
+            },
             "Wkhtmltopdf.NetCore": {
               "target": "Package",
               "version": "[3.0.0, )"
