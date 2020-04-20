@@ -23,7 +23,7 @@
                 
             CreateMap<LDMDTO, LoadDistributionMessage>();
 
-            CreateMap<CPMDTO, ContainerPalletMessage>();
+            CreateMap<ContainerPalletMessageDTO, ContainerPalletMessage>();
         }
     }
 }

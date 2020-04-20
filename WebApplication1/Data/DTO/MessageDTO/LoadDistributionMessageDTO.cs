@@ -5,15 +5,15 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class LDMDTO
+    public class LoadDistributionMessageDTO
     {
-        public LDMDTO(string config, int[] paxFigures,int totalWeightInCpts,Dictionary<int,int> compartmentWeights, int[] summaryInfo)
+        public LoadDistributionMessageDTO(string config, int[] paxFigures,int totalWeightInCpts,Dictionary<int,int> compartmentWeights, int[] summaryInfo)
         {
-            this.CrewConfiguration = config;
-            this.TotalWeightInAllCompartments = totalWeightInCpts;
-            this.SetCompartmentWeights(compartmentWeights);
-            this.SetSummaryInfo(summaryInfo);
-            this.SetPaxFigures(paxFigures);
+            CrewConfiguration = config;
+            TotalWeightInAllCompartments = totalWeightInCpts;
+            SetCompartmentWeights(compartmentWeights);
+            SetSummaryInfo(summaryInfo);
+            SetPaxFigures(paxFigures);
         }
 
         public string CrewConfiguration { get; set; }

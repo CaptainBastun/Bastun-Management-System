@@ -6,12 +6,12 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class CPMDTO
+    public class ContainerPalletMessageDTO
     {
-        public CPMDTO(List<ContainerInfo> containerInfo, string supplementaryInformation)
+        public ContainerPalletMessageDTO(List<ContainerInfo> containerInfo, string supplementaryInformation)
         {
-            this.ContainerInfo = containerInfo;
-            this.SupplementaryInformation = supplementaryInformation;
+            ContainerInfo = containerInfo;
+            SupplementaryInformation = supplementaryInformation;
         }
 
         public List<ContainerInfo> ContainerInfo { get; set; }

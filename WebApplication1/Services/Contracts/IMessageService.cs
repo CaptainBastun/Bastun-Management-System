@@ -9,13 +9,13 @@
     using System.Threading.Tasks;
     public interface IMessageService
     {
-        public void CreateInboundLDM(InboundFlight inbound,LDMDTO inboundLDMDTO);
+        public void CreateInboundLDM(InboundFlight inbound,LoadDistributionMessageDTO inboundLDMDTO);
 
-        public void CreateOutboundLDM(OutboundFlight outbound, LDMDTO outboundLDMDTO);
+        public void CreateOutboundLDM(OutboundFlight outbound, LoadDistributionMessageDTO outboundLDMDTO);
 
-        public void CreateInboundCPM(InboundFlight inbound, CPMDTO inboundCPMDTO);
+        public void CreateInboundCPM(InboundFlight inbound, ContainerPalletMessageDTO inboundCPMDTO);
 
-        public void CreateOutboundCPM(OutboundFlight outboundFlight,CPMDTO outboundCPMDTO);
+        public void CreateOutboundCPM(OutboundFlight outboundFlight,ContainerPalletMessageDTO outboundCPMDTO);
 
     }
 }

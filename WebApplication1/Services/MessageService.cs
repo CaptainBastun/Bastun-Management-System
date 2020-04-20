@@ -14,57 +14,58 @@
 
     public class MessageService : IMessageService
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly IMapper mapper;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly IMapper _mapper;
 
         public MessageService(ApplicationDbContext dbContext,IMapper mapper)
         {
-            this.dbContext = dbContext;
-            this.mapper = mapper;
+            _dbContext = dbContext;
+            _mapper = mapper;
         }
 
-        public void CreateInboundCPM(InboundFlight inbound, CPMDTO dto)
+        public void CreateInboundCPM(InboundFlight inbound, ContainerPalletMessageDTO dto)
         {
-            var inboundContainerPalletMessage = this.mapper.Map<ContainerPalletMessage>(dto);
-            this.dbContext.ContainerPalletMessages.Add(inboundContainerPalletMessage);
-            this.dbContext.SaveChanges();
+            var inboundContainerPalletMessage = _mapper.Map<ContainerPalletMessage>(dto);
+            _dbContext.ContainerPalletMessages.Add(inboundContainerPalletMessage);
+            _dbContext.SaveChanges();
 
             inboundContainerPalletMessage.InboundFlight = inbound;
             inboundContainerPalletMessage.InboundFlightId = inbound.FlightId;
         }
 
-        public void CreateInboundLDM(InboundFlight inboundFlight, LDMDTO ldmDTO)
+        public void CreateInboundLDM(InboundFlight inboundFlight, LoadDistributionMessageDTO ldmDTO)
         {
-            var loadDistributionMessage = mapper.Map<LoadDistributionMessage>(ldmDTO);
-            this.dbContext.LoadDistributionMessages.Add(loadDistributionMessage);
-            this.dbContext.SaveChanges();
+            var loadDistributionMessage = _mapper.Map<LoadDistributionMessage>(ldmDTO);
+            _dbContext.LoadDistributionMessages.Add(loadDistributionMessage);
+            _dbContext.SaveChanges();
 
             loadDistributionMessage.InboundFlight = inboundFlight;
             loadDistributionMessage.InboundFlightId = inboundFlight.FlightId;
-            this.dbContext.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
-        public void CreateOutboundCPM(OutboundFlight outboundFlight, CPMDTO dto)
+        public void CreateOutboundCPM(OutboundFlight outboundFlight, ContainerPalletMessageDTO dto)
         {
-            var outboundContainerPalletMessage = mapper.Map<ContainerPalletMessage>(dto);
-            this.dbContext.ContainerPalletMessages.Add(outboundContainerPalletMessage);
-            this.dbContext.SaveChanges();
+            var outboundContainerPalletMessage = _mapper.Map<ContainerPalletMessage>(dto);
+            _dbContext.ContainerPalletMessages.Add(outboundContainerPalletMessage);
+            _dbContext.SaveChanges();
 
             outboundContainerPalletMessage.OutboundFlight = outboundFlight;
             outboundContainerPalletMessage.OutboundFlightId = outboundFlight.FlightId;
             outboundFlight.OutboundMessages.Add(outboundContainerPalletMessage);
-            this.dbContext.SaveChanges();
+            _dbContext.SaveChanges();
         }
 
-        public void CreateOutboundLDM(OutboundFlight outboundFlight, LDMDTO  dto)
+        public void CreateOutboundLDM(OutboundFlight outboundFlight, LoadDistributionMessageDTO  dto)
         {
-            var outboundLoadDistributionMessage = this.mapper.Map<LoadDistributionMessage>(dto);
-            this.dbContext.LoadDistributionMessages.Add(outboundLoadDistributionMessage);
-            this.dbContext.SaveChanges();
+            var outboundLoadDistributionMessage = _mapper.Map<LoadDistributionMessage>(dto);
+            _dbContext.LoadDistributionMessages.Add(outboundLoadDistributionMessage);
+            _dbContext.SaveChanges();
 
             outboundLoadDistributionMessage.OutboundFlight = outboundFlight;
             outboundLoadDistributionMessage.OutboundFlightId = outboundFlight.FlightId;
-            this.dbContext.SaveChanges();
+          
+            _dbContext.SaveChanges();
         }
 
     }
