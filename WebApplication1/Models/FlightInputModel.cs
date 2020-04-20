@@ -40,5 +40,8 @@
         [Required(ErrorMessage = InvalidErrorMessages.SeatMapRequired)]
         [RegularExpression(FlightInputDataValidation.SeatMapValidation, ErrorMessage = InvalidErrorMessages.SeatMapIsInvalid)]
         public string SeatMap { get; set; }
+
+        [Required(ErrorMessage = InvalidErrorMessages.RampAgentNameRequired)]
+        public string RampAgentName { get; set; }
     }
 }

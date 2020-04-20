@@ -38,7 +38,7 @@
                 messageContent
                 .Split("\r\n", StringSplitOptions.None);
 
-            if (_flightDataValidation.IsCPMFlightDataValid(splitMessageContent))
+            if (_flightDataValidation.IsInboundContainerPalletMessageFlightDataValid(splitMessageContent))
             {
                 var inbound = await _flightsService.GetInboundFlightByFlightNumber(GetFlightNumber(splitMessageContent[1]));
                 string supplementaryInformation = ParseSupplementaryInformation(splitMessageContent[splitMessageContent.Length - 1]);
@@ -62,13 +62,15 @@
                 messageContent
                 .Split("\r\n", StringSplitOptions.None);
 
-            if (_flightDataValidation.IsCPMFlightDataValid(splitMessageContent))
+            if (_flightDataValidation.IsOutboundContainerPalletMessageFlightDataValid(splitMessageContent))
             {
                 var outbound = await _flightsService.GetOutboundFlightByFlightNumber(GetFlightNumber(splitMessageContent[1]));
                 string supplementaryInformation = ParseSupplementaryInformation(splitMessageContent[splitMessageContent.Length - 1]);
+
                 int amountOfInboundContainers = _parserContainerPalletMessageUtility.GetContainerCount(splitMessageContent);
                 var listOfContainersForCurrentMessage = _loadControlService.AddContainersToOutboundFlight(outbound, amountOfInboundContainers);
                 var listofContainerInfo = _loadControlService.CreateContainerInfo(splitMessageContent, listOfContainersForCurrentMessage);
+
                 var containerPalletMessageDTO = new ContainerPalletMessageDTO(listofContainerInfo, supplementaryInformation);
                 _messageService.CreateOutboundCPM(outbound, containerPalletMessageDTO);
                

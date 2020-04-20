@@ -24,6 +24,8 @@ namespace WebApplication1
     using BMS.Services.ParserUtility.ParserMovementUtility;
     using Microsoft.AspNetCore.Http;
     using Wkhtmltopdf.NetCore;
+    using BMS.Services.ParserUtility.ParserMessageUtility;
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -41,15 +43,17 @@ namespace WebApplication1
             services.AddTransient<IMovementService, MovementsService>();
             services.AddTransient<IPAXService, PAXService>();
             services.AddTransient<ILoadControlService, LoadControlService>();
-            services.AddTransient<IMessageParser, MessageParser>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IFlightDataValidation, FlightDataValidation>();
             services.AddTransient<IParserMovementUtility, ParserArrMVTUtility>();
             services.AddTransient<IParserMovementUtility, ParserDepMVTUtility>();
-            services.AddTransient<IParserContainerPalletMessageUtility, ParserCPMUtility>();
             services.AddTransient<IFuelAndWeightService, FuelAndWeightService>();
             services.AddTransient<IAircraftCabinBaggageHoldService, AircraftCabinBaggageHoldService>();
             services.AddTransient<IMovementParser, MovementParser>();
+            services.AddTransient<IContainerMessageParser, ContainerMessageParser>();
+            services.AddTransient<ILoadMessageParser, LoadMessageParser>();
+            services.AddTransient<IParserLoadDistributionMessageUtility, ParserLoadDistributionMessageUtility>();
+            services.AddTransient<IParserContainerPalletMessageUtility, ParserContainerPalletMessageUtility>();
             services.AddTransient<IEmailSenderService>(serviceProvider => 
                   new EmailSender(this.Configuration["SendGrid:BMS_SendGridApiKey"]));
             services.AddDbContext<ApplicationDbContext>(options =>

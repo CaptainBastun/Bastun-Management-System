@@ -11,6 +11,7 @@
     using BMS.Data.Models;
     using BMS.Data.Models.Contracts;
     using Microsoft.EntityFrameworkCore;
+    using BMS.Models.ViewModels.Flights;
 
     public class FlightsService : IFlightService
     {
@@ -35,9 +36,36 @@
             return _DbContext.OutboundFlights.Any(x => x.FlightNumber == flightNumber);
         }
 
-        public void GetAllFlights()
+        public DisplayDailyFlightViewModel GetAllFlights()
         {
-           
+            var outboundFlightViewModels =
+                _DbContext
+                .OutboundFlights
+                .Select(x => new FlightViewModel
+                {
+                    AircraftType = x.Aircraft.Type.ToString(),
+                    Destination = x.Destination,
+                    Registration = x.Aircraft.AircraftRegistration,
+                    FlightNumber = x.FlightNumber,
+                    STD = x.STD.Hour.ToString(),
+                    RampAgent = x.RampAgentName,
+                })
+                .ToList();
+
+            foreach (var flightViewModel in outboundFlightViewModels)
+            {
+                var inboundFlight =
+                    _DbContext
+                    .InboundFlights
+                    .FirstOrDefault(x => x.RampAgentName == flightViewModel.RampAgent);
+
+                flightViewModel.STA = inboundFlight.STA.Hour.ToString();
+                flightViewModel.Origin = inboundFlight.Origin;
+            }
+
+
+            var dailyFlightsModel = new DisplayDailyFlightViewModel(outboundFlightViewModels);
+            return dailyFlightsModel;
         }
 
         public async Task<InboundFlight> GetInboundFlightByFlightNumber(string inboundFlightNumber)
@@ -65,7 +93,7 @@
 
             newInboundFlight.FlightNumber = inboundFlightNumber;
             newOutboundFlight.FlightNumber = outboundFlightNumber;
-
+     
             _DbContext.InboundFlights.Add(newInboundFlight);
             _DbContext.OutboundFlights.Add(newOutboundFlight);
             await _DbContext.SaveChangesAsync();

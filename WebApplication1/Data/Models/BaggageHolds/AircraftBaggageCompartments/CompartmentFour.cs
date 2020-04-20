@@ -8,8 +8,6 @@
 
     public class CompartmentFour : Compartment
     {
-        //public int AircraftBaggageHoldId { get; set; }
-
-        //public virtual AircraftBaggageHold? BaggageHold { get; set; }
+       
     }
 }

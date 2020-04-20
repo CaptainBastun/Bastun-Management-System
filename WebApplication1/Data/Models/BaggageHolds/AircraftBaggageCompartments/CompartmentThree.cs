@@ -7,8 +7,6 @@
     using System.Threading.Tasks;
     public class CompartmentThree : Compartment
     {
-        //public int AircraftBaggageHoldId { get; set; }
-
-        //public virtual AircraftBaggageHold? BaggageHold { get; set; }
+     
     }
 }

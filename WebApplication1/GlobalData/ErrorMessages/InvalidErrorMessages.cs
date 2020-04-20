@@ -51,5 +51,7 @@
         public const string SeatMapRequired = "Seat map is required!";
 
         public const string SeatMapIsInvalid = "Seat map is invalid!";
+
+        public const string RampAgentNameRequired = "Ramp agent name is required!";
     }
 }

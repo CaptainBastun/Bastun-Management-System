@@ -3,14 +3,17 @@
 }
 
 @using Microsoft.AspNetCore.Identity;
-@using BMS.Models.ViewModels.Flights;
-@using BMS.Models;
+@using BMS.Models.ViewModels.Flights
 @inject SignInManager<IdentityUser> signInManager
-
+@model DisplayDailyFlightViewModel
 @if (this.signInManager.IsSignedIn(User))
 {
+    @if (Model.Flights.Count == 0)
+    {
+        
+    }
     <div class="col">
-        <h1 class="text-center">Daily aircraft movements:</h1>
+        <h1 class="text-center">Daily flights</h1>
         <br />
         <table class="table table-bordered table-hover text-center" id="dailyMovements">
             <thead class="thead-dark ">
@@ -26,6 +29,19 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach (var flight in Model.Flights)
+                {
+                   <tr>
+                       <td>@flight.FlightNumber</td>
+                       <td>@flight.Registration</td>
+                       <td>@flight.AircraftType</td>
+                       <td>@flight.Origin</td>
+                       <td>@flight.Destination</td>
+                       <td>@flight.STA</td>
+                       <td>@flight.STD</td>
+                       <td>@flight.RampAgent</td>
+                   </tr>
+                }
             </tbody>
         </table>
     </div>

@@ -317,6 +317,10 @@ namespace BMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("RampAgentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("STA")
                         .HasColumnType("datetime2");
 

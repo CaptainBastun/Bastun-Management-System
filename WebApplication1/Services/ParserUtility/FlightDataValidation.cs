@@ -12,92 +12,19 @@
 
     public class FlightDataValidation : IFlightDataValidation
     {
-        private readonly IFlightService flightService;
-        private readonly IAircraftService aircraftService;
+        //TODO Refactor this.. - REFACTORED!!!!
+        private readonly IFlightService _flightsService;
+        private readonly IAircraftService _aircraftService;
  
-        public FlightDataValidation(IFlightService flightService, IAircraftService aircraftService)
+        public FlightDataValidation(IFlightService flightsService, IAircraftService aircraftService)
         {
-            this.flightService = flightService;
-            this.aircraftService = aircraftService;
-        }
-   
-        private bool IsFlightNumberAndRegistrationValid(string flightNumber, string registration)
-        {
-            bool isFlightInbound = this.flightService.CheckIfFlightIsInbound(flightNumber);
-            bool isFlightOutbound = this.flightService.CheckIfFlightIsOutbound(flightNumber);
-
-            if (isFlightInbound)
-            {
-                if (this.aircraftService.CheckAircraftRegistration(registration))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-                 
-            } 
-            else if(isFlightOutbound)
-            {
-                if (this.aircraftService.CheckAircraftRegistration(registration))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            return false;
+            _flightsService = flightsService;
+            _aircraftService = aircraftService;
         }
 
-        private bool IsDateAndStationValid(string flightNumber,string date, string station)
+  
+        public bool IsInboundContainerPalletMessageFlightDataValid(string[] splitMessageContent)
         {
-            //bool isFlightInbound = this.flightService.CheckIfFlightIsInbound(flightNumber);
-            //bool isFlightOutbound = this.flightService.CheckIfFlightIsOutbound(flightNumber);
-
-            //if (isFlightInbound)
-            //{
-            //    var inboundFlightByFlightNumber = this.flightService.GetInboundFlightByFlightNumber(flightNumber);
-
-            //    if (inboundFlightByFlightNumber != null)
-            //    {
-            //        if (inboundFlightByFlightNumber.STA.Day.ToString() != date || inboundFlightByFlightNumber.Origin != station)
-            //        {
-            //            return false;
-            //        } 
-            //        else
-            //        {
-            //            return true;
-            //        }
-            //    }
-            //} 
-            //else if(isFlightInbound)
-            //{
-            //    var outboundFlightByFlightNumber = this.flightService.GetOutboundFlightByFlightNumber(flightNumber);
-            //    if (outboundFlightByFlightNumber != null)
-            //    {
-            //        if (outboundFlightByFlightNumber.STD.Day.ToString() != date || outboundFlightByFlightNumber.Destination != station)
-            //        {
-            //            return false;
-            //        } 
-            //        else
-            //        {
-            //            return true;
-            //        }
-            //    }
-            //}
-
-            return true;
-        }
-
-
-        public bool IsCPMFlightDataValid(string[] splitMessageContent)
-        {
-            bool flag = true;
-
             if (MessageValidation.IsCPMMessageTypeValid(splitMessageContent[0]))
             {
                 var flightRegex = new Regex(FlightInfoConstants.IsFlightInfoValid);
@@ -110,32 +37,25 @@
                     string registration = match.Groups["reg"].Value;
                     string station = match.Groups["origin"].Value;
 
-                    if (this.IsFlightNumberAndRegistrationValid(flightNumber, registration))
+                    if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration,date,station))
                     {
-                        if (this.IsDateAndStationValid(flightNumber,date,station))
+                        if (_flightsService.CheckIfFlightIsInbound(flightNumber))
                         {
-                            return flag;
-                        } 
-                        else
-                        {
-                            flag = false;
+                            if (_aircraftService.CheckAircraftRegistration(registration))
+                            {
+                                return true;
+                            }
                         }
-                    } 
-                    else
-                    {
-                        flag = false;
                     }
                 }
-                
-            } else
-            {
-                flag = false;
             }
 
-            return flag;
+            return false;
         }
 
-        public bool IsArrivalMovementFlightDataValid(string[] splitMessageContent)
+
+
+        public  bool IsArrivalMovementFlightDataValid(string[] splitMessageContent)
         {
             if (MessageValidation.IsMovementMessageTypeValid(splitMessageContent[0]))
             {
@@ -151,69 +71,40 @@
 
                     if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration,date, station))
                     {
-                        if (this.IsFlightNumberAndRegistrationValid(flightNumber, registration))
+                        if (_flightsService.CheckIfFlightIsInbound(flightNumber))
                         {
-                            if (this.IsDateAndStationValid(flightNumber, date, station))
+                            if (_aircraftService.CheckAircraftRegistration(registration))
                             {
                                 return true;
                             }
-                            else
-                            {
-                                return false;
-                            }
-                        }
-                        else
-                        {
-                            return false;
                         }
                     } 
-                    else
-                    {
-                        return false;
-                    }
-                  
-                }
-                else
-                {
-                    return false;
                 }
             } 
-            else
-            {
-                return false;
-            }
-
-           
+            return false;
         }
 
-        public bool IsLDMFlightDataValid(string[] splitMessageContent)
+        public bool IsInboundLoadDistributionMessageFlightDataValid(string[] splitMessageContent)
         {
             if (MessageValidation.IsLoadDistributionMessageTypeValid(splitMessageContent[0]))
             {
                 var flightDataRegex = new Regex(FlightInfoConstants.IsLDMFlightInfoValid);
                 var match = flightDataRegex.Match(splitMessageContent[1]);
+
                 if (match.Success)
                 {
                     string fltNumber = match.Groups["flt"].Value;
                     string registration = match.Groups["reg"].Value;
-                    string date = match.Groups["date"].Value;
-                    
 
-                    if (this.IsFlightNumberAndRegistrationValid(fltNumber,registration))
+                    if (_flightsService.CheckIfFlightIsInbound(fltNumber))
                     {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
+                        if (_aircraftService.CheckAircraftRegistration(registration))
+                        {
+                            return true;
+                        }
                     }
                 }
             } 
-            else
-            {
-                return false;
-            }
-
             return true;
         }
 
@@ -235,36 +126,77 @@
 
                     if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration, date, station))
                     {
-                        if (this.IsFlightNumberAndRegistrationValid(flightNumber, registration))
+                        if (_flightsService.CheckIfFlightIsOutbound(flightNumber))
                         {
-                            if (this.IsDateAndStationValid(flightNumber, date, station))
+                            if (_aircraftService.CheckAircraftRegistration(registration))
                             {
                                 return true;
                             }
-                            else
-                            {
-                                return false; 
-                            }
-                        } 
-                        else
-                        {
-                            return false;
                         }
                     } 
-                    else
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    return false;
                 }
             } 
-            else
+            return false;
+        }
+
+        public bool IsOutboundContainerPalletMessageFlightDataValid(string[] splitMessageContent)
+        {
+            if (MessageValidation.IsCPMMessageTypeValid(splitMessageContent[0]))
             {
-                return false;
+                var flightRegex = new Regex(FlightInfoConstants.IsFlightInfoValid);
+                var match = flightRegex.Match(splitMessageContent[1]);
+
+                if (match.Success)
+                {
+                    string flightNumber = match.Groups["flt"].Value;
+                    string date = match.Groups["date"].Value;
+                    string registration = match.Groups["reg"].Value;
+                    string station = match.Groups["origin"].Value;
+
+                    if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration, date, station))
+                    {
+                        if (_flightsService.CheckIfFlightIsOutbound(flightNumber))
+                        {
+                            if (_aircraftService.CheckAircraftRegistration(registration))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
             }
+
+            return false;
+        }
+
+        public bool IsOutboundLoadDistributionMessageFlightDataValid(string[] splitMessageContent)
+        {
+            if (MessageValidation.IsCPMMessageTypeValid(splitMessageContent[0]))
+            {
+                var flightRegex = new Regex(FlightInfoConstants.IsFlightInfoValid);
+                var match = flightRegex.Match(splitMessageContent[1]);
+
+                if (match.Success)
+                {
+                    string flightNumber = match.Groups["flt"].Value;
+                    string date = match.Groups["date"].Value;
+                    string registration = match.Groups["reg"].Value;
+                    string station = match.Groups["origin"].Value;
+
+                    if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration, date, station))
+                    {
+                        if (_flightsService.CheckIfFlightIsOutbound(flightNumber))
+                        {
+                            if (_aircraftService.CheckAircraftRegistration(registration))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

@@ -13,5 +13,7 @@
         public DateTime STD { get; set; }
 
         public string SeatMap { get; set; }
+
+        public string RampAgentName { get; set; }
     }
 }

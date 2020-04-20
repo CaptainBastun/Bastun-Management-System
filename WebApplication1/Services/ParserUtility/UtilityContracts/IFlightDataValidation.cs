@@ -8,13 +8,17 @@
     public interface IFlightDataValidation
     {
 
-        bool IsCPMFlightDataValid(string[] splitMessageContent);
+        bool IsInboundContainerPalletMessageFlightDataValid(string[] splitMessageContent);
+
+        bool IsOutboundContainerPalletMessageFlightDataValid(string[] splitMessageContent);
 
         bool IsArrivalMovementFlightDataValid(string[] splitMessageContent);
 
         bool IsDepartureMovementFlightDataValid(string[] splitMessageContent);
 
-        bool IsLDMFlightDataValid(string[] splitMessageContent);
+        bool IsInboundLoadDistributionMessageFlightDataValid(string[] splitMessageContent);
+
+        bool IsOutboundLoadDistributionMessageFlightDataValid(string[] splitMessageContent);
 
     }
 }

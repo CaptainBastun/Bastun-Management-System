@@ -16,8 +16,8 @@
     {
         public OutboundFlight()
         {
-            this.OutboundContainers = new HashSet<Container>();
-            this.OutboundMessages = new HashSet<Message>();
+            OutboundContainers = new HashSet<Container>();
+            OutboundMessages = new HashSet<Message>();
         }
 
         public int AircraftId { get; set; }

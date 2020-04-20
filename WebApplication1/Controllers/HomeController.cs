@@ -11,19 +11,19 @@
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IEmailSenderService _emailSender;
+        private readonly IFlightService _flightsService;
 
-        public HomeController(ILogger<HomeController> logger, IEmailSenderService emailSender)
+        public HomeController(ILogger<HomeController> logger,IFlightService flightsService)
         {
             _logger = logger;
-            _emailSender = emailSender;
+            _flightsService = flightsService;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            //TODO: create logic for merging inbound/outbound flights as one and displaying to view
-            return View();
+            var flights = _flightsService.GetAllFlights();
+            return View(flights);
         }
      
 

@@ -24,5 +24,8 @@
         public DateTime STD { get; set; }
         [Required(ErrorMessage = "")]
         public string SeatMap { get; set; }
+
+        [Required(ErrorMessage = InvalidErrorMessages.RampAgentNameRequired)]
+        public string RampAgentName { get ; set; }
     }
 }

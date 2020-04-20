@@ -2,6 +2,7 @@
 {
     using BMS.Data.Models;
     using BMS.Models;
+    using BMS.Models.ViewModels.Flights;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -18,6 +19,6 @@
 
         bool CheckIfFlightIsOutbound(string flightNumber);
 
-        void GetAllFlights();
+        DisplayDailyFlightViewModel GetAllFlights();
     }
 }

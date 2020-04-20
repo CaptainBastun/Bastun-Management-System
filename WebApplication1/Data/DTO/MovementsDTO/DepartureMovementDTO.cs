@@ -1,11 +1,6 @@
 ﻿namespace BMS.Data.DTO.MovementsDTO
 {
-    using BMS.Data.Models;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     public class DepartureMovementDTO
     {
         public DepartureMovementDTO(DateTime[] depMvtTimes, string supplementaryInformation, int totalPax)

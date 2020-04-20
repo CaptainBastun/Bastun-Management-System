@@ -4,15 +4,21 @@
     using BMS.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
 
     [Authorize]
     public class MessagesController : Controller
     {
-        private readonly IMessageParser _messageParser;
+        private readonly IMovementParser _movementParser;
+        private readonly ILoadMessageParser _loadMessageParser;
+        private readonly IContainerMessageParser _containerMessageParser;
 
-        public MessagesController(IMessageParser messageParser)
+        public MessagesController(IMovementParser movementParser,
+            ILoadMessageParser loadMessageParser, IContainerMessageParser containerMessageParser)
         {
-            _messageParser = messageParser;
+            _movementParser = movementParser;
+            _loadMessageParser = loadMessageParser;
+            _containerMessageParser = containerMessageParser;
         }
 
         [HttpGet]
@@ -22,26 +28,31 @@
         }
 
         [HttpPost]
-        public IActionResult InboundLDM(MessageInputModel  messageInputModel)
+        public async Task<IActionResult> InboundLDM(MessageInputModel  messageInputModel)
         {
             if (ModelState.IsValid)
             {
-                _messageParser.ParseInboundLDM(messageInputModel.Message);
-                return RedirectToAction("InboundMessages");
+                if (await _loadMessageParser.ParseInboundLoadDistributionMessage(messageInputModel.Message))
+                {
+                    return RedirectToAction("InboundMessages");
+                }
             } 
 
-          return this.RedirectToAction("Index", "Home");
+          return RedirectToAction("Index", "Home");
         } 
         
         [HttpPost]
-        public IActionResult InboundCPM(MessageInputModel messageInputModel)
+        public async Task<IActionResult> InboundCPM(MessageInputModel messageInputModel)
         {
-            if (_messageParser.ParseInboundCPM(messageInputModel.Message))
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("InboundMessages");
+                if (await _containerMessageParser.ParseInboundContainerPalletMessage(messageInputModel.Message))
+                {
+                    return RedirectToAction("InboundMessages");
+                }
             }
             
-           return this.RedirectToAction("Index", "Home");
+           return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -51,14 +62,14 @@
         }
 
         [HttpPost]
-        public IActionResult OutboundCPM(MessageInputModel messageInputModel)
+        public async Task<IActionResult> OutboundCPM(MessageInputModel messageInputModel)
         {
             if (ModelState.IsValid)
             {
-                if (_messageParser.ParseOutboundCPM(messageInputModel.Message))
+                if (await _containerMessageParser.ParseOutboundContainerPalletMessage(messageInputModel.Message))
                 {
                     return RedirectToAction("OutboundMessages");
-                } 
+                }
             }
 
             return RedirectToAction("Index","Home");
@@ -66,11 +77,11 @@
 
 
         [HttpPost]
-        public IActionResult OutboundLDM(MessageInputModel messageInputModel)
+        public async Task<IActionResult> OutboundLDM(MessageInputModel messageInputModel)
         {
             if (ModelState.IsValid)
             {
-                if (_messageParser.ParseOutboundLDM(messageInputModel.Message))
+                if (await _loadMessageParser.ParseOutboundLoadDistributionMessage(messageInputModel.Message))
                 {
                     return RedirectToAction("OutboundMessages");
                 }
