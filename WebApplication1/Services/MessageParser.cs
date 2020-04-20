@@ -16,7 +16,7 @@
         private readonly IFlightDataValidation _flightDataValidation;
         private readonly IFlightService _flightsService;
         private readonly IParserMovementUtility _parserMovementUtility;
-        private readonly IParserCPMUtility _parserCPMUtility;
+        private readonly IParserContainerPalletMessageUtility _parserCPMUtility;
         private readonly ILoadControlService _loadControlService;
         private readonly Regex regex = new Regex("maika ti");
         private readonly Regex ldmFlightInfoRegex = new Regex(FlightInfoConstants.IsLDMFlightInfoValid);
@@ -27,7 +27,7 @@
         //TODO: Refactor this
         public MessageParser(IMovementService movementService, IMessageService messageService, IFlightDataValidation flightDataValidation, 
             IFlightService flightService,
-            IParserMovementUtility parserMovementUtility, IParserCPMUtility parserCPMUtility, ILoadControlService loadControlService)
+            IParserMovementUtility parserMovementUtility, IParserContainerPalletMessageUtility parserCPMUtility, ILoadControlService loadControlService)
         {
             _movementService = movementService;
             _messageService = messageService;
@@ -45,70 +45,43 @@
 
             if (this._flightDataValidation.IsArrivalMovementFlightDataValid(splitMessage))
             {
-                //string[] flightData = this.parserMovementUtility.GetMovementFlightData(splitMessage[1]); 
-                //var inboundFlightByFlightNumber = this.flightService.GetInboundFlightByFlightNumber(flightData[0]);
-                //string[] arrivalMovementTimes = this.parserMovementUtility.GetTimes(splitMessage[2]); 
-                //DateTime[] validMovementTime = this.parserMovementUtility.ParseMovementTimes(arrivalMovementTimes, inboundFlightByFlightNumber);
-                //string supplementaryInformation = this.ParseSupplementaryInformation(splitMessage[3]);
-                //this.movementService.CreateArrivalMovement(validMovementTime, supplementaryInformation, inboundFlightByFlightNumber);
+                //string[] flightData = _parserMovementUtility.GetMovementFlightData(splitMessage[1]); 
+                //var inboundFlightByFlightNumber = _flightService.GetInboundFlightByFlightNumber(flightData[0]);
+                //string[] arrivalMovementTimes = _parserMovementUtility.GetTimes(splitMessage[2]); 
+                //DateTime[] validMovementTime = _parserMovementUtility.ParseMovementTimes(arrivalMovementTimes, inboundFlightByFlightNumber);
+                //string supplementaryInformation = _ParseSupplementaryInformation(splitMessage[3]);
+                //-movementService.CreateArrivalMovement(validMovementTime, supplementaryInformation, inboundFlightByFlightNumber);
                 //return true; 
             } 
-            else
-            {
-                return false;
-            }
-
-            return true;
+            return false;
         }
 
         public bool ParseInboundCPM(string messageContent)
         {
-            //method returns true if message has been created successfully 
-            //else returns false
-            string[] splitMessageContent =
-                messageContent
-                .Split("\r\n", StringSplitOptions.None);
-
-            if (this._flightDataValidation.IsCPMFlightDataValid(splitMessageContent))
-            {
-                //var inbound = this.flightService.GetInboundFlightByFlightNumber(this.GetFlightNumber(splitMessageContent[1]));
-                //string supplementaryInformation = this.ParseSupplementaryInformation(splitMessageContent[splitMessageContent.Length - 1]);
-                //int amountOfInboundContainers = this.parserCPMUtility.GetContainerCount(splitMessageContent);
-                //var listOfContainersForCurrentMessage = _loadControlService.AddContainersToInboundFlight(inbound,amountOfInboundContainers);
-                //var listofContainerInfo =  _loadControlService.CreateContainerInfo(splitMessageContent, listOfContainersForCurrentMessage);
-                //var dto = new CPMDTO(listofContainerInfo, supplementaryInformation);
-                //this.messageService.CreateInboundCPM(inbound, dto);
-            } 
-            else
-            {
-                return false;
-            }
-              
-            return true;
-        }
-
-        public bool ParseDepartureMovement(string messageContent)
-        {
-            //string[] splitMessage = messageContent
+            ////method returns true if message has been created successfully 
+            ////else returns false
+            //string[] splitMessageContent =
+            //    messageContent
             //    .Split("\r\n", StringSplitOptions.None);
 
-            //if (this.flightDataValidation.IsDepartureMovementFlightDataValid(splitMessage))
+            //if (this._flightDataValidation.IsCPMFlightDataValid(splitMessageContent))
             //{
-            //    string[] flightData = this.parserMovementUtility.GetMovementFlightData(splitMessage[1]);
-            //   var outboundFlightByFlightNumber = this.flightService.GetOutboundFlightByFlightNumber(flightData[0]);
-            //   string supplementaryInformation = this.ParseSupplementaryInformation(splitMessage[splitMessage.Length - 1]);
-            //   int totalPax = this.ParseTotalPax(splitMessage[3]); 
-            //   string[] times = this.parserMovementUtility.GetTimes(splitMessage[2]);
-            //   DateTime[] timesForDeparture = this.parserMovementUtility.ParseMovementTimes(times, outboundFlightByFlightNumber);
-            //   this.movementService.CreateDepartureMovement(timesForDeparture, supplementaryInformation, totalPax, outboundFlightByFlightNumber);
-            //}
+            //    //var inbound = this.flightService.GetInboundFlightByFlightNumber(this.GetFlightNumber(splitMessageContent[1]));
+            //    //string supplementaryInformation = this.ParseSupplementaryInformation(splitMessageContent[splitMessageContent.Length - 1]);
+            //    //int amountOfInboundContainers = this.parserCPMUtility.GetContainerCount(splitMessageContent);
+            //    //var listOfContainersForCurrentMessage = _loadControlService.AddContainersToInboundFlight(inbound,amountOfInboundContainers);
+            //    //var listofContainerInfo =  _loadControlService.CreateContainerInfo(splitMessageContent, listOfContainersForCurrentMessage);
+            //    //var dto = new CPMDTO(listofContainerInfo, supplementaryInformation);
+            //    //this.messageService.CreateInboundCPM(inbound, dto);
+            //} 
             //else
             //{
             //    return false;
             //}
-
-            return true;
+              
+            //return true;
         }
+
 
         private string ParseSupplementaryInformation(string supplementaryInfo)
         {
@@ -133,18 +106,7 @@
             return int.Parse(totalPax.Remove(0, 3));
         }
 
-        private string GetFlightNumber(string message)
-        {
-            var regex = new Regex(FlightInfoConstants.IsLDMFlightInfoValid);
-            var match = regex.Match(message);
-
-            if (match.Success)
-            {
-                return match.Groups["flt"].Value;
-            }
-
-            return null;
-        }
+       
 
         public bool ParseOutboundCPM(string messageContent)
         {

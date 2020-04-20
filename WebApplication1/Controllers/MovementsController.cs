@@ -4,6 +4,7 @@
     using BMS.Models.MovementsInputModels;
     using BMS.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
+    using System.Threading.Tasks;
 
     [Authorize]
     public class MovementsController : Controller
@@ -14,7 +15,7 @@
         public MovementsController(IMovementParser movementParser, IAircraftService flightsService)
         {
           
-            this._movementParser = movementParser;
+            _movementParser = movementParser;
             _flightsService = flightsService;
         }
 
@@ -26,11 +27,11 @@
 
 
         [HttpPost]
-        public IActionResult Arrival(MovementInputModel movementInput)
+        public async Task<IActionResult> Arrival(MovementInputModel movementInput)
         {
             if (ModelState.IsValid)
             {
-                if (_messageParser.ParseArrivalMovement(movementInput.Movement))
+                if (await _movementParser.ParseArrivalMovement(movementInput.Movement))
                 {
                     return RedirectToAction("InboundMessages", "Messages");
                 }
@@ -45,15 +46,16 @@
         }
 
         [HttpPost]
-        public IActionResult Departure(MovementInputModel movementInput)
+        public async Task<IActionResult> Departure(MovementInputModel movementInput)
         {
             if (ModelState.IsValid)
             {
-                if (_messageParser.ParseDepartureMovement(movementInput.Movement))
+                if (await _movementParser.ParseDepartureMovement(movementInput.Movement))
                 {
                     return RedirectToAction("OutboundMessages", "Messages");
                 }
             }
+
             return View();
         }
     }

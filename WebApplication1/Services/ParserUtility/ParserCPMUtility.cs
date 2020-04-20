@@ -7,7 +7,7 @@
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    public class ParserCPMUtility : IParserCPMUtility
+    public class ParserCPMUtility : IParserContainerPalletMessageUtility
     {
         public Regex FlightInfo { get; set; } = new Regex(FlightInfoConstants.IsLDMFlightInfoValid);
 

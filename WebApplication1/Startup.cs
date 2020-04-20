@@ -46,9 +46,10 @@ namespace WebApplication1
             services.AddTransient<IFlightDataValidation, FlightDataValidation>();
             services.AddTransient<IParserMovementUtility, ParserArrMVTUtility>();
             services.AddTransient<IParserMovementUtility, ParserDepMVTUtility>();
-            services.AddTransient<IParserCPMUtility, ParserCPMUtility>();
+            services.AddTransient<IParserContainerPalletMessageUtility, ParserCPMUtility>();
             services.AddTransient<IFuelAndWeightService, FuelAndWeightService>();
             services.AddTransient<IAircraftCabinBaggageHoldService, AircraftCabinBaggageHoldService>();
+            services.AddTransient<IMovementParser, MovementParser>();
             services.AddTransient<IEmailSenderService>(serviceProvider => 
                   new EmailSender(this.Configuration["SendGrid:BMS_SendGridApiKey"]));
             services.AddDbContext<ApplicationDbContext>(options =>

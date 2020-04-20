@@ -21,7 +21,7 @@
 
             CreateMap<AircraftInputModel, Aircraft>();
                 
-            CreateMap<LDMDTO, LoadDistributionMessage>();
+            CreateMap<LoadDistributionMessageDTO, LoadDistributionMessage>();
 
             CreateMap<ContainerPalletMessageDTO, ContainerPalletMessage>();
         }

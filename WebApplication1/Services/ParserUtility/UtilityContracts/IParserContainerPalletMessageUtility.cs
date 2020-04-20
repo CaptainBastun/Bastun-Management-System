@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    public interface IParserCPMUtility
+    public interface IParserContainerPalletMessageUtility
     {
         Regex FlightInfo { get; set; }
 
