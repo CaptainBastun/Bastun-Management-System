@@ -1,26 +1,22 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebApplication1.Controllers
+﻿namespace WebApplication1.Controllers
 {
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+
     [Authorize]
     public class PAXController : Controller
     {
         [HttpGet]
         public IActionResult Register()
         {
-            return this.View();
+            return View();
         }
 
         
         [HttpGet]
         public IActionResult OffloadEdit()
         {
-            return this.View();
+            return View();
         }
       
     }

@@ -47,5 +47,9 @@
         public const string HandlingStationIsInvalid = "Handling station format is invalid!";
 
         public const string MessageIsRequired = "Message is required!";
+
+        public const string SeatMapRequired = "Seat map is required!";
+
+        public const string SeatMapIsInvalid = "Seat map is invalid!";
     }
 }

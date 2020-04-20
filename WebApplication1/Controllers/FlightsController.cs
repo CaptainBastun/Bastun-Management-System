@@ -1,15 +1,11 @@
-﻿using BMS.Models;
-
-using BMS.Services.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace BMS.Controllers
+﻿namespace BMS.Controllers
 {
+    using BMS.Models;
+    using BMS.Services.Contracts;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
+
     [Authorize]
     public class FlightsController : Controller
     {
@@ -47,11 +43,11 @@ namespace BMS.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterAircraft(AircraftInputModel aircraftInputModel)
+        public async Task<IActionResult> RegisterAircraft(AircraftInputModel aircraftInputModel)
         {
             if (ModelState.IsValid)
             {
-                _aircraftService.RegisterAircraft(aircraftInputModel);
+                await _aircraftService.RegisterAircraft(aircraftInputModel);
                 return RedirectToAction("DetermineCorrectLoadingInstruction", "Operations");
             }
 

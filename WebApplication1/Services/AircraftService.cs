@@ -44,18 +44,11 @@
             return _dbContext.Aircraft.FirstOrDefault(ac => ac.AircraftRegistration == registration);
         }
 
-        private async Task AddCabinToAircraft(string registration)
-        {
-            var aircraft = GetAicraftByRegistration(registration);
 
-            await _cabinBaggageHoldService.AddCabinAndBaggageHoldToAircraft(aircraft);
-
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public string IsAircraftOfACertainType(OutboundFlight flight)
+        public string GetAircraftOfContainerizedType(OutboundFlight flight)
         {
             string type = string.Empty;
+
             if (flight.Aircraft.Type.ToString() == "B763" || flight.Aircraft.Type.ToString() == "B788")
             {
                 type =  flight.Aircraft.Type.ToString();

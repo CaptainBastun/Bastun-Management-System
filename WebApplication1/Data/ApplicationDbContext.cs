@@ -1,19 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-using BMS.Data;
-using BMS.Data.LoadingInstructions;
-using BMS.Data.Models;
-using BMS.Data.Models.AircraftBaggageHolds;
-using BMS.Data.Models.AircraftCabins;
-using BMS.Data.Models.Flights;
-using BMS.Data.Models.Messages;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-
-namespace WebApplication1.Data
+﻿namespace WebApplication1.Data
 {
+    using System.Reflection;
+    using BMS.Data;
+    using BMS.Data.LoadingInstructions;
+    using BMS.Data.Models;
+    using BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments;
+    using BMS.Data.Models.BaggageHolds.AircraftBaggageHolds;
+    using BMS.Data.Models.Cabins;
+    using BMS.Data.Models.Cabins.AircraftCabinZones;
+    using BMS.Data.Models.Flights;
+    using BMS.Data.Models.Messages;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore;
+
     public class ApplicationDbContext : IdentityDbContext
     {
         public DbSet<InboundFlight> InboundFlights { get; set; }
@@ -46,25 +45,28 @@ namespace WebApplication1.Data
 
         public DbSet<BulkLoadingInstruction> BulkLoadingInstructions { get; set; }
 
-        public DbSet<Cabin320> Cabins320 { get; set; }
+        public DbSet<AircraftBaggageHold> AircraftBaggageHolds { get; set; }
 
-        public DbSet<Cabin738> Cabins738 { get; set; }
+        public DbSet<CompartmentOne> CompartmentOnes { get; set; }
 
-        public DbSet<Cabin752> Cabins752 { get; set; }
+        public DbSet<CompartmentTwo> CompartmentTwos { get; set; }
 
-        public DbSet<Cabin763> Cabins763 { get; set; }
+        public DbSet<CompartmentThree> CompartmentThrees { get; set; }
 
-        public DbSet<Cabin788> Cabins788 { get; set; }
+        public DbSet<CompartmentFour> CompartmentFours { get; set; }
 
-        public DbSet<BaggageHoldA320> BaggageHoldsA320 { get; set; }
+        public DbSet<CompartmentFive> CompartmentFives { get; set; }
 
-        public DbSet<BaggageHold738> BaggageHolds738 { get; set; }
+        public DbSet<AircraftCabin> AircraftCabins { get; set; }
 
-        public DbSet<BaggageHold752> BaggageHolds752 { get; set; }
+        public DbSet<ZoneAlpha> ZoneAlphas { get; set; }
 
-        public DbSet<BaggageHold763> BaggageHolds763 { get; set; }
+        public DbSet<ZoneBravo> ZoneBravos { get; set; }
 
-        public DbSet<BaggageHold788> BaggageHolds788 { get; set; }
+        public DbSet<ZoneCharlie> ZoneCharlies { get; set; }
+
+        public DbSet<ZoneDelta> ZoneDeltas { get; set; }
+
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -81,10 +83,11 @@ namespace WebApplication1.Data
 
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             builder.Entity<Message>().ToTable("Messages");
+            builder.Entity<Compartment>().ToTable("Compartments");
+            builder.Entity<AircraftCabinZone>().ToTable("Zones");
             builder.Entity<Flight>().ToTable("Flights");
             builder.Entity<LoadingInstruction>().ToTable("LoadingInstructions");
-            builder.Entity<AircraftCabin>().ToTable("AircraftCabins"); 
-
+           
             base.OnModelCreating(builder);
         }
     }

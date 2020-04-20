@@ -1,5 +1,6 @@
 ﻿namespace BMS.Data.Models
 {
+    using BMS.Data.Models.Cabins;
     using BMS.Data.Models.Contracts;
     using BMS.Data.Models.Enums;
     using BMS.GlobalData.ErrorMessages;
@@ -41,6 +42,9 @@
         public string PassportNumber { get; set; }
 
         public virtual ICollection<Suitcase> Suitcases { get; set; }
+
+        public int AircraftCabinZoneId { get; set; }
+        public virtual AircraftCabinZone Zone { get; set; }
 
     }
 }

@@ -22,5 +22,7 @@
 
         [Required(ErrorMessage = InvalidErrorMessages.FlightSTDIsRequired)]
         public DateTime STD { get; set; }
+        [Required(ErrorMessage = "")]
+        public string SeatMap { get; set; }
     }
 }

@@ -14,8 +14,8 @@
     {
         public InboundFlight()
         {
-            this.InboundMessages = new HashSet<Message>();
-            this.InboundContainers = new HashSet<Container>();
+            InboundMessages = new HashSet<Message>();
+            InboundContainers = new HashSet<Container>();
         }
 
 

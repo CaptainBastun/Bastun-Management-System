@@ -14,7 +14,7 @@
         public int HoldThreePieces { get; set; }
 
         public int HoldFourPieces { get; set; }
-
+        
         public int HoldFivePieces { get; set; }
     }
 }

@@ -8,12 +8,13 @@
     [Authorize]
     public class MovementsController : Controller
     {
-        private readonly IMessageParser _messageParser;
+        private readonly IMovementParser _movementParser;
         private readonly IAircraftService _flightsService;
 
-        public MovementsController(IMessageParser messageParser,IAircraftService flightsService)
+        public MovementsController(IMovementParser movementParser, IAircraftService flightsService)
         {
-            _messageParser = messageParser;
+          
+            this._movementParser = movementParser;
             _flightsService = flightsService;
         }
 

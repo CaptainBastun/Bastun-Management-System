@@ -19,6 +19,9 @@
 
         public const string StationValidation = @"^[A-Z]{3}$";
 
-       
+        public const string SeatMapValidation = @"[A-Z]{2}[0-9]{1,3}\/?";
+
+
+
     }
 }

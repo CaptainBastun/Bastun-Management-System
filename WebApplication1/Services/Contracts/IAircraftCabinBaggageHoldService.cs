@@ -5,6 +5,6 @@
 
     public interface IAircraftCabinBaggageHoldService
     {
-        Task AddCabinAndBaggageHoldToAircraft(Aircraft aircraft);
+        void AddCabinAndBaggageHoldToAircraft(Aircraft aircraft);
     }
 }

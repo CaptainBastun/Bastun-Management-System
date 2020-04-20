@@ -7,13 +7,14 @@
     using System.ComponentModel.DataAnnotations;
     using BMS.GlobalData.ErrorMessages;
     using BMS.GlobalData.PAXConstants;
+    using BMS.Data.Models.BaggageHolds.AircraftBaggageHolds;
 
     public class Suitcase
     {
 
         public Suitcase()
         {
-            this.SuitcaseId = Guid.NewGuid().ToString();
+           SuitcaseId = Guid.NewGuid().ToString();
         }
 
         [Key]
@@ -28,5 +29,9 @@
 
         [Required]
         public virtual Passenger Passenger { get; set; }
+
+        public int CompartmentId { get; set; }
+
+        public virtual Compartment Compartment { get; set; }
     }
 }

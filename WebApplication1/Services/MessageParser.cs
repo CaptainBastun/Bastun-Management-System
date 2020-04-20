@@ -1,21 +1,13 @@
 ﻿namespace BMS.Services
 {
-    using BMS.Data.Models;
-    using BMS.Models.MovementsInputModels;
     using BMS.Services.Contracts;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using BMS.Services.ParserUtility;
-    using System.Threading.Tasks;
     using BMS.Services.Utility.UtilityConstants;
-    using BMS.Services.Utility;
     using BMS.Services.Utility.UtilityContracts;
-    using System.Globalization;
-    using BMS.Data.DTO;
     using BMS.Services.ParserUtility.UtilityContracts;
-    using BMS.Data.Models.Contracts.FlightContracts;
 
     public class MessageParser : IMessageParser
     {
@@ -130,11 +122,8 @@
                     .ToArray();
                 string actualData = splitData[0];
                 result = actualData;
-            } 
-            else
-            {
-                result = "NIL";
             }
+            result = "NIL";
 
             return result;
         }
@@ -146,24 +135,15 @@
 
         private string GetFlightNumber(string message)
         {
-            if (message != null)
-            {
-                var test = new Regex(FlightInfoConstants.IsLDMFlightInfoValid);
-                var match = test.Match(message);
+            var regex = new Regex(FlightInfoConstants.IsLDMFlightInfoValid);
+            var match = regex.Match(message);
 
-                if (match.Success)
-                {
-                    return match.Groups["flt"].Value;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            else
+            if (match.Success)
             {
-                return null;
+                return match.Groups["flt"].Value;
             }
+
+            return null;
         }
 
         public bool ParseOutboundCPM(string messageContent)

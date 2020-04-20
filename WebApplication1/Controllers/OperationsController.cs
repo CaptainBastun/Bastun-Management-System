@@ -1,55 +1,52 @@
-﻿using BMS.Models;
-using BMS.Models.LoadingInstructionInputModels;
-using BMS.Services.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace WebApplication1.Controllers
+﻿namespace BMS.Controllers
 {
+    using BMS.Models;
+    using BMS.Models.LoadingInstructionInputModels;
+    using BMS.Services.Contracts;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
+
     [Authorize]
     public class OperationsController : Controller
     {
-        private readonly IFlightService flightService;
-        private readonly IAircraftService aircraftService;
-        private readonly ILoadControlService loadControlService;
+        private readonly IFlightService _flightsService;
+        private readonly IAircraftService _aircraftService;
+        private readonly ILoadControlService _loadControlService;
 
         public OperationsController(IFlightService flightService, IAircraftService aircraftService, ILoadControlService loadControlService)
         {
-            this.flightService = flightService;
-            this.aircraftService = aircraftService;
-            this.loadControlService = loadControlService;
+            _flightsService = flightService;
+            _aircraftService = aircraftService;
+            _loadControlService = loadControlService;
         }
 
 
         [HttpGet]
         public IActionResult Loadsheet()
         {
-            return this.View();
+            return View();
         }
 
         [HttpGet]
         public IActionResult DefaultLoadingInstruction()
         {
-            return this.View();
+            return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> DetermineCorrectLoadingInstruction(string flightNumber)
         {
-            var flight = await this.flightService.GetOutboundFlightByFlightNumber(flightNumber);
-            string type = this.aircraftService.IsAircraftOfACertainType(flight);
-            string correctLoadingInstruction = this.loadControlService.GetCorrectLoadingInstruction(type);
+            var flight = await _flightsService.GetOutboundFlightByFlightNumber(flightNumber);
+            string type = _aircraftService.GetAircraftOfContainerizedType(flight);
+            string correctLoadingInstruction = _loadControlService.GetCorrectLoadingInstruction(type);
 
             if (correctLoadingInstruction == null)
             {
-                this.ModelState.AddModelError(string.Empty, "No valid loading instruction report found!");
+                ModelState.AddModelError(string.Empty, "No valid loading instruction report found!");
             }
 
-            return this.View(correctLoadingInstruction);
+            return View(correctLoadingInstruction);
         }
 
         [HttpPost]

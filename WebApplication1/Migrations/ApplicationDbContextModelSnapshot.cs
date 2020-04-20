@@ -97,48 +97,12 @@ namespace BMS.Migrations
                     b.Property<int>("AircraftId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CompartmentFiveCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompartmentFiveTotalWeight")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompartmentFourCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompartmentFourTotalWeight")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompartmentOneCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompartmentOneTotalWeight")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompartmentThreeCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompartmentThreeTotalWeight")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompartmentTwoCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompartmentTwoTotalWeight")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("BaggageHoldId");
 
                     b.HasIndex("AircraftId")
                         .IsUnique();
 
-                    b.ToTable("AircraftBaggageHold");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AircraftBaggageHold");
+                    b.ToTable("AircraftBaggageHolds");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.AircraftCabin", b =>
@@ -151,30 +115,12 @@ namespace BMS.Migrations
                     b.Property<int>("AircraftId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ZoneAlphaCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ZoneBravoCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ZoneCharlieCapacity")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ZoneDeltaCapacity")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AircraftId")
                         .IsUnique();
 
                     b.ToTable("AircraftCabins");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AircraftCabin");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.ArrivalMovement", b =>
@@ -205,6 +151,67 @@ namespace BMS.Migrations
                         .IsUnique();
 
                     b.ToTable("ArrivalMovements");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BaggageHoldId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CurrentPiecesInHold")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MaxHoldWeightCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PiecesToPutInHold")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalWeightInHold")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaggageHoldId");
+
+                    b.ToTable("Compartments");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Compartment");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZone", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AircraftCabinId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CabinCapacity")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AircraftCabinId");
+
+                    b.ToTable("Zones");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("AircraftCabinZone");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.Container", b =>
@@ -316,6 +323,10 @@ namespace BMS.Migrations
                     b.Property<DateTime>("STD")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("SeatMap")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("FlightId");
 
                     b.ToTable("Flights");
@@ -408,7 +419,7 @@ namespace BMS.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int?>("AircraftCabinId")
+                    b.Property<int>("AircraftCabinZoneId")
                         .HasColumnType("int");
 
                     b.Property<string>("FirstName")
@@ -435,7 +446,7 @@ namespace BMS.Migrations
 
                     b.HasKey("PaxId");
 
-                    b.HasIndex("AircraftCabinId");
+                    b.HasIndex("AircraftCabinZoneId");
 
                     b.ToTable("Passengers");
                 });
@@ -444,6 +455,9 @@ namespace BMS.Migrations
                 {
                     b.Property<string>("SuitcaseId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CompartmentId")
+                        .HasColumnType("int");
 
                     b.Property<int>("PassengerPaxId")
                         .HasColumnType("int");
@@ -455,6 +469,8 @@ namespace BMS.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("SuitcaseId");
+
+                    b.HasIndex("CompartmentId");
 
                     b.HasIndex("PassengerPaxId");
 
@@ -744,74 +760,67 @@ namespace BMS.Migrations
                     b.HasDiscriminator().HasValue("ContainerLoadingInstruction");
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHold738", b =>
+            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentFive", b =>
                 {
-                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
 
-                    b.HasDiscriminator().HasValue("BaggageHold738");
+                    b.HasDiscriminator().HasValue("CompartmentFive");
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHold752", b =>
+            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentFour", b =>
                 {
-                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
 
-                    b.HasDiscriminator().HasValue("BaggageHold752");
+                    b.HasDiscriminator().HasValue("CompartmentFour");
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHold763", b =>
+            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentOne", b =>
                 {
-                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
 
-                    b.HasDiscriminator().HasValue("BaggageHold763");
+                    b.HasDiscriminator().HasValue("CompartmentOne");
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHold788", b =>
+            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentThree", b =>
                 {
-                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
 
-                    b.HasDiscriminator().HasValue("BaggageHold788");
+                    b.HasDiscriminator().HasValue("CompartmentThree");
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHolds.BaggageHoldA320", b =>
+            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentTwo", b =>
                 {
-                    b.HasBaseType("BMS.Data.Models.AircraftBaggageHold");
+                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
 
-                    b.HasDiscriminator().HasValue("BaggageHoldA320");
+                    b.HasDiscriminator().HasValue("CompartmentTwo");
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin320", b =>
+            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZones.ZoneAlpha", b =>
                 {
-                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
+                    b.HasBaseType("BMS.Data.Models.Cabins.AircraftCabinZone");
 
-                    b.HasDiscriminator().HasValue("Cabin320");
+                    b.HasDiscriminator().HasValue("ZoneAlpha");
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin738", b =>
+            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZones.ZoneBravo", b =>
                 {
-                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
+                    b.HasBaseType("BMS.Data.Models.Cabins.AircraftCabinZone");
 
-                    b.HasDiscriminator().HasValue("Cabin738");
+                    b.HasDiscriminator().HasValue("ZoneBravo");
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin752", b =>
+            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZones.ZoneCharlie", b =>
                 {
-                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
+                    b.HasBaseType("BMS.Data.Models.Cabins.AircraftCabinZone");
 
-                    b.HasDiscriminator().HasValue("Cabin752");
+                    b.HasDiscriminator().HasValue("ZoneCharlie");
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin763", b =>
+            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZones.ZoneDelta", b =>
                 {
-                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
+                    b.HasBaseType("BMS.Data.Models.Cabins.AircraftCabinZone");
 
-                    b.HasDiscriminator().HasValue("Cabin763");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.AircraftCabins.Cabin788", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.AircraftCabin");
-
-                    b.HasDiscriminator().HasValue("Cabin788");
+                    b.HasDiscriminator().HasValue("ZoneDelta");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.InboundFlight", b =>
@@ -964,6 +973,24 @@ namespace BMS.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment", b =>
+                {
+                    b.HasOne("BMS.Data.Models.AircraftBaggageHold", "BaggageHold")
+                        .WithMany("Compartments")
+                        .HasForeignKey("BaggageHoldId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZone", b =>
+                {
+                    b.HasOne("BMS.Data.Models.AircraftCabin", "Cabin")
+                        .WithMany("Zones")
+                        .HasForeignKey("AircraftCabinId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("BMS.Data.Models.Container", b =>
                 {
                     b.HasOne("BMS.Data.Models.InboundFlight", "InboundFlight")
@@ -1024,13 +1051,21 @@ namespace BMS.Migrations
 
             modelBuilder.Entity("BMS.Data.Models.Passenger", b =>
                 {
-                    b.HasOne("BMS.Data.Models.AircraftCabin", null)
+                    b.HasOne("BMS.Data.Models.Cabins.AircraftCabinZone", "Zone")
                         .WithMany("Passengers")
-                        .HasForeignKey("AircraftCabinId");
+                        .HasForeignKey("AircraftCabinZoneId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BMS.Data.Models.Suitcase", b =>
                 {
+                    b.HasOne("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment", "Compartment")
+                        .WithMany("Suitcases")
+                        .HasForeignKey("CompartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("BMS.Data.Models.Passenger", "Passenger")
                         .WithMany("Suitcases")
                         .HasForeignKey("PassengerPaxId")

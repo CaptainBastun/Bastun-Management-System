@@ -11,5 +11,7 @@
         public DateTime STA { get; set; }
 
         public DateTime STD { get; set; }
+
+        public string SeatMap { get; set; }
     }
 }

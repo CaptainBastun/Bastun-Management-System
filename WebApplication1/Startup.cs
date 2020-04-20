@@ -24,9 +24,6 @@ namespace WebApplication1
     using BMS.Services.ParserUtility.ParserMovementUtility;
     using Microsoft.AspNetCore.Http;
     using Wkhtmltopdf.NetCore;
-    using BMS.Factories.Contracts;
-    using BMS.Factories;
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -52,8 +49,6 @@ namespace WebApplication1
             services.AddTransient<IParserCPMUtility, ParserCPMUtility>();
             services.AddTransient<IFuelAndWeightService, FuelAndWeightService>();
             services.AddTransient<IAircraftCabinBaggageHoldService, AircraftCabinBaggageHoldService>();
-            services.AddTransient<IAircraftBaggageHoldFactory, BaggageHoldFactory>();
-            services.AddTransient<IAircraftCabinFactory, CabinFactory>();
             services.AddTransient<IEmailSenderService>(serviceProvider => 
                   new EmailSender(this.Configuration["SendGrid:BMS_SendGridApiKey"]));
             services.AddDbContext<ApplicationDbContext>(options =>

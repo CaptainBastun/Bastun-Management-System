@@ -1,40 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using BMS.Models;
-using BMS.Services.Contracts;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using WebApplication1.Models;
-
-namespace WebApplication1.Controllers
+﻿namespace WebApplication1.Controllers
 {
+    using System.Diagnostics;
+    using BMS.Services.Contracts;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
+    using WebApplication1.Models;
+
     [Authorize]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IEmailSenderService emailSender;
+        private readonly IEmailSenderService _emailSender;
 
         public HomeController(ILogger<HomeController> logger, IEmailSenderService emailSender)
         {
             _logger = logger;
-            this.emailSender = emailSender;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
             //TODO: create logic for merging inbound/outbound flights as one and displaying to view
-            return this.View();
+            return View();
         }
      
 
         public IActionResult Privacy()
         {
-            return this.View();
+            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

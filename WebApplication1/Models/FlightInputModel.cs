@@ -36,5 +36,9 @@
         [Required(ErrorMessage = InvalidErrorMessages.BookedPAXRequired)]
         [Range(1,345, ErrorMessage = InvalidErrorMessages.BookedPax)]
         public int BookedPax { get; set; }
+
+        [Required(ErrorMessage = InvalidErrorMessages.SeatMapRequired)]
+        [RegularExpression(FlightInputDataValidation.SeatMapValidation, ErrorMessage = InvalidErrorMessages.SeatMapIsInvalid)]
+        public string SeatMap { get; set; }
     }
 }
