@@ -15,31 +15,3 @@
     </form>
 </div>
 <br />
-<hr />
-<br />
-<div class="col">
-    <form id="cpmForm" asp-controller="Messages" asp-action="OutboundCPM">
-        <div class="form-group">
-            <label asp-for="@Model.Message">Outbound CPM:</label>
-            <textarea asp-for="@Model.Message" class="form-control w-100" rows="7"></textarea>
-            <span asp-validation-for="@Model.Message"></span>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Submit</button>
-    </form>
-</div>
-<br />
-<hr />
-<br />
-<div class="col">
-    <form id="ucmForm" asp-controller="Messages" asp-action="OutboundUCM">
-        <div class="form-group">
-            <label asp-for="@Model.Message">Outbound UCM:</label>
-            <textarea asp-for="@Model.Message" class="form-control w-100" rows="7"></textarea>
-            <span asp-validation-for="@Model.Message"></span>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Submit</button>
-    </form>
-</div>
-<br />
-<hr />
-<br />

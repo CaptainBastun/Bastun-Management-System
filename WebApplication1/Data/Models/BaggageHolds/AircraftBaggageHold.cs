@@ -6,6 +6,11 @@
 
     public class AircraftBaggageHold
     {
+        public AircraftBaggageHold()
+        {
+            Compartments = new List<Compartment>();
+        }
+
         [Key]
         public int BaggageHoldId { get; set; }
 

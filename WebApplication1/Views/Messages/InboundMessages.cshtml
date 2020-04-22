@@ -14,18 +14,3 @@
     </form>
 </div>
 <br />
-<hr />
-<br />
-<div class="col">
-    <form id="cpmForm" asp-controller="Messages" asp-action="InboundCPM">
-        <div class="form-group">
-            <label class="text-center">Inbound CPM:</label>
-            <textarea asp-for="@Model.Message"class="form-control w-100" rows="3"></textarea>
-            <span asp-validation-for="@Model.Message"></span>
-        </div>
-        <button type="submit" class="btn btn-primary w-100">Submit</button>
-    </form>
-</div>
-<br />
-<hr />
-<br />

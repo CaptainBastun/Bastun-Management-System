@@ -1,8 +1,10 @@
 ﻿namespace BMS.Mappings
 {
     using AutoMapper;
+    using BMS.Data;
     using BMS.Data.DTO;
     using BMS.Data.DTO.MovementsDTO;
+    using BMS.Data.LoadingInstructions;
     using BMS.Data.Models;
     using BMS.Data.Models.Messages;
     using BMS.Models;
@@ -23,6 +25,12 @@
             CreateMap<AircraftInputModel, Aircraft>();
                 
             CreateMap<LoadDistributionMessageDTO, LoadDistributionMessage>();
+
+            CreateMap<BulkLoadingInstructionInputModel, LoadingInstruction>();
+
+            CreateMap<FuelFormInputModel,FuelForm>();
+
+            CreateMap<WeightFormInputModel, WeightForm>();
 
         }
     }

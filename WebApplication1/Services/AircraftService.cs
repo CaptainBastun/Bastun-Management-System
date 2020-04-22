@@ -44,6 +44,9 @@
 
             await _dbContext.Aircraft.AddAsync(aircraft);
             await _dbContext.SaveChangesAsync();
+
+            await _cabinBaggageHoldService.CreateBaggageHoldAndCompartments(outboundFlightToRegisterAircraftTo);
+            await _cabinBaggageHoldService.CreateCabinAndZones(outboundFlightToRegisterAircraftTo);
             
         }
 

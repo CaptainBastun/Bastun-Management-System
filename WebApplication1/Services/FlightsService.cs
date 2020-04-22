@@ -48,7 +48,7 @@
                     Destination = x.Destination,
                     Registration = x.Aircraft.AircraftRegistration,
                     FlightNumber = x.FlightNumber,
-                    STD = x.STD.Hour.ToString(),
+                    STD = x.STD.ToString("HH:mm"),
                     RampAgent = x.RampAgentName,
                 })
                 .ToList();

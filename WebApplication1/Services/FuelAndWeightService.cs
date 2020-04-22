@@ -1,6 +1,7 @@
 ﻿namespace BMS.Services
 {
     using AutoMapper;
+    using BMS.Data;
     using BMS.Data.Models;
     using BMS.Models;
     using BMS.Services.Contracts;
@@ -12,41 +13,52 @@
 
     public class FuelAndWeightService : IFuelAndWeightService
     {
-        private readonly ApplicationDbContext dbContext;
-        private readonly IFlightService flightService;
-        private readonly IMapper mapper;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly IFlightService _flightService;
+        private readonly IMapper _mapper;
 
         public FuelAndWeightService(ApplicationDbContext dbContext, IFlightService flightService, IMapper mapper)
         {
-            this.dbContext = dbContext;
-            this.flightService = flightService;
-            this.mapper = mapper;
+            _dbContext = dbContext;
+            _flightService = flightService;
+            _mapper = mapper;
         }
-        public void AddFuelForm(FuelFormInputModel fuelFormInputModel)
+        public async Task AddFuelForm(FuelFormInputModel fuelFormInputModel)
         {
-            //var outboundFlight = this.flightService.GetOutboundFlightByFlightNumber(fuelFormInputModel.FlightNumber);
-            //if (outboundFlight.Aircraft != null)
-            //{
-            //    var newFuelForm = this.mapper.Map<FuelForm>(fuelFormInputModel);
+            var outboundFlight = await _flightService.GetOutboundFlightByFlightNumber(fuelFormInputModel.FlightNumber);
 
-            //    newFuelForm.Aircraft = outboundFlight.Aircraft;
-            //    newFuelForm.AircraftId = outboundFlight.AircraftId;
+            if (outboundFlight.Aircraft != null)
+            {
+                var newFuelForm = _mapper.Map<FuelForm>(fuelFormInputModel);
 
-            //    this.dbContext.FuelForms.Add(newFuelForm);
-            //    this.dbContext.SaveChanges();
+                newFuelForm.Aircraft = outboundFlight.Aircraft;
+                newFuelForm.AircraftId = outboundFlight.AircraftId;
 
-            //    outboundFlight.Aircraft.FuelForm = newFuelForm;
-            //    outboundFlight.Aircraft.FuelFormId = newFuelForm.Id;
-            //}
+
+                outboundFlight.Aircraft.FuelForm = newFuelForm;
+                outboundFlight.Aircraft.FuelFormId = newFuelForm.Id;
+
+               await _dbContext.FuelForms.AddAsync(newFuelForm);
+               await _dbContext.SaveChangesAsync();
+
+            }
         }
 
-        public void AddWeightForm(WeightFormInputModel weightInputModel)
+        public async Task AddWeightForm(WeightFormInputModel weightInputModel)
         {
-            var outboundFlight = this.flightService.GetOutboundFlightByFlightNumber(weightInputModel.FlightNumber);
+            var outboundFlight = await _flightService.GetOutboundFlightByFlightNumber(weightInputModel.FlightNumber);
 
             if (outboundFlight != null)
             {
-                
+                var newWeightForm = _mapper.Map<WeightForm>(weightInputModel);
+
+                newWeightForm.Aircraft = outboundFlight.Aircraft;
+                newWeightForm.AircraftId = outboundFlight.Aircraft.AircraftId;
+                outboundFlight.Aircraft.WeightForm = newWeightForm;
+                outboundFlight.Aircraft.WeightFormId = newWeightForm.Id;
+
+                await _dbContext.WeightForms.AddAsync(newWeightForm);
+                await _dbContext.SaveChangesAsync();
             }
         }
     }

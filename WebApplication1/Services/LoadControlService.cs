@@ -28,8 +28,12 @@
         public async Task AddLoadingInstruction(OutboundFlight flight, BulkLoadingInstructionInputModel inputModel)
         {
             var newLoadingInstruction = _mapper.Map<LoadingInstruction>(inputModel);
+
             flight.LoadingInstruction = newLoadingInstruction;
             flight.LoadingInstructionId = newLoadingInstruction.Id;
+            newLoadingInstruction.OutboundFlight = flight;
+            newLoadingInstruction.OutboundFlightFlightNumber = flight.FlightNumber;
+
             await _dbContext.LoadingInstructions.AddAsync(newLoadingInstruction);
             await _dbContext.SaveChangesAsync();
         }

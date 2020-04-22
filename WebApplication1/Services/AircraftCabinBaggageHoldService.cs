@@ -38,11 +38,11 @@
 
         public async Task CreateBaggageHoldAndCompartments(OutboundFlight outbound)
         {
-            var baggageHold = new AircraftBaggageHold
-            {
-                Aircraft = outbound.Aircraft,
-                AircraftId = outbound.Aircraft.AircraftId,
-            };
+            var baggageHold = new AircraftBaggageHold();
+            outbound.Aircraft.BaggageHold = baggageHold;
+            outbound.Aircraft.AircraftBaggageHoldId = baggageHold.BaggageHoldId;
+            baggageHold.Aircraft = outbound.Aircraft;
+            baggageHold.AircraftId = outbound.AircraftId;
 
            await _dbContext.AircraftBaggageHolds.AddAsync(baggageHold);
            await _dbContext.SaveChangesAsync();
@@ -82,7 +82,7 @@
                     ZoneCapacity = zone.Value 
 
                 };
-
+                
                 cabin.Zones.Add(newZone);
 
                 await _dbContext.CabinZones.AddAsync(newZone);

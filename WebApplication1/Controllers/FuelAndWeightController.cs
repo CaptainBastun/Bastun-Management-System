@@ -1,24 +1,19 @@
-﻿using BMS.Models;
-using BMS.Services.Contracts;
-using Microsoft.AspNetCore.Authorization;
-
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-
-namespace WebApplication1.Controllers
+﻿namespace BMS.Controllers
 {
+    using BMS.Models;
+    using BMS.Services.Contracts;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
+
     [Authorize]
     public class FuelAndWeightController : Controller
     {
-        private readonly IFuelAndWeightService fuelService;
+        private readonly IFuelAndWeightService _fuelAndWeightService;
 
-        public FuelAndWeightController(IFuelAndWeightService fuelService)
+        public FuelAndWeightController(IFuelAndWeightService fuelAndWeightService)
         {
-            this.fuelService = fuelService;
+            _fuelAndWeightService = fuelAndWeightService;
         }
 
 
@@ -29,30 +24,33 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterFuelForm(FuelFormInputModel fuelInputModel)
+        public async Task<IActionResult> RegisterFuelForm(FuelFormInputModel fuelInputModel)
         {
-            if (this.ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                this.fuelService.AddFuelForm(fuelInputModel);
-            }
-            else
-            {
-                return this.View();
+                await _fuelAndWeightService.AddFuelForm(fuelInputModel);
+                return RedirectToAction("Index", "Home");
             }
 
-            return this.RedirectToAction("Index", "Home");
+            return View();
         }
 
         [HttpGet]
         public IActionResult RegisterWeightForm()
         {
-            return this.View();
+            return View();
         }
 
         [HttpPost]
-        public IActionResult RegisterWeightForm(WeightFormInputModel weightInputModel)
+        public  async Task<IActionResult> RegisterWeightForm(WeightFormInputModel weightInputModel)
         {
-            return this.View(weightInputModel);
+            if (ModelState.IsValid)
+            {
+                await _fuelAndWeightService.AddWeightForm(weightInputModel);
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View();
         }
     }
 }

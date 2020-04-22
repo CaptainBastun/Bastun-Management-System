@@ -27,7 +27,10 @@
             newArrivalMovement.InboundFlight = inbound;
             newArrivalMovement.InboundFlightFlightNumber = inbound.FlightNumber;
 
-            _dbContext.ArrivalMovements.Add(newArrivalMovement);
+            inbound.ArrivalMovement = newArrivalMovement;
+            inbound.ArrivalMovementId = newArrivalMovement.Id;
+
+            await _dbContext.ArrivalMovements.AddAsync(newArrivalMovement);
             await _dbContext.SaveChangesAsync();
         }
 

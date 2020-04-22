@@ -36,10 +36,16 @@
         }
 
         [HttpPost]
-        public IActionResult FileLoadingInstruction(BulkLoadingInstructionInputModel loadingInstructionInputModel)
+        public async Task<IActionResult> FileLoadingInstruction(BulkLoadingInstructionInputModel loadingInstructionInputModel)
         {
+            if (ModelState.IsValid)
+            {
+                var outboundFlight = await _flightsService.GetOutboundFlightByFlightNumber(loadingInstructionInputModel.FlightNumber);
+                await _loadControlService.AddLoadingInstruction(outboundFlight,loadingInstructionInputModel);
+                return Redirect("LoadingInstruction");
+            }
 
-            return Ok();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]

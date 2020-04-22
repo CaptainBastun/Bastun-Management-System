@@ -30,11 +30,13 @@
         [HttpPost]
         public async Task<IActionResult> Arrival(MovementInputModel movementInput)
         {
+            _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
+
             if (ModelState.IsValid)
             {
                 if (await _movementParser.ParseArrivalMovement(movementInput.Movement))
                 {
-                    _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
+                    
                     return RedirectToAction("InboundMessages", "Messages");
                 }
             }
@@ -50,11 +52,12 @@
         [HttpPost]
         public async Task<IActionResult> Departure(MovementInputModel movementInput)
         {
+            _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
             if (ModelState.IsValid)
             {
                 if (await _movementParser.ParseDepartureMovement(movementInput.Movement))
                 {
-                    _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
+                    
                     return RedirectToAction("OutboundMessages", "Messages");
                 }
             }
