@@ -5,7 +5,6 @@
     using BMS.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
     using System.Threading.Tasks;
-    using BMS.Data;
     using BMS.GlobalData;
 
     [Authorize]
@@ -30,13 +29,12 @@
         [HttpPost]
         public async Task<IActionResult> Arrival(MovementInputModel movementInput)
         {
-            _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
-
+            _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, "Test");
             if (ModelState.IsValid)
             {
                 if (await _movementParser.ParseArrivalMovement(movementInput.Movement))
                 {
-                    
+                    _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
                     return RedirectToAction("InboundMessages", "Messages");
                 }
             }
@@ -52,12 +50,11 @@
         [HttpPost]
         public async Task<IActionResult> Departure(MovementInputModel movementInput)
         {
-            _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
             if (ModelState.IsValid)
             {
                 if (await _movementParser.ParseDepartureMovement(movementInput.Movement))
                 {
-                    
+                    _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
                     return RedirectToAction("OutboundMessages", "Messages");
                 }
             }
