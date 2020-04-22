@@ -5,18 +5,19 @@
     using BMS.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
     using System.Threading.Tasks;
+    using BMS.Data;
+    using BMS.GlobalData;
 
     [Authorize]
     public class MovementsController : Controller
     {
         private readonly IMovementParser _movementParser;
-        private readonly IAircraftService _flightsService;
+        private readonly IEmailSender _emailSender;
 
-        public MovementsController(IMovementParser movementParser, IAircraftService flightsService)
+        public MovementsController(IMovementParser movementParser, IEmailSender emailSender)
         {
-          
             _movementParser = movementParser;
-            _flightsService = flightsService;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -33,6 +34,7 @@
             {
                 if (await _movementParser.ParseArrivalMovement(movementInput.Movement))
                 {
+                    _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
                     return RedirectToAction("InboundMessages", "Messages");
                 }
             }
@@ -52,6 +54,7 @@
             {
                 if (await _movementParser.ParseDepartureMovement(movementInput.Movement))
                 {
+                    _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
                     return RedirectToAction("OutboundMessages", "Messages");
                 }
             }

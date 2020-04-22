@@ -12,16 +12,19 @@
     public class MovementParser : IMovementParser
     {
         private readonly IFlightDataValidation _flightDataValidation;
-        private readonly IParserMovementUtility _parserMovementUtility;
+        private readonly IParserArrivalMovementUtility _arrivalMovementUtility;
+        private readonly IParserDepartureMovementUtility _departureMovementUtility;
         private readonly IFlightService _flightsService;
         private readonly IMovementService _movementService;
 
         public MovementParser(IFlightDataValidation flightDataValidation, 
-            IParserMovementUtility parserMovementUtility, IFlightService flightsService,
+            IParserArrivalMovementUtility arrivalMovementUtility,IParserDepartureMovementUtility departureMovementUtility,
+            IFlightService flightsService,
             IMovementService movementService)
         {
             _flightDataValidation = flightDataValidation;
-            _parserMovementUtility = parserMovementUtility;
+            _arrivalMovementUtility = arrivalMovementUtility;
+            _departureMovementUtility = departureMovementUtility;
             _flightsService = flightsService;
             _movementService = movementService;
         }
@@ -33,10 +36,10 @@
 
             if (_flightDataValidation.IsArrivalMovementFlightDataValid(splitMessage))
             {
-                string[] flightData = _parserMovementUtility.GetMovementFlightData(splitMessage[1]); 
+                string[] flightData = _arrivalMovementUtility.GetMovementFlightData(splitMessage[1]); 
                 var inboundFlightByFlightNumber = await _flightsService.GetInboundFlightByFlightNumber(flightData[0]);
-                string[] arrivalMovementTimes = _parserMovementUtility.GetTimes(splitMessage[2]); 
-                DateTime[] validMovementTime = _parserMovementUtility.ParseMovementTimes(arrivalMovementTimes, inboundFlightByFlightNumber);
+                string[] arrivalMovementTimes = _arrivalMovementUtility.GetTimes(splitMessage[2]); 
+                DateTime[] validMovementTime = _arrivalMovementUtility.ParseMovementTimes(arrivalMovementTimes, inboundFlightByFlightNumber);
                 string supplementaryInformation = ParseSupplementaryInformation(splitMessage[3]);
 
                 var arrivalMovementDTO = new ArrivalMovementDTO(validMovementTime, supplementaryInformation);
@@ -55,12 +58,12 @@
 
             if (_flightDataValidation.IsDepartureMovementFlightDataValid(splitMessage))
             {
-                string[] flightData = _parserMovementUtility.GetMovementFlightData(splitMessage[1]);
+                string[] flightData = _departureMovementUtility.GetMovementFlightData(splitMessage[1]);
                 var outboundFlightByFlightNumber = await _flightsService.GetOutboundFlightByFlightNumber(flightData[0]);
                 string supplementaryInformation = ParseSupplementaryInformation(splitMessage[splitMessage.Length - 1]);
                 int totalPax = ParseTotalPax(splitMessage[3]);
-                string[] times = _parserMovementUtility.GetTimes(splitMessage[2]);
-                DateTime[] timesForDeparture = _parserMovementUtility.ParseMovementTimes(times, outboundFlightByFlightNumber);
+                string[] times = _departureMovementUtility.GetTimes(splitMessage[2]);
+                DateTime[] timesForDeparture = _departureMovementUtility.ParseMovementTimes(times, outboundFlightByFlightNumber);
 
                 var departureMovementDTO = new DepartureMovementDTO(timesForDeparture, supplementaryInformation, totalPax);
 

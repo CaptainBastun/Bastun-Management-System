@@ -2,6 +2,7 @@
 {
     using BMS.Data.Models;
     using BMS.Models;
+    using BMS.Models.FlightInputModels;
     using BMS.Models.ViewModels.Flights;
     using System;
     using System.Collections.Generic;
@@ -13,7 +14,9 @@
 
         Task<OutboundFlight> GetOutboundFlightByFlightNumber(string outboundFlightNumber);
 
-        Task CreateFlights(FlightInputModel flightInputModel);
+        Task CreateInbounddFlight(InboundFlightInputModel flightInputModel);
+
+        Task CreateOutboundFlight(OutboundFlightInputModel flightInputModel);
 
         bool CheckIfFlightIsInbound(string flightNumber);
 

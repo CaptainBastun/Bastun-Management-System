@@ -22,9 +22,8 @@ namespace WebApplication1
     using BMS.Services.ParserUtility.UtilityContracts;
     using BMS.Services.ParserUtility;
     using BMS.Services.ParserUtility.ParserMovementUtility;
-    using Microsoft.AspNetCore.Http;
     using Wkhtmltopdf.NetCore;
-    using BMS.Services.ParserUtility.ParserMessageUtility;
+
 
     public class Startup
     {
@@ -45,22 +44,19 @@ namespace WebApplication1
             services.AddTransient<ILoadControlService, LoadControlService>();
             services.AddTransient<IMessageService, MessageService>();
             services.AddTransient<IFlightDataValidation, FlightDataValidation>();
-            services.AddTransient<IParserMovementUtility, ParserArrMVTUtility>();
-            services.AddTransient<IParserMovementUtility, ParserDepMVTUtility>();
+            services.AddTransient<IParserArrivalMovementUtility, ParserArrMVTUtility>();
+            services.AddTransient<IParserDepartureMovementUtility, ParserDepMVTUtility>();
             services.AddTransient<IFuelAndWeightService, FuelAndWeightService>();
             services.AddTransient<IAircraftCabinBaggageHoldService, AircraftCabinBaggageHoldService>();
             services.AddTransient<IMovementParser, MovementParser>();
-            services.AddTransient<IContainerMessageParser, ContainerMessageParser>();
             services.AddTransient<ILoadMessageParser, LoadMessageParser>();
             services.AddTransient<IParserLoadDistributionMessageUtility, ParserLoadDistributionMessageUtility>();
-            services.AddTransient<IParserContainerPalletMessageUtility, ParserContainerPalletMessageUtility>();
-            services.AddTransient<IEmailSenderService>(serviceProvider => 
-                  new EmailSender(this.Configuration["SendGrid:BMS_SendGridApiKey"]));
+            services.AddTransient<ICabinAndHoldUtilityService, CabinAndHoldUtilityService>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
             services.AddDefaultIdentity<IdentityUser>(options => 
-            options.SignIn.RequireConfirmedAccount = true)
+            options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.Configure<IdentityOptions>(options =>
             {
@@ -75,6 +71,7 @@ namespace WebApplication1
                     options.LoginPath = "/Identity/Account/Login";
                     options.LogoutPath = "/Identity/Account/Logout";
                 });
+            services.AddTransient<IEmailSender, EmailSender>();
             services.AddControllersWithViews();
             services.AddMvc();
             services.AddRazorPages();

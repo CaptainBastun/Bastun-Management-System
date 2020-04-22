@@ -53,5 +53,9 @@
         public const string SeatMapIsInvalid = "Seat map is invalid!";
 
         public const string RampAgentNameRequired = "Ramp agent name is required!";
+
+        public const string EmailAddressRequired = "Ops email address is required!";
+
+        public const string EmailAddressFormatInvalid = "Ops email is invalid!";
     }
 }

@@ -3,16 +3,13 @@
     using BMS.Services.ParserUtility;
     using BMS.Services.Contracts;
     using BMS.Services.Utility.UtilityContracts;
-    using System;
     using System.Text.RegularExpressions;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
     using BMS.Services.Utility.UtilityConstants;
+    using System.Collections.Generic;
 
     public class FlightDataValidation : IFlightDataValidation
     {
-        //TODO Refactor this.. - REFACTORED!!!!
+       
         private readonly IFlightService _flightsService;
         private readonly IAircraftService _aircraftService;
  
@@ -37,7 +34,7 @@
                     string registration = match.Groups["reg"].Value;
                     string station = match.Groups["origin"].Value;
 
-                    if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration,date,station))
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration,date,station))
                     {
                         if (_flightsService.CheckIfFlightIsInbound(flightNumber))
                         {
@@ -69,7 +66,7 @@
                     string date = match.Groups["date"].Value;
                     string station = match.Groups["origin"].Value;
 
-                    if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration,date, station))
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration,date, station))
                     {
                         if (_flightsService.CheckIfFlightIsInbound(flightNumber))
                         {
@@ -119,12 +116,14 @@
 
                 if (match.Success)
                 {
+                  
                     string flightNumber = match.Groups["flt"].Value;
                     string registration = match.Groups["reg"].Value;
                     string date = match.Groups["date"].Value;
                     string station = match.Groups["origin"].Value;
 
-                    if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration, date, station))
+
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration, date, station))
                     {
                         if (_flightsService.CheckIfFlightIsOutbound(flightNumber))
                         {
@@ -153,7 +152,7 @@
                     string registration = match.Groups["reg"].Value;
                     string station = match.Groups["origin"].Value;
 
-                    if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration, date, station))
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration, date, station))
                     {
                         if (_flightsService.CheckIfFlightIsOutbound(flightNumber))
                         {
@@ -183,7 +182,7 @@
                     string registration = match.Groups["reg"].Value;
                     string station = match.Groups["origin"].Value;
 
-                    if (MessageValidation.IsFlightInfoNotNullOrEmpty(flightNumber, registration, date, station))
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration, date, station))
                     {
                         if (_flightsService.CheckIfFlightIsOutbound(flightNumber))
                         {

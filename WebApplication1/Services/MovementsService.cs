@@ -3,11 +3,7 @@
     using AutoMapper;
     using BMS.Data.DTO.MovementsDTO;
     using BMS.Data.Models;
-    using BMS.Data.Models.Contracts.FlightContracts;
     using BMS.Services.Contracts;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading.Tasks;
     using WebApplication1.Data;
 
@@ -29,7 +25,7 @@
             var newArrivalMovement = _mapper.Map<ArrivalMovement>(movementDTO);
 
             newArrivalMovement.InboundFlight = inbound;
-            newArrivalMovement.InboundFlightId = inbound.FlightId;
+            newArrivalMovement.InboundFlightFlightNumber = inbound.FlightNumber;
 
             _dbContext.ArrivalMovements.Add(newArrivalMovement);
             await _dbContext.SaveChangesAsync();
@@ -40,7 +36,7 @@
             var newDepartureMovement = _mapper.Map<DepartureMovement>(movementDTO);
 
             newDepartureMovement.OutboundFlight = outbound;
-            newDepartureMovement.OutboundFlightId = outbound.FlightId;
+            newDepartureMovement.OutboundFlightFlightNumber = outbound.FlightNumber;
 
             _dbContext.DepartureMovements.Add(newDepartureMovement);
             await _dbContext.SaveChangesAsync();

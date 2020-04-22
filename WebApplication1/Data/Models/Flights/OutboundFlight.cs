@@ -1,8 +1,6 @@
 ﻿namespace BMS.Data.Models
 {
     using BMS.Data.LoadingInstructions;
-    using BMS.Data.Models.Contracts.FlightContracts;
-    using BMS.Data.Models.Flights;
     using BMS.Data.Models.Messages;
     using BMS.GlobalData;
     using BMS.GlobalData.ErrorMessages;
@@ -12,13 +10,18 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public class OutboundFlight : Flight, IOutbound
+    public class OutboundFlight
     {
         public OutboundFlight()
         {
-            OutboundContainers = new HashSet<Container>();
+         
             OutboundMessages = new HashSet<Message>();
         }
+
+        [Key]
+        [Required(ErrorMessage = InvalidErrorMessages.FlightNumberRequired)]
+        [RegularExpression(FlightInputDataValidation.GeneralFlightNumberValidation, ErrorMessage = InvalidErrorMessages.InvalidFlightNumberFormat)]
+        public string FlightNumber { get; set; }
 
         public int AircraftId { get; set; }
         public virtual Aircraft Aircraft { get; set; }
@@ -30,8 +33,6 @@
         public string Destination { get; set; }
 
         public virtual ICollection<Message> OutboundMessages { get; set; }
-
-        public virtual ICollection<Container> OutboundContainers { get; set; }
 
         public int DepartureMovementId { get; set; }
 
@@ -45,6 +46,15 @@
 
         public int LoadingInstructionId { get; set; }
 
-        public virtual LoadingInstruction? LoadingInstruction { get; set; }
+        public virtual LoadingInstruction LoadingInstruction { get; set; }
+
+        public DateTime STD { get ; set; }
+
+        [Required(ErrorMessage = InvalidErrorMessages.SeatMapRequired)]
+        [RegularExpression(FlightInputDataValidation.SeatMapValidation, ErrorMessage = InvalidErrorMessages.SeatMapIsInvalid)]
+        public string SeatMap { get ; set ; }
+
+        [Required(ErrorMessage = InvalidErrorMessages.RampAgentNameRequired)]
+        public string RampAgentName { get ; set; }
     }
 }

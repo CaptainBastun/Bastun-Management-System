@@ -20,24 +20,20 @@
                 <tr>
                     <th scope="col">Flight Number</th>
                     <th scope="col">A/C Registration</th>
-                    <th scope="col">A/C Type</th>
-                    <th scope="col">Origin</th>
+                    <th scope="col">A/C Type</th>     
                     <th scope="col">Destination</th>
-                    <th scope="col">STA</th>
                     <th scope="col">STD</th>
                     <th scope="col">R/A</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody class="table-striped"    >
                 @foreach (var flight in Model.Flights)
                 {
                    <tr>
                        <td>@flight.FlightNumber</td>
                        <td>@flight.Registration</td>
                        <td>@flight.AircraftType</td>
-                       <td>@flight.Origin</td>
                        <td>@flight.Destination</td>
-                       <td>@flight.STA</td>
                        <td>@flight.STD</td>
                        <td>@flight.RampAgent</td>
                    </tr>

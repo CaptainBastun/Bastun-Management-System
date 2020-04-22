@@ -26,21 +26,31 @@ namespace BMS.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("OutboundFlightId")
+                    b.Property<int>("HoldFivePieces")
                         .HasColumnType("int");
+
+                    b.Property<int>("HoldFourPieces")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HoldOnePieces")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HoldThreePieces")
+                        .HasColumnType("int");
+
+                    b.Property<int>("HoldTwoPieces")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OutboundFlightFlightNumber")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OutboundFlightId")
-                        .IsUnique();
+                    b.HasIndex("OutboundFlightFlightNumber")
+                        .IsUnique()
+                        .HasFilter("[OutboundFlightFlightNumber] IS NOT NULL");
 
                     b.ToTable("LoadingInstructions");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("LoadingInstruction");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.Aircraft", b =>
@@ -63,11 +73,8 @@ namespace BMS.Migrations
                     b.Property<int>("FuelFormId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsAicraftContainerized")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OutboundFlightId")
-                        .HasColumnType("int");
+                    b.Property<string>("OutboundFlightFlightNumber")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -81,8 +88,9 @@ namespace BMS.Migrations
 
                     b.HasKey("AircraftId");
 
-                    b.HasIndex("OutboundFlightId")
-                        .IsUnique();
+                    b.HasIndex("OutboundFlightFlightNumber")
+                        .IsUnique()
+                        .HasFilter("[OutboundFlightFlightNumber] IS NOT NULL");
 
                     b.ToTable("Aircraft");
                 });
@@ -133,8 +141,8 @@ namespace BMS.Migrations
                     b.Property<DateTime>("DateOfMovement")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("InboundFlightId")
-                        .HasColumnType("int");
+                    b.Property<string>("InboundFlightFlightNumber")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("OnBlockTime")
                         .HasColumnType("datetime2");
@@ -147,8 +155,9 @@ namespace BMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InboundFlightId")
-                        .IsUnique();
+                    b.HasIndex("InboundFlightFlightNumber")
+                        .IsUnique()
+                        .HasFilter("[InboundFlightFlightNumber] IS NOT NULL");
 
                     b.ToTable("ArrivalMovements");
                 });
@@ -163,20 +172,16 @@ namespace BMS.Migrations
                     b.Property<int>("BaggageHoldId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CurrentPiecesInHold")
+                    b.Property<int>("CurrentPiecesInCompartment")
                         .HasColumnType("int");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MaxHoldWeightCapacity")
+                    b.Property<int>("MaxCompartmentWeight")
                         .HasColumnType("int");
 
-                    b.Property<int>("PiecesToPutInHold")
+                    b.Property<int>("PiecesToPutInCompartment")
                         .HasColumnType("int");
 
-                    b.Property<int>("TotalWeightInHold")
+                    b.Property<int>("TotalWeightInCompartment")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -184,8 +189,6 @@ namespace BMS.Migrations
                     b.HasIndex("BaggageHoldId");
 
                     b.ToTable("Compartments");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Compartment");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZone", b =>
@@ -198,75 +201,17 @@ namespace BMS.Migrations
                     b.Property<int>("AircraftCabinId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CabinCapacity")
+                    b.Property<int>("ZoneCapacity")
                         .HasColumnType("int");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
+                    b.Property<string>("ZoneType")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AircraftCabinId");
 
-                    b.ToTable("Zones");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("AircraftCabinZone");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.Container", b =>
-                {
-                    b.Property<int>("ContainerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ContainerInfoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ContainerPieces")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("InboundFlightId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OutboundFlightId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ContainerId");
-
-                    b.HasIndex("InboundFlightId");
-
-                    b.HasIndex("OutboundFlightId");
-
-                    b.ToTable("Containers");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.ContainerInfo", b =>
-                {
-                    b.Property<int>("ContainerInfoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ContainerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContainerNumberAndType")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ContainerPalletMessageId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ContainerPosition")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ContainerTotalWeight")
-                        .HasColumnType("int");
-
-                    b.HasKey("ContainerInfoId");
-
-                    b.HasIndex("ContainerPalletMessageId");
-
-                    b.ToTable("ContainerInfos");
+                    b.ToTable("CabinZones");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.DepartureMovement", b =>
@@ -282,8 +227,8 @@ namespace BMS.Migrations
                     b.Property<DateTime>("OffBlockTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OutboundFlightId")
-                        .HasColumnType("int");
+                    b.Property<string>("OutboundFlightFlightNumber")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SupplementaryInformation")
                         .HasColumnType("nvarchar(max)");
@@ -296,46 +241,11 @@ namespace BMS.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("OutboundFlightId")
-                        .IsUnique();
+                    b.HasIndex("OutboundFlightFlightNumber")
+                        .IsUnique()
+                        .HasFilter("[OutboundFlightFlightNumber] IS NOT NULL");
 
                     b.ToTable("DepartureMovements");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.Flights.Flight", b =>
-                {
-                    b.Property<int>("FlightId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FlightNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RampAgentName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("STA")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("STD")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("SeatMap")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("FlightId");
-
-                    b.ToTable("Flights");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Flight");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.FuelForm", b =>
@@ -385,6 +295,26 @@ namespace BMS.Migrations
                     b.ToTable("FuelForms");
                 });
 
+            modelBuilder.Entity("BMS.Data.Models.InboundFlight", b =>
+                {
+                    b.Property<string>("FlightNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("ArrivalMovementId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Origin")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("STA")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("FlightNumber");
+
+                    b.ToTable("InboundFlights");
+                });
+
             modelBuilder.Entity("BMS.Data.Models.Messages.Message", b =>
                 {
                     b.Property<int>("MessageId")
@@ -396,21 +326,66 @@ namespace BMS.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("InboundFlightId")
-                        .HasColumnType("int");
+                    b.Property<string>("InboundFlightFlightNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("OutboundFlightId")
-                        .HasColumnType("int");
+                    b.Property<string>("OutboundFlightFlightNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MessageId");
 
-                    b.HasIndex("InboundFlightId");
+                    b.HasIndex("InboundFlightFlightNumber");
 
-                    b.HasIndex("OutboundFlightId");
+                    b.HasIndex("OutboundFlightFlightNumber");
 
                     b.ToTable("Messages");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Message");
+                });
+
+            modelBuilder.Entity("BMS.Data.Models.OutboundFlight", b =>
+                {
+                    b.Property<string>("FlightNumber")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("AircraftId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BookedPAX")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DepartureMovementId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Destination")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HandlingStation")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeparted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("LoadingInstructionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RampAgentName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("STD")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SeatMap")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("FlightNumber");
+
+                    b.ToTable("OutboundFlights");
                 });
 
             modelBuilder.Entity("BMS.Data.Models.Passenger", b =>
@@ -478,7 +453,7 @@ namespace BMS.Migrations
 
                     b.HasIndex("PassengerPaxId");
 
-                    b.ToTable("Suitcases");
+                    b.ToTable("Suitcase");
                 });
 
             modelBuilder.Entity("BMS.Data.WeightForm", b =>
@@ -711,178 +686,6 @@ namespace BMS.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("BMS.Data.LoadingInstructions.BulkLoadingInstruction", b =>
-                {
-                    b.HasBaseType("BMS.Data.LoadingInstructions.LoadingInstruction");
-
-                    b.Property<int>("HoldFivePieces")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldFourPieces")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldOnePieces")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldThreePieces")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldTwoPieces")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("BulkLoadingInstruction");
-                });
-
-            modelBuilder.Entity("BMS.Data.LoadingInstructions.ContainerLoadingInstruction", b =>
-                {
-                    b.HasBaseType("BMS.Data.LoadingInstructions.LoadingInstruction");
-
-                    b.Property<int>("HoldFourLeftContainerCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldFourRightContainerCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldOneLeftContainerCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldOneRightContainerCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldThreeLeftContainerCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldThreeRightContainerCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldTwoLeftContainerCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("HoldTwoRightContainerCount")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("ContainerLoadingInstruction");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentFive", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
-
-                    b.HasDiscriminator().HasValue("CompartmentFive");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentFour", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
-
-                    b.HasDiscriminator().HasValue("CompartmentFour");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentOne", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
-
-                    b.HasDiscriminator().HasValue("CompartmentOne");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentThree", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
-
-                    b.HasDiscriminator().HasValue("CompartmentThree");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageCompartments.CompartmentTwo", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment");
-
-                    b.HasDiscriminator().HasValue("CompartmentTwo");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZones.ZoneAlpha", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.Cabins.AircraftCabinZone");
-
-                    b.HasDiscriminator().HasValue("ZoneAlpha");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZones.ZoneBravo", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.Cabins.AircraftCabinZone");
-
-                    b.HasDiscriminator().HasValue("ZoneBravo");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZones.ZoneCharlie", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.Cabins.AircraftCabinZone");
-
-                    b.HasDiscriminator().HasValue("ZoneCharlie");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.Cabins.AircraftCabinZones.ZoneDelta", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.Cabins.AircraftCabinZone");
-
-                    b.HasDiscriminator().HasValue("ZoneDelta");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.InboundFlight", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.Flights.Flight");
-
-                    b.Property<int>("ArrivalMovementId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Origin")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("InboundFlight");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.OutboundFlight", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.Flights.Flight");
-
-                    b.Property<int>("AircraftId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BookedPAX")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DepartureMovementId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Destination")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HandlingStation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeparted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LoadingInstructionId")
-                        .HasColumnType("int");
-
-                    b.HasDiscriminator().HasValue("OutboundFlight");
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.Messages.ContainerPalletMessage", b =>
-                {
-                    b.HasBaseType("BMS.Data.Models.Messages.Message");
-
-                    b.Property<int>("ContainerInfoId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("SupplementaryInformation")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasDiscriminator().HasValue("ContainerPalletMessage");
-                });
-
             modelBuilder.Entity("BMS.Data.Models.Messages.LoadDistributionMessage", b =>
                 {
                     b.HasBaseType("BMS.Data.Models.Messages.Message");
@@ -936,18 +739,16 @@ namespace BMS.Migrations
                 {
                     b.HasOne("BMS.Data.Models.OutboundFlight", "OutboundFlight")
                         .WithOne("LoadingInstruction")
-                        .HasForeignKey("BMS.Data.LoadingInstructions.LoadingInstruction", "OutboundFlightId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("BMS.Data.LoadingInstructions.LoadingInstruction", "OutboundFlightFlightNumber")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BMS.Data.Models.Aircraft", b =>
                 {
                     b.HasOne("BMS.Data.Models.OutboundFlight", "OutboundFlight")
                         .WithOne("Aircraft")
-                        .HasForeignKey("BMS.Data.Models.Aircraft", "OutboundFlightId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("BMS.Data.Models.Aircraft", "OutboundFlightFlightNumber")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BMS.Data.Models.AircraftBaggageHold", b =>
@@ -972,9 +773,8 @@ namespace BMS.Migrations
                 {
                     b.HasOne("BMS.Data.Models.InboundFlight", "InboundFlight")
                         .WithOne("ArrivalMovement")
-                        .HasForeignKey("BMS.Data.Models.ArrivalMovement", "InboundFlightId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("BMS.Data.Models.ArrivalMovement", "InboundFlightFlightNumber")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment", b =>
@@ -995,40 +795,12 @@ namespace BMS.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("BMS.Data.Models.Container", b =>
-                {
-                    b.HasOne("BMS.Data.Models.InboundFlight", "InboundFlight")
-                        .WithMany("InboundContainers")
-                        .HasForeignKey("InboundFlightId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("BMS.Data.Models.OutboundFlight", "OutboundFlight")
-                        .WithMany("OutboundContainers")
-                        .HasForeignKey("OutboundFlightId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("BMS.Data.Models.ContainerInfo", b =>
-                {
-                    b.HasOne("BMS.Data.Models.Container", "Container")
-                        .WithOne("ContainerInfo")
-                        .HasForeignKey("BMS.Data.Models.ContainerInfo", "ContainerInfoId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BMS.Data.Models.Messages.ContainerPalletMessage", "ContainerPalletMessage")
-                        .WithMany("ContainerInfo")
-                        .HasForeignKey("ContainerPalletMessageId")
-                        .OnDelete(DeleteBehavior.Restrict);
-                });
-
             modelBuilder.Entity("BMS.Data.Models.DepartureMovement", b =>
                 {
                     b.HasOne("BMS.Data.Models.OutboundFlight", "OutboundFlight")
                         .WithOne("DepartureMovement")
-                        .HasForeignKey("BMS.Data.Models.DepartureMovement", "OutboundFlightId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("BMS.Data.Models.DepartureMovement", "OutboundFlightFlightNumber")
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("BMS.Data.Models.FuelForm", b =>
@@ -1042,15 +814,17 @@ namespace BMS.Migrations
 
             modelBuilder.Entity("BMS.Data.Models.Messages.Message", b =>
                 {
-                    b.HasOne("BMS.Data.Models.InboundFlight", "InboundFlight")
+                    b.HasOne("BMS.Data.Models.InboundFlight", "Inbound")
                         .WithMany("InboundMessages")
-                        .HasForeignKey("InboundFlightId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("InboundFlightFlightNumber")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("BMS.Data.Models.OutboundFlight", "OutboundFlight")
+                    b.HasOne("BMS.Data.Models.OutboundFlight", "Outbound")
                         .WithMany("OutboundMessages")
-                        .HasForeignKey("OutboundFlightId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("OutboundFlightFlightNumber")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("BMS.Data.Models.Passenger", b =>

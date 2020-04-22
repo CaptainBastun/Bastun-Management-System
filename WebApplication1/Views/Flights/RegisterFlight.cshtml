@@ -4,52 +4,70 @@
 
 @using BMS.Models;
 @model FlightInputModel
-     <form asp-controller="Flights" asp-action="RegisterFlight">
-          <div class="form-row">
-              <div class="form-group col">
-                  <input asp-for="@Model.FlightNumber" type="text" class="form-control w-100" placeholder="Flight numbers" />
-                  <span asp-validation-for="@Model.FlightNumber"></span>
-              </div>
-          </div>
-          <div class="form-row">
-              <div class="form-group col">
-                  <input asp-for="@Model.Origin"  class="form-control w-100" placeholder="Origin" />
-                  <span asp-validation-for="@Model.Origin"></span>
-              </div>
-              <div class="form-group col">
-                  <input asp-for="@Model.HandlingStation" type="text" class="form-control w-100" placeholder="Handling station" />
-                  <span asp-validation-for="@Model.HandlingStation"></span>
-              </div>
-          </div>
-          <div class="form-row">
-              <div class="form-group col">
-                  <input asp-for="@Model.Destination" type="text" class="form-control w-100" placeholder="Destination" />
-                  <span asp-validation-for="@Model.Destination"></span>
-              </div>
-              <div class="form-group col">
-                  <input asp-for="@Model.STA" type="datetime" class="form-control w-100" placeholder="STA" />
-                  <span asp-validation-for="@Model.STA"></span>
-              </div>
-          </div>
-          <div class="form-row">
-              <div class="form-group col">
-                  <input asp-for="@Model.STD" type="datetime" class="form-control w-100" placeholder="STD" />
-                  <span asp-validation-for="@Model.STD"></span>
-              </div>
-              <div class="form-group col">
-                  <input asp-for="@Model.BookedPax" class="form-control w-100" placeholder="Booked pax" />
-                  <span asp-validation-for="@Model.BookedPax"></span>
-              </div>
-          </div>
-         <div class="form-row">
-             <div class="col form-group">
-                 <input asp-for="@Model.SeatMap" class="form-control" placeholder="Seat map"/>
-                 <span asp-validation-for="@Model.SeatMap"></span>
-             </div>
-             <div class="col form-group">
-                 <input asp-for="@Model.RampAgentName" class="form-control" placeholder="Ramp Agent" />
-                 <span asp-validation-for="@Model.RampAgentName"></span>
-             </div>
-         </div>
-            <button type="submit" class="btn btn-primary w-100">Register flight</button>
-        </form>
+<div class="container-fluid">
+    <br />
+    <div class="row">
+        <div class="col">
+            <form asp-controller="Flights" asp-action="CreateInboundFlight">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.InboundInputModel.FlightNumber" type="text" class="form-control" placeholder="Inbound flight number" />
+                        <span asp-validation-for="@Model.InboundInputModel.FlightNumber"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.InboundInputModel.Origin" class="form-control" placeholder="Origin" />
+                        <span asp-validation-for="@Model.InboundInputModel.Origin"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.InboundInputModel.STA" type="datetime" class="form-control" placeholder="STA" />
+                        <span asp-validation-for="@Model.InboundInputModel.STA"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg w-100">Create inbound flight</button>
+             </form>
+        </div>
+        <div class="col">
+            <form asp-controller="Flights" asp-action="CreateOutboundFlight">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.OutboundInputModel.FlightNumber" class="form-control" placeholder="Outbound flight number" />
+                        <span asp-validation-for="@Model.OutboundInputModel.FlightNumber"></span>
+                    </div>
+                    <div class="form-group col">
+                        <input asp-for="@Model.OutboundInputModel.HandlingStation"  class="form-control" placeholder="Handling station" />
+                        <span asp-validation-for="@Model.OutboundInputModel.HandlingStation"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.OutboundInputModel.STD" type="datetime" class="form-control" placeholder="STD"/>
+                        <span asp-validation-for="@Model.OutboundInputModel.STD"></span>
+                    </div>
+                    <div class="form-group col">
+                        <input asp-for="@Model.OutboundInputModel.Destination" class="form-control" placeholder="Destination"/>
+                        <span asp-validation-for="@Model.OutboundInputModel.Destination"></span>
+                    </div>
+                    <div class="form-group col">
+                        <input asp-for="@Model.OutboundInputModel.BookedPax" class="form-control" placeholder="Pax booked"/>
+                        <span asp-validation-for="@Model.OutboundInputModel.BookedPax"></span>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.OutboundInputModel.SeatMap" class="form-control" placeholder="Seat map"/>
+                        <span asp-validation-for="@Model.OutboundInputModel.SeatMap"></span>
+                    </div>
+                    <div class="form-group col">
+                        <input asp-for="@Model.OutboundInputModel.RampAgentName" class="form-control" placeholder="Ramp agent"/>
+                        <span asp-validation-for="@Model.OutboundInputModel.RampAgentName"></span>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg w-100">Create outbound flight</button>
+            </form>
+        </div>
+    </div>
+</div>

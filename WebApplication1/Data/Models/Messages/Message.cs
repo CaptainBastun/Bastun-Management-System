@@ -11,15 +11,16 @@
         [Key]
         public int MessageId { get; set; }
 
-        
-        public int? InboundFlightId { get; set; }
+#nullable enable
+        public string InboundFlightFlightNumber { get; set; }
 
        
-        public virtual InboundFlight? InboundFlight { get; set; }
+        public virtual InboundFlight? Inbound { get; set; }
 
         
-        public int? OutboundFlightId { get; set; }
+        public string OutboundFlightFlightNumber { get; set; }
 
-        public virtual OutboundFlight? OutboundFlight { get; set; }
+        public virtual OutboundFlight? Outbound { get; set; }
+#nullable disable
     }
 }

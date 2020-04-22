@@ -26,14 +26,27 @@
 
 
         [HttpPost]
-        public async Task<IActionResult> RegisterFlight(FlightInputModel flightInputModel)
+        public async Task<IActionResult> CreateInboundFlight(FlightInputModel flightInputModel)
         {
             if (ModelState.IsValid)
             {
-                await _flightService.CreateFlights(flightInputModel);
+              await _flightService.CreateInbounddFlight(flightInputModel.InboundInputModel);
+              return RedirectToAction("Index", "Home");
             }
 
-            return View();
+            return Redirect("RegisterFlight");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOutboundFlight(FlightInputModel flightInputModel)
+        {
+            if (ModelState.IsValid)
+            {
+                await _flightService.CreateOutboundFlight(flightInputModel.OutboundInputModel);
+                return RedirectToAction("Index", "Home");
+            }
+
+            return Redirect("RegisterFlight");
         }
 
         [HttpGet]

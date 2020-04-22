@@ -15,7 +15,7 @@
         [Required]
         public virtual Aircraft Aircraft { get; set; }
 
-
+        [Required]
         public virtual ICollection<Compartment> Compartments { get; set; }
 
     }

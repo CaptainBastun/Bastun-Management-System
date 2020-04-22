@@ -11,5 +11,9 @@
     {
         [Required(ErrorMessage = InvalidErrorMessages.MovementIsRequired)]
         public string Movement { get; set; }
+
+        [Required(ErrorMessage = InvalidErrorMessages.EmailAddressRequired)]
+        [EmailAddress(ErrorMessage = InvalidErrorMessages.EmailAddressFormatInvalid)]
+        public string OpsEmail { get; set; }
     }
 }

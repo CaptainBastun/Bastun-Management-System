@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Add aircraft";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using BMS.Models;
+@using BMS.Data.Models.Enums;
+@model AircraftInputModel
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <form asp-controller="Aircraft" asp-action="RegisterAircraft">
+                <div class="form-group">
+                    <label>Flight number:</label>
+                    <input asp-for="@Model.FlightNumber" type="text" class="form-control w-100" />
+                    <span asp-validation-for="@Model.FlightNumber"></span>
+                </div>
+                <div class="form-group">
+                    <label>Aircraft type:</label>
+                    <select asp-for="@Model.Type" class="form-control w-100">
+                        <option selected="selected" value="">Select an aircraft type:</option>
+                        <option>B738</option>
+                        <option>B752</option>
+                        <option>B763</option>
+                        <option>B788</option>
+                        <option>A320</option>
+                    </select>
+                    <span asp-validation-for="@Model.Type"></span>
+                </div>
+                <div class="form-group">
+                    <label>Aircraft registration:</label>
+                    <input asp-for="@Model.AircraftRegistration" type="text" class="form-control w-100"/>
+                    <span asp-validation-for="@Model.AircraftRegistration"></span>
+                </div>
+                <div class="form-group">
+                    <label>Aircraft version:</label>
+                    <input asp-for="@Model.Version" type="text" class="form-control w-100"/>
+                    <span asp-validation-for="@Model.Version"></span>
+                </div>
+                <button type="submit" class="btn btn-lg btn-primary w-100">Register aircraft</button>
+            </form>
+        </div>
+    </div>
+</div>
+

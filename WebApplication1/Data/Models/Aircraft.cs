@@ -23,7 +23,7 @@
         
         public string AircraftRegistration { get; set; }
 
-        public int OutboundFlightId { get; set; }
+        public string OutboundFlightFlightNumber { get; set; }
 
         public  virtual OutboundFlight OutboundFlight { get; set; }
 
@@ -45,6 +45,5 @@
 
         public virtual WeightForm  WeightForm { get; set; }
 
-        public bool IsAicraftContainerized { get; set; }
     }
 }

@@ -11,14 +11,15 @@
     {
         private readonly IMovementParser _movementParser;
         private readonly ILoadMessageParser _loadMessageParser;
-        private readonly IContainerMessageParser _containerMessageParser;
+        private readonly IEmailSender _emailSender;
 
         public MessagesController(IMovementParser movementParser,
-            ILoadMessageParser loadMessageParser, IContainerMessageParser containerMessageParser)
+            ILoadMessageParser loadMessageParser,
+            IEmailSender emailSender)
         {
             _movementParser = movementParser;
             _loadMessageParser = loadMessageParser;
-            _containerMessageParser = containerMessageParser;
+           _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -41,40 +42,13 @@
           return RedirectToAction("Index", "Home");
         } 
         
-        [HttpPost]
-        public async Task<IActionResult> InboundCPM(MessageInputModel messageInputModel)
-        {
-            if (ModelState.IsValid)
-            {
-                if (await _containerMessageParser.ParseInboundContainerPalletMessage(messageInputModel.Message))
-                {
-                    return RedirectToAction("InboundMessages");
-                }
-            }
-            
-           return RedirectToAction("Index", "Home");
-        }
+     
 
         [HttpGet]
         public IActionResult OutboundMessages()
         {
             return View();
         }
-
-        [HttpPost]
-        public async Task<IActionResult> OutboundCPM(MessageInputModel messageInputModel)
-        {
-            if (ModelState.IsValid)
-            {
-                if (await _containerMessageParser.ParseOutboundContainerPalletMessage(messageInputModel.Message))
-                {
-                    return RedirectToAction("OutboundMessages");
-                }
-            }
-
-            return RedirectToAction("Index","Home");
-        }
-
 
         [HttpPost]
         public async Task<IActionResult> OutboundLDM(MessageInputModel messageInputModel)

@@ -15,11 +15,9 @@
 
         public DateTime TakeoffTime { get; set; }
 
-        public int OutboundFlightId { get; set; }
+        public string OutboundFlightFlightNumber { get; set; }
 
         public virtual OutboundFlight OutboundFlight { get; set; }
-
-       
         public int TotalPAX { get; set; }
 
         public string SupplementaryInformation { get; set; }

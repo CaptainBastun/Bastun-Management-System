@@ -5,6 +5,15 @@
     <UserSecretsId>aspnet-WebApplication1-334F89FB-0C78-4867-86FC-102E1A13EE27</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Migrations\20200421212744_Initial.cs" />
+    <Compile Remove="Migrations\20200421212744_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200421212925_Initial.cs" />
+    <Compile Remove="Migrations\20200421212925_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20200421213530_Initial.cs" />
+    <Compile Remove="Migrations\20200421213530_Initial.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="9.0.0" />
@@ -23,6 +32,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.2" />
+    <PackageReference Include="NETCore.MailKit" Version="2.0.2" />
     <PackageReference Include="SendGrid" Version="9.14.0" />
     <PackageReference Include="Wkhtmltopdf.NetCore" Version="3.0.0" />
     <PackageReference Include="wkhtmltopdf.x64" Version="0.12.5" />

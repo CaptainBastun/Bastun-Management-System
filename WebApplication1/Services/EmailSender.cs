@@ -1,39 +1,32 @@
 ﻿namespace BMS.Services
 {
+    using BMS.Services.Contracts;
+    using SendGrid;
+    using SendGrid.Helpers.Mail;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using BMS.Services.Contracts;
-    using SendGrid;
-    using SendGrid.Helpers.Mail;
-
-    public class EmailSender : IEmailSenderService
+    public class EmailSender : IEmailSender
     {
-
-        private readonly string _apiKey;
-        public EmailSender(string apiKey)
+        public void Send(string recipientEmail, string content, string emailSubject)
         {
-            this._apiKey = apiKey;
+            SendEmail(recipientEmail, content, emailSubject).Wait();
         }
 
-        public void Send()
+        private async Task SendEmail(string recipientEmail, string content,string emailSubject)
         {
-            this.SendEmailAsync().Wait();
+            string apiKey = "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";
+            var client = new SendGridClient(apiKey);
+            var from = new EmailAddress("bastunmanagementsystem@gmail.com");
+            var subject = emailSubject;
+            var to = new EmailAddress(recipientEmail);
+            string plainTextContent = content;
+            string htmlContent = content;
+            var msg = MailHelper.CreateSingleEmail(from,to,subject, plainTextContent, htmlContent);
+            var response = await client.SendEmailAsync(msg);
         }
 
-
-        private async Task SendEmailAsync()
-        {
-            var sendGridClient = new SendGridClient(this._apiKey);
-            var from = new EmailAddress("kevin11@mail.bg", "Chicho Mitko");
-            string messageSubject = "SendGridTest";
-            var to = new EmailAddress("predator131@mail.bg", "BMS");
-            var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = "<strong>and easy to do anywhere, even with c#</strong>";
-            var msg = MailHelper.CreateSingleEmail(from, to, messageSubject, plainTextContent, htmlContent);
-            var response = await sendGridClient.SendEmailAsync(msg);
-
-        }
+      
     }
 }

@@ -23,37 +23,14 @@
             _mapper = mapper;
         }
 
-        public void CreateInboundCPM(InboundFlight inbound, ContainerPalletMessageDTO dto)
-        {
-            var inboundContainerPalletMessage = _mapper.Map<ContainerPalletMessage>(dto);
-            _dbContext.ContainerPalletMessages.Add(inboundContainerPalletMessage);
-            _dbContext.SaveChanges();
-
-            inboundContainerPalletMessage.InboundFlight = inbound;
-            inboundContainerPalletMessage.InboundFlightId = inbound.FlightId;
-        }
-
         public void CreateInboundLDM(InboundFlight inboundFlight, LoadDistributionMessageDTO ldmDTO)
         {
             var loadDistributionMessage = _mapper.Map<LoadDistributionMessage>(ldmDTO);
+            inboundFlight.InboundMessages.Add(loadDistributionMessage);
             _dbContext.LoadDistributionMessages.Add(loadDistributionMessage);
             _dbContext.SaveChanges();
 
-            loadDistributionMessage.InboundFlight = inboundFlight;
-            loadDistributionMessage.InboundFlightId = inboundFlight.FlightId;
-            _dbContext.SaveChanges();
-        }
-
-        public void CreateOutboundCPM(OutboundFlight outboundFlight, ContainerPalletMessageDTO dto)
-        {
-            var outboundContainerPalletMessage = _mapper.Map<ContainerPalletMessage>(dto);
-            _dbContext.ContainerPalletMessages.Add(outboundContainerPalletMessage);
-            _dbContext.SaveChanges();
-
-            outboundContainerPalletMessage.OutboundFlight = outboundFlight;
-            outboundContainerPalletMessage.OutboundFlightId = outboundFlight.FlightId;
-            outboundFlight.OutboundMessages.Add(outboundContainerPalletMessage);
-            _dbContext.SaveChanges();
+     
         }
 
         public void CreateOutboundLDM(OutboundFlight outboundFlight, LoadDistributionMessageDTO  dto)
@@ -62,8 +39,8 @@
             _dbContext.LoadDistributionMessages.Add(outboundLoadDistributionMessage);
             _dbContext.SaveChanges();
 
-            outboundLoadDistributionMessage.OutboundFlight = outboundFlight;
-            outboundLoadDistributionMessage.OutboundFlightId = outboundFlight.FlightId;
+            outboundLoadDistributionMessage.Outbound = outboundFlight;
+            outboundLoadDistributionMessage.OutboundFlightFlightNumber = outboundFlight.FlightNumber;
           
             _dbContext.SaveChanges();
         }

@@ -1,16 +1,15 @@
 ﻿namespace BMS.Services.ParserUtility.ParserMovementUtility
 {
-    using BMS.Data.Models.Contracts.FlightContracts;
+    using BMS.Data.Models;
     using BMS.Services.ParserUtility.UtilityConstants;
     using BMS.Services.ParserUtility.UtilityContracts;
     using BMS.Services.Utility.UtilityConstants;
     using System;
-    using System.Collections.Generic;
-   
+
     using System.Text.RegularExpressions;
    
 
-    public class ParserDepMVTUtility : IParserMovementUtility
+    public class ParserDepMVTUtility : IParserDepartureMovementUtility
     {
         public Regex MovementFlightData { get; set; } = new Regex(FlightInfoConstants.IsFlightInfoValid);
 
@@ -54,7 +53,7 @@
             return new string[] { firstTimeValid, secondTimeValid };
         }
 
-        public DateTime[] ParseMovementTimes(string[] flightData, IFlight outbound)
+        public DateTime[] ParseMovementTimes(string[] flightData,OutboundFlight outbound)
         {
             var arrOfValidTimes = this.GetValidTimesFormat(flightData);
             string time1 = arrOfValidTimes[0];

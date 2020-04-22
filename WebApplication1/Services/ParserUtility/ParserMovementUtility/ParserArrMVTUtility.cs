@@ -1,16 +1,13 @@
 ﻿namespace BMS.Services.ParserUtility.ParserMovementUtility
 {
     using BMS.Data.Models;
-    using BMS.Data.Models.Contracts.FlightContracts;
     using BMS.Services.ParserUtility.UtilityConstants;
     using BMS.Services.ParserUtility.UtilityContracts;
     using BMS.Services.Utility.UtilityConstants;
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Text.RegularExpressions;
-    using System.Threading.Tasks;
-    public class ParserArrMVTUtility : IParserMovementUtility
+
+    public class ParserArrMVTUtility : IParserArrivalMovementUtility
     {
         public Regex MovementFlightData { get; set; } = new Regex(FlightInfoConstants.IsFlightInfoValid);
 
@@ -54,9 +51,9 @@
             return new string[] { firstTimeValid, secondTimeValid };
         }
 
-        public DateTime[] ParseMovementTimes(string[] times, IFlight inbound)
+        public DateTime[] ParseMovementTimes(string[] times,InboundFlight inbound)
         {
-            var arrOfValidTimes = this.GetValidTimesFormat(times);
+            var arrOfValidTimes = GetValidTimesFormat(times);
             string touchdownTime = arrOfValidTimes[0];
             string onblockTime = arrOfValidTimes[1];
 

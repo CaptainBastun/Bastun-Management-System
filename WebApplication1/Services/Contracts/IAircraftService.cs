@@ -15,8 +15,6 @@
         public Aircraft GetAicraftByRegistration(string registration);
 
         public bool IsAircraftGoingToBeContainerized(string aircraftType);
-
-        public string GetAircraftOfContainerizedType(OutboundFlight flight);
        
     }
 }

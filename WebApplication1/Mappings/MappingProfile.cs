@@ -6,14 +6,15 @@
     using BMS.Data.Models;
     using BMS.Data.Models.Messages;
     using BMS.Models;
+    using BMS.Models.FlightInputModels;
 
     public class MappingProfile : Profile
     {
         public MappingProfile()
         {
-            CreateMap<FlightInputModel, InboundFlight>();
+            CreateMap<InboundFlightInputModel, InboundFlight>();
 
-            CreateMap<FlightInputModel, OutboundFlight>();
+            CreateMap<OutboundFlightInputModel, OutboundFlight>();
 
             CreateMap<ArrivalMovementDTO, ArrivalMovement>();
 
@@ -23,7 +24,6 @@
                 
             CreateMap<LoadDistributionMessageDTO, LoadDistributionMessage>();
 
-            CreateMap<ContainerPalletMessageDTO, ContainerPalletMessage>();
         }
     }
 }

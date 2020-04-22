@@ -12,6 +12,7 @@
     using BMS.Data.Models.Contracts;
     using Microsoft.EntityFrameworkCore;
     using BMS.Models.ViewModels.Flights;
+    using BMS.Models.FlightInputModels;
 
     public class FlightsService : IFlightService
     {
@@ -52,16 +53,16 @@
                 })
                 .ToList();
 
-            foreach (var flightViewModel in outboundFlightViewModels)
-            {
-                var inboundFlight =
-                    _DbContext
-                    .InboundFlights
-                    .FirstOrDefault(x => x.RampAgentName == flightViewModel.RampAgent);
+            //foreach (var flightViewModel in outboundFlightViewModels)
+            //{
+            //    var inboundFlight =
+            //        _DbContext
+            //        .InboundFlights
+            //        .FirstOrDefault(x => x.RampAgentName == flightViewModel.RampAgent);
 
-                flightViewModel.STA = inboundFlight.STA.Hour.ToString();
-                flightViewModel.Origin = inboundFlight.Origin;
-            }
+            //    flightViewModel.STA = inboundFlight.STA.Hour.ToString();
+            //    flightViewModel.Origin = inboundFlight.Origin;
+            //}
 
 
             var dailyFlightsModel = new DisplayDailyFlightViewModel(outboundFlightViewModels);
@@ -78,26 +79,20 @@
             return await _DbContext.OutboundFlights.FirstOrDefaultAsync(obF => obF.FlightNumber == outboundFlightNumber);
         }
 
-        public async Task CreateFlights(FlightInputModel flightInputModel)
+        public async Task CreateInbounddFlight(InboundFlightInputModel inboundFlightInput)
         {
-            string[] splitFlightNumbers =
-                flightInputModel
-                .FlightNumber
-                .Split("/", StringSplitOptions.RemoveEmptyEntries);
-
-            string inboundFlightNumber = splitFlightNumbers[0];
-            string outboundFlightNumber = splitFlightNumbers[1];
-
-            var newInboundFlight = _mapper.Map<InboundFlight>(flightInputModel);
-            var newOutboundFlight = _mapper.Map<OutboundFlight>(flightInputModel);
-
-            newInboundFlight.FlightNumber = inboundFlightNumber;
-            newOutboundFlight.FlightNumber = outboundFlightNumber;
+            var newInboundFlight = _mapper.Map<InboundFlight>(inboundFlightInput);
      
-            _DbContext.InboundFlights.Add(newInboundFlight);
-            _DbContext.OutboundFlights.Add(newOutboundFlight);
+            await _DbContext.InboundFlights.AddAsync(newInboundFlight);
             await _DbContext.SaveChangesAsync();
         }
 
+        public async Task CreateOutboundFlight(OutboundFlightInputModel outboundFlightInput)
+        {
+            var newOutboundFlight = _mapper.Map<OutboundFlight>(outboundFlightInput);
+
+            await _DbContext.OutboundFlights.AddAsync(newOutboundFlight);
+            await _DbContext.SaveChangesAsync();
+        }
     } 
 }

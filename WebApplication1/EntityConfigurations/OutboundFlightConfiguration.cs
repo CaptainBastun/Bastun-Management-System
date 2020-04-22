@@ -15,28 +15,23 @@
         {
 
             builder.HasMany(x => x.OutboundMessages)
-                .WithOne(x => x.OutboundFlight)
-                .HasForeignKey(x => x.OutboundFlightId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(x => x.OutboundContainers)
-                .WithOne(x => x.OutboundFlight)
-                .HasForeignKey(x => x.OutboundFlightId)
+                .WithOne(x => x.Outbound)
+                .HasForeignKey(x => x.OutboundFlightFlightNumber)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(a => a.Aircraft)
                 .WithOne(obF => obF.OutboundFlight)
-                .HasForeignKey<Aircraft>(fk => fk.OutboundFlightId)
+                .HasForeignKey<Aircraft>(fk => fk.OutboundFlightFlightNumber)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.DepartureMovement)
                 .WithOne(x => x.OutboundFlight)
-                .HasForeignKey<DepartureMovement>(mvt => mvt.OutboundFlightId)
+                .HasForeignKey<DepartureMovement>(mvt => mvt.OutboundFlightFlightNumber)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(x => x.LoadingInstruction)
                 .WithOne(x => x.OutboundFlight)
-                .HasForeignKey<LoadingInstruction>(li => li.OutboundFlightId)
+                .HasForeignKey<LoadingInstruction>(li => li.OutboundFlightFlightNumber)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

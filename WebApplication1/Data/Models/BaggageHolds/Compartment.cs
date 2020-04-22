@@ -6,9 +6,9 @@
     using System.Linq;
     using System.Threading.Tasks;
 
-    public abstract class Compartment
+    public class Compartment
     {
-        protected Compartment()
+        public Compartment()
         {
             Suitcases = new List<Suitcase>();
         }
@@ -16,13 +16,13 @@
         [Key]
         public int  Id { get; set; }
 
-        public int PiecesToPutInHold { get; set; }
+        public int PiecesToPutInCompartment { get; set; }
 
-        public int CurrentPiecesInHold { get; set; }
+        public int CurrentPiecesInCompartment { get; set; }
 
-        public int MaxHoldWeightCapacity { get; set; }
+        public int MaxCompartmentWeight { get; set; }
 
-        public int TotalWeightInHold { get; set; }
+        public int TotalWeightInCompartment { get; set; }
 
         public int BaggageHoldId { get; set; }
 
@@ -32,16 +32,16 @@
 
         public bool IsHoldFull()
         {
-            return CurrentPiecesInHold == PiecesToPutInHold;
+            return CurrentPiecesInCompartment == PiecesToPutInCompartment;
         }
 
         public void AddSuitcase(Suitcase suitcase)
         {
-            if ((TotalWeightInHold + suitcase.Weight) < MaxHoldWeightCapacity)
+            if ((TotalWeightInCompartment + suitcase.Weight) < MaxCompartmentWeight)
             {
                 Suitcases.Add(suitcase);
-                TotalWeightInHold += suitcase.Weight;
-                CurrentPiecesInHold++;
+                TotalWeightInCompartment += suitcase.Weight;
+                CurrentPiecesInCompartment++;
             }
         }
 

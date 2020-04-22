@@ -11,7 +11,7 @@
     {
         public AircraftCabin()
         {
-            this.Zones = new List<AircraftCabinZone>();
+            Zones = new List<AircraftCabinZone>();
         }
 
         [Key]

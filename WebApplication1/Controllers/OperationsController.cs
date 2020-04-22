@@ -14,7 +14,8 @@
         private readonly IAircraftService _aircraftService;
         private readonly ILoadControlService _loadControlService;
 
-        public OperationsController(IFlightService flightService, IAircraftService aircraftService, ILoadControlService loadControlService)
+        public OperationsController(IFlightService flightService, IAircraftService aircraftService, 
+            ILoadControlService loadControlService)
         {
             _flightsService = flightService;
             _aircraftService = aircraftService;
@@ -29,55 +30,28 @@
         }
 
         [HttpGet]
-        public IActionResult DefaultLoadingInstruction()
+        public IActionResult LoadingInstruction()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> DetermineCorrectLoadingInstruction(string flightNumber)
-        {
-            var flight = await _flightsService.GetOutboundFlightByFlightNumber(flightNumber);
-            string type = _aircraftService.GetAircraftOfContainerizedType(flight);
-            string correctLoadingInstruction = _loadControlService.GetCorrectLoadingInstruction(type);
-
-            if (correctLoadingInstruction == null)
-            {
-                ModelState.AddModelError(string.Empty, "No valid loading instruction report found!");
-            }
-
-            return View(correctLoadingInstruction);
-        }
-
-        [HttpPost]
-        public IActionResult FileBulkLoadingInstruction(BulkLoadingInstructionInputModel loadingInstructionInputModel)
+        public IActionResult FileLoadingInstruction(BulkLoadingInstructionInputModel loadingInstructionInputModel)
         {
 
-            return this.Ok();
-        }
-
-        [HttpPost]
-        public IActionResult File788ContainerLoadingInstruction(_788LoadingInstructionInputModel loadingInstructionInputModel)
-        {
-            return this.Ok();
-        }
-
-        [HttpPost]
-        public IActionResult File763ContainerLoadingInstruction(_763LoadingInstructionInputModel loadingInstructionInputModel)
-        {
-            return this.Ok();
+            return Ok();
         }
 
         [HttpGet]
         public IActionResult PAXManifest()
         {
-            return this.View();
+            return View();
         }
 
         [HttpGet]
         public IActionResult DepartureControl()
         {
-            return this.View();
+            return View();
         }
 
         [HttpPost]
