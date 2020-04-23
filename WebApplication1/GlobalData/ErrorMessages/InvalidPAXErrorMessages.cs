@@ -23,5 +23,16 @@
         public const string PAXGenderIsInvalid = "Passenger gender is invalid!";
 
         public const string PAXPassportNumberIsRequired = "Passenger passport number is required!";
+
+        public const string SeatNumberRequired = "Seat number is required!";
+
+        public const string InvalidSeatNumber = "Seat number is invalid!";
+
+        public const string SuitcaseWeightInvalid = "Suitcase weight is invalid!";
+
+        public const string PaxFullNameInvalid = "Passenger full name is invalid!";
+
+        public const string PaxFullNameRequired = "Passenger full name is required!";
+
     }
 }

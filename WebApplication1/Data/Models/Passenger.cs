@@ -13,7 +13,7 @@
     {
         public Passenger()
         {
-            this.Suitcases = new List<Suitcase>();
+           Suitcases = new List<Suitcase>();
         }
 
         [Key]

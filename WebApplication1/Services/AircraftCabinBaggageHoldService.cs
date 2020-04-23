@@ -79,8 +79,8 @@
                     Cabin = cabin,
                     AircraftCabinId = cabin.Id,
                     ZoneType = zone.Key,
-                    ZoneCapacity = zone.Value 
-
+                    ZoneCapacity = zone.Value,
+                    
                 };
                 
                 cabin.Zones.Add(newZone);

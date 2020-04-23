@@ -32,6 +32,10 @@
 
             CreateMap<WeightFormInputModel, WeightForm>();
 
+            CreateMap<PAXInputModel, Passenger>();
+
+            CreateMap<PAXSuitcaseInputModel, Suitcase>();
+
         }
     }
 }

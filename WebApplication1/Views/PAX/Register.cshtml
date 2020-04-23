@@ -1,46 +1,60 @@
 ﻿@{ 
-    this.ViewData["Title"] = "Add passengers";
+    ViewData["Title"] = "Add passengers";
 }
 
+@using  BMS.Models
+@model PAXInputModel
 <div class="container-fluid">
     <div class="row">
         <div class="col">
+            <h3 class="text-center">Check-in</h3>
+            <br />
             <form asp-controller="PAX" asp-action="Register">
-                <div class="form-group">
-                    <label>Flight number:</label>
-                    <input type="text" class="form-control w-100" />
+                <div class="form-row">
+                    <div class="form-group col">
+                       <input asp-for="@Model.FlightNumber" class="form-control" placeholder="Flight number"/>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>First name:</label>
-                    <input type="text" class="form-control w-100" />
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.FirstName" class="form-control " placeholder="First name"/> 
+                        <span asp-validation-for="@Model.FirstName"></span>
+                    </div>
+                    <div class="form-group col">
+                        <input asp-for="@Model.LastName" class="form-control" placeholder="Last name" />
+                        <span asp-validation-for="@Model.LastName"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Last name:</label>
-                    <input type="text" class="form-control w-100"/>
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.Nationality" class="form-control w-100" placeholder="Nationality" />
+                        <span asp-validation-for="@Model.Nationality"></span>
+                    </div>
+                    <div class="form-group col">
+                        <input asp-for="@Model.Age" class="form-control" placeholder="Age" />
+                        <span asp-validation-for="@Model.Age"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Nationality:</label>
-                    <input type="text" class="form-control w-100" />
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.PassportNumber" class="form-control" placeholder="Passport number" />
+                        <span asp-validation-for="@Model.PassportNumber"></span>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Age</label>
-                    <input type="number" class="form-control w-100" />
-                </div>
-                <div class="form-group">
-                    <label>Passport number</label>
-                    <input type="text" class="form-control w-100"/>
-                </div>
-                <div class="form-group">
-                    <label>Gender</label>
-                    <input type="text" class="form-control w-100" />
-                </div>
-                <div class="form-group">
-                    <label>Seat number</label>
-                    <input type="text" class="form-control w-100" />
+                <div class="form-row">
+                    <div class="form-group col">
+                        <input asp-for="@Model.Gender" class="form-control" placeholder="Gender" />
+                        <span asp-validation-for="@Model.Gender"></span>
+                    </div>
+                    <div class="form-group col">
+                        <input asp-for="@Model.SeatNumber" class="form-control" placeholder="Seat number" />
+                        <span asp-validation-for="@Model.SeatNumber"></span>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-lg btn-primary w-100">Check-in</button>
             </form>
         </div>
+
         <div class="col align-content-end">
             <h3 class="text-center">Bag drop</h3>
             <form asp-controller="PAX" asp-action="Register">
