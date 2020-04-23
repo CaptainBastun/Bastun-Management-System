@@ -9,6 +9,7 @@
     using BMS.Data.Models.Messages;
     using BMS.Models;
     using BMS.Models.FlightInputModels;
+    using BMS.Models.ViewModels.Passengers;
 
     public class MappingProfile : Profile
     {
@@ -35,6 +36,11 @@
             CreateMap<PAXInputModel, Passenger>();
 
             CreateMap<PAXSuitcaseInputModel, Suitcase>();
+
+            CreateMap<Passenger, PassengerOffloadEditViewModel>()
+                .ForMember(dest => dest.Gender, src => src.MapFrom(g => g.Gender.ToString()))
+                .ForMember(dest => dest.Id, src => src.MapFrom(i => i.PaxId));
+                
 
         }
     }

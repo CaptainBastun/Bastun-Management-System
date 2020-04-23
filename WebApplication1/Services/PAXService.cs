@@ -4,14 +4,12 @@
     using BMS.Data.Models;
     using BMS.Data.Models.Cabins;
     using BMS.Data.Models.Enums;
+    using BMS.GlobalData.PAXConstants.PAXErrorMessages;
     using BMS.Models;
-    using BMS.Models.ViewModels;
     using BMS.Models.ViewModels.Passengers;
     using BMS.Services.Contracts;
+    using Microsoft.EntityFrameworkCore;
     using System;
-
-    using System.Collections.Generic;
-    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using WebApplication1.Data;
@@ -102,11 +100,6 @@
             }
         }
 
-        public string RenderViewToString(string viewName, object model)
-        {
-            return null;
-        }
-
         public PassengerViewModel GetAllPassengers(string flightNumber)
         {
 
@@ -134,6 +127,11 @@
                 .OrderBy(g => g.FirstName)
                 .ToList();
 
+            if (allPassengers.Count == 0)
+            {
+                throw new Exception("No passengers found for flight");
+            }
+
 
             var passengerViewModel = new PassengerViewModel()
             {
@@ -141,6 +139,39 @@
             };
 
             return passengerViewModel;
+        }
+
+        public async Task<PassengerOffloadEditViewModel> GetPassengerByFullName(string passengerFullName)
+        {
+            string[] passengerNames =
+                passengerFullName
+                .Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            var passengerByFullName =
+                await
+                _dbContext
+                .Passengers
+                .Where(x => x.FirstName == passengerNames[0] && x.LastName == passengerNames[1])
+                .FirstOrDefaultAsync();
+
+            if (passengerByFullName == null)
+            {
+                throw new Exception(PassengerErrors.PassengerNotFound);
+            }
+
+            var viewModel = _mapper.Map<PassengerOffloadEditViewModel>(passengerByFullName);
+
+            return viewModel;
+        }
+
+        public async Task<Passenger> GetPassengerById(int id)
+        {
+            if (id == 0 || id < 0)
+            {
+                throw new Exception("No such passenger found");
+            }
+
+            return await _dbContext.Passengers.FirstOrDefaultAsync(x => x.PaxId == id);
         }
     }
 }

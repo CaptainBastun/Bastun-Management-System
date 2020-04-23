@@ -12,12 +12,14 @@
     {
         private readonly string _rasterizePath = @"C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\wwwroot\js\rasterize.js";
 
-        public byte[] Convert(string basePath, string htmlCode, FormatType formatType = FormatType.A4,
-            OrientationType orientationType = OrientationType.Portrait)
+        public byte[] Convert(string basePath, string htmlCode)
         {
             var inputFileName = $"input_{Guid.NewGuid()}.html";
             var outputFileName = $"output_{Guid.NewGuid()}.pdf";
             File.WriteAllText($"{basePath}/{inputFileName}", htmlCode);
+
+            var formatType = FormatType.A4;
+            var orientationType = OrientationType.Portrait;
 
             var startInfo = new ProcessStartInfo("phantomjs.exe")
             {

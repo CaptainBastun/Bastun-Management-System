@@ -1,5 +1,6 @@
 ﻿namespace BMS.Services.Contracts
 {
+    using BMS.Data.Models;
     using BMS.Models;
     using BMS.Models.ViewModels.Passengers;
     using System;
@@ -12,5 +13,9 @@
 
 
         PassengerViewModel GetAllPassengers(string flightNumber);
+
+        Task<PassengerOffloadEditViewModel> GetPassengerByFullName(string passengerName);
+
+        Task<Passenger> GetPassengerById(int id);
     }
 }

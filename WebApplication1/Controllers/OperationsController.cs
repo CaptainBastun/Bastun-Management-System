@@ -47,8 +47,6 @@
             return View();
         }
 
-
-
         [HttpPost]
         public async Task<IActionResult> FileLoadingInstruction(BulkLoadingInstructionInputModel loadingInstructionInputModel)
         {
@@ -62,22 +60,31 @@
            return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
-        public IActionResult PAXManifest(string flightNumber)
+        [HttpGet]
+        public IActionResult PAXManifest()
         {
-            var model =  _passengerService.GetAllPassengers(flightNumber);
-            
-            return View(model);
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> GeneratePAXManifest(string flightNumber)
+        public async Task<IActionResult> GeneratePAXManifest(PassengerManifestInputModel inputModel)
         {
-            var pax = _passengerService.GetAllPassengers(flightNumber);
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid flight number");
+                return View("PAXManifest");
+            }
+
+            var pax = _passengerService.GetAllPassengers(inputModel.FlightNumber);
+
+            if (pax.Passengers.Count == 0)
+            {
+                ModelState.AddModelError(string.Empty, "No passengers found for flight number!");
+                return View("PAXManifest");
+            }
+             
             var htmlData = await _viewRenderService.RenderToStringAsync("~/Views/Operations/_PassengerManifestPartial.cshtml", pax);
-            var formatType = FormatType.A4;
-            var orientationType = OrientationType.Portrait;
-            var fileContents = _toPdfConverter.Convert(_hostingEnvironment.ContentRootPath, htmlData, formatType, orientationType);
+            var fileContents = _toPdfConverter.Convert(_hostingEnvironment.ContentRootPath, htmlData);
 
             return File(fileContents, "application/pdf");
         }

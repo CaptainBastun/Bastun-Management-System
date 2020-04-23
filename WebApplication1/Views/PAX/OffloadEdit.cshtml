@@ -1,8 +1,14 @@
-﻿
-@{
-    ViewData["Title"] = "OffloadEdit";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@{
+   ViewData["Title"] = "Offload or edit passenger";
+   Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using BMS.Models.ViewModels.Passengers
+@model PassengerFullNameInputModel
 
-<h1>Tuka shte ima offload i edit funkciq ;)</h1>
+<form asp-controller="PAX" asp-action="GetPassengerByFullNameData">
+    <div class="form-group">
+        <input asp-for="@Model.FullName" class="form-control w-100" placeholder="Enter passenger full name"/>
+        <button type="submit" class="btn btn-primary w-100">Get passenger</button>
+    </div>
+</form>
 

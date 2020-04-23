@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewData["Title"] = "Display passenger data";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using BMS.Models.ViewModels.Passengers
+@model PassengerOffloadEditViewModel
+
+<div class="container-fluid">
+   <form asp-controller="PAX" asp-action="OffloadEdit">
+       <div class="form-group">
+           <label>Current first name:@Model.FirstName</label>
+           <input asp-for="@Model.OffloadEditInputModel.FirstName" class="form-control" placeholder="New first name"/>
+       </div>
+       <div class="form-group">
+           <label>Current last name:@Model.LastName</label>
+           <input asp-for="@Model.OffloadEditInputModel.LastName" class="form-control" placeholder="New last name"/>
+       </div>
+       <div class="form-group">
+           <label>Current nationality:@Model.Nationality</label>
+           <input asp-for="@Model.OffloadEditInputModel.Nationality" class="form-control" placeholder="New nationality" />
+       </div>
+       <div class="form-group">
+           <label>Current gender:@Model.Gender</label>
+           <input asp-for="@Model.OffloadEditInputModel.Gender" class="form-control" placeholder="New gender"/>
+       </div>
+       <div class="form-group">
+           <label>Current age:@Model.Age</label>
+           <input asp-for="@Model.OffloadEditInputModel.Age" class="form-control" placeholder="New age"/>
+       </div>
+       <div class="form-group">
+           <label>Current passport number:@Model.PassportNumber</label>
+           <input asp-for="@Model.OffloadEditInputModel.PassportNumber" class="form-control" placeholder="New passport number" />
+       </div>
+       <button type="submit" class="btn btn-primary w-50">Edit</button>
+   </form>
+</div>
+<div class="col">
+    <a asp-controller="PAX" asp-action="Offload" asp-route-id="@Model.Id">Offload</a>
+</div>
+
