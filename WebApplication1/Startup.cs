@@ -22,8 +22,6 @@ namespace WebApplication1
     using BMS.Services.ParserUtility.UtilityContracts;
     using BMS.Services.ParserUtility;
     using BMS.Services.ParserUtility.ParserMovementUtility;
-    using Wkhtmltopdf.NetCore;
-
 
     public class Startup
     {
@@ -52,6 +50,8 @@ namespace WebApplication1
             services.AddTransient<ILoadMessageParser, LoadMessageParser>();
             services.AddTransient<IParserLoadDistributionMessageUtility, ParserLoadDistributionMessageUtility>();
             services.AddTransient<ICabinAndHoldUtilityService, CabinAndHoldUtilityService>();
+            services.AddTransient<IViewRenderService, ViewRenderService>();
+            services.AddTransient<IHtmlToPdfConverter, HtmlToPdfConverter>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());

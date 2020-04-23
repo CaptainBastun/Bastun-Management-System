@@ -1,4 +1,4 @@
-﻿namespace BMS.Models.ViewModels
+﻿namespace BMS.Models.ViewModels.Passengers
 {
     using System;
     using System.Collections.Generic;

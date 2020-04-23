@@ -7,7 +7,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
-    using Wkhtmltopdf.NetCore;
+    using Microsoft.AspNetCore.Hosting;
+    using BMS.Services.ConvertToPdf.Enums;
 
     [Authorize]
     public class OperationsController : Controller
@@ -16,17 +17,21 @@
         private readonly IAircraftService _aircraftService;
         private readonly ILoadControlService _loadControlService;
         private readonly IPAXService _passengerService;
-    
+        private readonly IViewRenderService _viewRenderService;
+        private readonly IHtmlToPdfConverter _toPdfConverter;
+        private readonly IHostingEnvironment _hostingEnvironment;
 
         public OperationsController(IFlightService flightService, IAircraftService aircraftService, 
-            ILoadControlService loadControlService,IPAXService passengerService
-           )
+            ILoadControlService loadControlService,IPAXService passengerService,IViewRenderService viewRenderService,
+            IHtmlToPdfConverter toPdfConverter, IHostingEnvironment hostingEnvironment)
         {
             _flightsService = flightService;
             _aircraftService = aircraftService;
             _loadControlService = loadControlService;
             _passengerService = passengerService;
-          
+            _viewRenderService = viewRenderService;
+            _toPdfConverter = toPdfConverter;
+            _hostingEnvironment = hostingEnvironment;
         }
 
 
@@ -42,6 +47,8 @@
             return View();
         }
 
+
+
         [HttpPost]
         public async Task<IActionResult> FileLoadingInstruction(BulkLoadingInstructionInputModel loadingInstructionInputModel)
         {
@@ -52,18 +59,28 @@
                 return Redirect("LoadingInstruction");
             }
 
-            return RedirectToAction("Index", "Home");
+           return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        public IActionResult PAXManifest()
+        [HttpPost]
+        public IActionResult PAXManifest(string flightNumber)
         {
-            var model =  _passengerService.GetAllPassengers("LH213");
+            var model =  _passengerService.GetAllPassengers(flightNumber);
             
             return View(model);
         }
 
-       
+        [HttpPost]
+        public async Task<IActionResult> GeneratePAXManifest(string flightNumber)
+        {
+            var pax = _passengerService.GetAllPassengers(flightNumber);
+            var htmlData = await _viewRenderService.RenderToStringAsync("~/Views/Operations/_PassengerManifestPartial.cshtml", pax);
+            var formatType = FormatType.A4;
+            var orientationType = OrientationType.Portrait;
+            var fileContents = _toPdfConverter.Convert(_hostingEnvironment.ContentRootPath, htmlData, formatType, orientationType);
+
+            return File(fileContents, "application/pdf");
+        }
 
         [HttpGet]
         public IActionResult DepartureControl()
@@ -74,8 +91,7 @@
         [HttpPost]
         public IActionResult Depart()
         {
-
-            return this.Ok();
+            return Ok();
         }
     }
 }

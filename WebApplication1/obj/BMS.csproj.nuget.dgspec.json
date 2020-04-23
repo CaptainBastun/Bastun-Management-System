@@ -49,6 +49,10 @@
               "target": "Package",
               "version": "[7.0.0, )"
             },
+            "Magick.NET-Q16-AnyCPU": {
+              "target": "Package",
+              "version": "[7.16.0, )"
+            },
             "MailKit": {
               "target": "Package",
               "version": "[2.6.0, )"
@@ -95,13 +99,9 @@
               "target": "Package",
               "version": "[2.0.2, )"
             },
-            "SendGrid": {
+            "PhantomJS": {
               "target": "Package",
-              "version": "[9.14.0, )"
-            },
-            "Wkhtmltopdf.NetCore": {
-              "target": "Package",
-              "version": "[3.0.0, )"
+              "version": "[2.1.1, )"
             },
             "bootstrap-select": {
               "target": "Package",
@@ -110,10 +110,6 @@
             "jQuery": {
               "target": "Package",
               "version": "[3.5.0.1, )"
-            },
-            "wkhtmltopdf.x64": {
-              "target": "Package",
-              "version": "[0.12.5, )"
             }
           },
           "imports": [

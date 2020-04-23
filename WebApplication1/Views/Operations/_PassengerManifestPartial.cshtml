@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Passenger manifest";
+}
+
+@using BMS.Models.ViewModels.Passengers;
+@model PassengerViewModel
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Nationality</th>
+            <th scope="col">Destination</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var passenger in Model.Passengers)
+        {
+            <tr>
+                <td>@passenger.FirstName</td>
+                <td>@passenger.LastName</td>
+                <td>@passenger.Gender</td>
+                <td>@passenger.Nationality</td>
+                <td>@passenger.Destination</td>
+            </tr>
+        }
+    </tbody>
+</table>

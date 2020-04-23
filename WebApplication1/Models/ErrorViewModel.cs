@@ -1,5 +1,4 @@
 using System;
-using Wkhtmltopdf.NetCore;
 namespace WebApplication1.Models
 {
     public class ErrorViewModel
