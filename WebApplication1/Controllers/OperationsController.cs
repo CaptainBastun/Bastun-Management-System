@@ -3,9 +3,11 @@
     using BMS.Models;
     using BMS.Models.LoadingInstructionInputModels;
     using BMS.Services.Contracts;
+    using BMS.Models.ViewModels.Passengers;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
+    using Wkhtmltopdf.NetCore;
 
     [Authorize]
     public class OperationsController : Controller
@@ -13,13 +15,18 @@
         private readonly IFlightService _flightsService;
         private readonly IAircraftService _aircraftService;
         private readonly ILoadControlService _loadControlService;
+        private readonly IPAXService _passengerService;
+        private readonly IGeneratePdf _pdfGenerator;
 
         public OperationsController(IFlightService flightService, IAircraftService aircraftService, 
-            ILoadControlService loadControlService)
+            ILoadControlService loadControlService,IPAXService passengerService,
+            IGeneratePdf pdfGenerator)
         {
             _flightsService = flightService;
             _aircraftService = aircraftService;
             _loadControlService = loadControlService;
+            _passengerService = passengerService;
+            _pdfGenerator = pdfGenerator;
         }
 
 
@@ -49,15 +56,20 @@
         }
 
         [HttpGet]
-        public IActionResult PAXManifest()
+        public async Task<IActionResult> PAXManifest()
         {
-            return View();
+            var model = await _passengerService.GetAllPassengers("LH213");
+            
+            return View(model);
         }
 
+       
+
         [HttpGet]
-        public IActionResult DepartureControl()
+        public async Task<IActionResult> DepartureControl()
         {
-            return View();
+            var model = await _passengerService.GetAllPassengers("LH213");
+            return await _pdfGenerator.GetPdf<PassengerViewModel>("Views/Operations/PAXManifest.cshtml", model);
         }
 
         [HttpPost]

@@ -1,8 +1,26 @@
 ﻿
 @{
-    ViewData["Title"] = "PAXManifest";
+    ViewData["Title"] = "Passenger manifest";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Tuka shte ima putnicheski manifest</h1>
+@using BMS.Models.ViewModels.Passengers;
+@model PassengerViewModel
+
+<table>
+    <thead>
+
+    </thead>
+    <tbody>
+       @foreach (var item in Model.Passengers)
+       {
+           <tr>
+               <td>@item.FirstName</td>
+               <td>@item.LastName</td>
+               <td>@item.Gender</td>
+               <td>@item.Nationality</td>
+           </tr>
+       }
+    </tbody>
+</table>
 

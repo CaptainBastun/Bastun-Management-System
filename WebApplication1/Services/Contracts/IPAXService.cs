@@ -1,6 +1,7 @@
 ﻿namespace BMS.Services.Contracts
 {
     using BMS.Models;
+    using BMS.Models.ViewModels.Passengers;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -10,6 +11,6 @@
         Task CreatePassenger(PAXInputModel inputModel);
 
 
-
+        Task<PassengerViewModel> GetAllPassengers(string flightNumber);
     }
 }

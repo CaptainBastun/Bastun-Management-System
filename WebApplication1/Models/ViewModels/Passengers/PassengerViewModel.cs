@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace BMS.Models.ViewModels.Passengers
+﻿namespace BMS.Models.ViewModels.Passengers
 {
+   
+    using System.Collections.Generic;
+  
     public class PassengerViewModel
     {
+     
+        public List<PassengerDetailsViewModel> Passengers { get; set; }
     }
 }

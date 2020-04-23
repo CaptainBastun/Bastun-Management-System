@@ -709,5 +709,10 @@ C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\Mi
 C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\NETCore.MailKit.dll
 C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
 C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\obj\Debug\netcoreapp3.1\Razor\Views\Aircraft\RegisterAircraft.cshtml.g.cs
-C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\obj\Debug\netcoreapp3.1\BMS.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\obj\Debug\netcoreapp3.1\BMS.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\IronPdf.Assets.Rendering.Universal.dll
+C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\IronPdf.dll
+C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\Microsoft.Win32.SystemEvents.dll
+C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\System.Drawing.Common.dll
+C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
+C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll

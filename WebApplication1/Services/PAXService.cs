@@ -3,10 +3,15 @@
     using AutoMapper;
     using BMS.Data.Models;
     using BMS.Data.Models.Cabins;
+    using BMS.Data.Models.Enums;
     using BMS.Models;
+    using BMS.Models.ViewModels;
+    using BMS.Models.ViewModels.Passengers;
     using BMS.Services.Contracts;
     using System;
+
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using WebApplication1.Data;
@@ -32,6 +37,9 @@
 
             int passengerRow = GetPassengerRow(inputModel.SeatNumber);
             string currentZoneType = DetermineZoneType(passengerRow);
+
+            string passengerWeight = DeterminePassengerWeight(passenger.Gender.ToString());
+            passenger.Weight = (PAXWeight)Enum.Parse(typeof(PAXWeight), passengerWeight);
 
             var zone =
                 outboundFlight
@@ -77,6 +85,59 @@
             return null;
         }
 
-       
+        private string DeterminePassengerWeight(string gender)
+        {
+            switch (gender)
+            {
+                case "M":
+                    return "88";
+                case "F":
+                    return "70";
+                case "C":
+                    return "35";
+                case "i":
+                    return "0";
+                default:
+                    return "0";
+            }
+        }
+
+        public string RenderViewToString(string viewName, object model)
+        {
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines
+            }
+        }
+
+        public async Task<PassengerViewModel> GetAllPassengers(string flightNumber)
+        {
+            var flight = await _flightService.GetOutboundFlightByFlightNumber(flightNumber);
+            var listOfDetailsViewModels = new List<PassengerDetailsViewModel>();
+
+            var zones = flight.Aircraft.Cabin.Zones.Select(x => x.Passengers);
+
+            foreach (var zone in zones)
+            {
+                foreach (var passenger in zone)
+                {
+                    var paxDetailsModel = new PassengerDetailsViewModel
+                    {
+                        FirstName = passenger.FirstName,
+                        Gender = passenger.Gender.ToString(),
+                        LastName = passenger.LastName,
+                        Nationality = passenger.Nationality
+                    };
+                    listOfDetailsViewModels.Add(paxDetailsModel);
+                }
+            }
+
+            var passengerViewModel = new PassengerViewModel()
+            {
+                Passengers = listOfDetailsViewModels
+            };
+
+            return passengerViewModel;
+        }
     }
 }

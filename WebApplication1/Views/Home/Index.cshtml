@@ -8,10 +8,6 @@
 @model DisplayDailyFlightViewModel
 @if (this.signInManager.IsSignedIn(User))
 {
-    @if (Model.Flights.Count == 0)
-    {
-        
-    }
     <div class="col">
         <h1 class="text-center">Daily flights</h1>
         <br />
