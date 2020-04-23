@@ -8,7 +8,7 @@
     {
         public const string FlightNumberValidationForInputForm = @"(?<inbound>[A-Z]{1,5}[0-9]{1,5})\/(?<outbound>[A-Z]{1,5}[0-9]{1,5})";
 
-        public const string GeneralFlightNumberValidation = @"[A-Z]{1,5}[0-9]{1,5}";
+        public const string GeneralFlightNumberValidation = @"^([A-Z]{2}|[A-Z]\d|\d[A-Z])[1-9](\d{1,3})?$";
 
         public const string AircraftRegistrationValidation = @"^[A-Z]{1,2}[A-Z]{1,10}$";
 

@@ -29,7 +29,7 @@
         [HttpPost]
         public async Task<IActionResult> Arrival(MovementInputModel movementInput)
         {
-            _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, "Test");
+          
             if (ModelState.IsValid)
             {
                 if (await _movementParser.ParseArrivalMovement(movementInput.Movement))

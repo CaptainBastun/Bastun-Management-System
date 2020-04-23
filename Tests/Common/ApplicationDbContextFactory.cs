@@ -1,10 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Tests.Common
+﻿namespace Tests.Common
 {
-    class ApplicationDbContextFactory
+    using Microsoft.EntityFrameworkCore;
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using WebApplication1.Data;
+
+    public class ApplicationDbContextFactory
     {
+       public static ApplicationDbContext InitializeContext()
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            return new ApplicationDbContext(options);
+        }
     }
 }

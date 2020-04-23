@@ -22,7 +22,7 @@
 
         public const string BookedPAXRequired = "Number of booked PAX is required!";
 
-        public const string FlightNumber = "Invalid flight numbers entered!";
+        public const string FlightNumber = "Invalid flight number";
 
         public const string FlightSTAIsRequired = "STA is required!";
 
@@ -57,5 +57,6 @@
         public const string EmailAddressRequired = "Ops email address is required!";
 
         public const string EmailAddressFormatInvalid = "Ops email is invalid!";
+
     }
 }
