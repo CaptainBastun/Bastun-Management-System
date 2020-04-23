@@ -76,7 +76,7 @@ namespace WebApplication1
             services.AddMvc();
             services.AddRazorPages();
             services.AddAutoMapper(typeof(Startup));
-            services.AddWkhtmltopdf(@"C:\Users\Mitko\source\repos\DMOME\BMS\WebApplication1\wkhtmltopdf\");
+         
        }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

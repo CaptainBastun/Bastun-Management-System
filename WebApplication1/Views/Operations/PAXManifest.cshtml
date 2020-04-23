@@ -7,20 +7,28 @@
 @using BMS.Models.ViewModels.Passengers;
 @model PassengerViewModel
 
-<table>
+<table class="table thead-dark table-dark">
     <thead>
-
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">Nationality</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Destination</th>
+        </tr>
     </thead>
     <tbody>
-       @foreach (var item in Model.Passengers)
-       {
-           <tr>
-               <td>@item.FirstName</td>
-               <td>@item.LastName</td>
-               <td>@item.Gender</td>
-               <td>@item.Nationality</td>
-           </tr>
-       }
+        @foreach (var passenger in Model.Passengers)
+        {
+            <tr>
+                <td>@passenger.FirstName</td>
+                <td>@passenger.LastName</td>
+                <td>@passenger.Gender</td>
+                <td>@passenger.Nationality</td>
+                <td>@passenger.Destination</td>
+            </tr>
+        }
     </tbody>
 </table>
+<button type="submit" class="btn btn-primary w-100" asp-controller="Flights" asp-action="RegisterAircraft">Create passenger manifest</button>
 

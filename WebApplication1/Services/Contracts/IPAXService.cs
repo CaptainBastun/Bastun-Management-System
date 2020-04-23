@@ -11,6 +11,6 @@
         Task CreatePassenger(PAXInputModel inputModel);
 
 
-        Task<PassengerViewModel> GetAllPassengers(string flightNumber);
+        PassengerViewModel GetAllPassengers(string flightNumber);
     }
 }

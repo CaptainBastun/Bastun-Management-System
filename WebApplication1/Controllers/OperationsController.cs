@@ -16,17 +16,17 @@
         private readonly IAircraftService _aircraftService;
         private readonly ILoadControlService _loadControlService;
         private readonly IPAXService _passengerService;
-        private readonly IGeneratePdf _pdfGenerator;
+    
 
         public OperationsController(IFlightService flightService, IAircraftService aircraftService, 
-            ILoadControlService loadControlService,IPAXService passengerService,
-            IGeneratePdf pdfGenerator)
+            ILoadControlService loadControlService,IPAXService passengerService
+           )
         {
             _flightsService = flightService;
             _aircraftService = aircraftService;
             _loadControlService = loadControlService;
             _passengerService = passengerService;
-            _pdfGenerator = pdfGenerator;
+          
         }
 
 
@@ -56,9 +56,9 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> PAXManifest()
+        public IActionResult PAXManifest()
         {
-            var model = await _passengerService.GetAllPassengers("LH213");
+            var model =  _passengerService.GetAllPassengers("LH213");
             
             return View(model);
         }
@@ -66,10 +66,9 @@
        
 
         [HttpGet]
-        public async Task<IActionResult> DepartureControl()
+        public IActionResult DepartureControl()
         {
-            var model = await _passengerService.GetAllPassengers("LH213");
-            return await _pdfGenerator.GetPdf<PassengerViewModel>("Views/Operations/PAXManifest.cshtml", model);
+            return View();
         }
 
         [HttpPost]

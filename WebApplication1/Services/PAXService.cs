@@ -104,37 +104,40 @@
 
         public string RenderViewToString(string viewName, object model)
         {
-            using (var sw = new StringWriter())
-            {
-                var viewResult = ViewEngines.Engines
-            }
+            return null;
         }
 
-        public async Task<PassengerViewModel> GetAllPassengers(string flightNumber)
+        public PassengerViewModel GetAllPassengers(string flightNumber)
         {
-            var flight = await _flightService.GetOutboundFlightByFlightNumber(flightNumber);
-            var listOfDetailsViewModels = new List<PassengerDetailsViewModel>();
 
-            var zones = flight.Aircraft.Cabin.Zones.Select(x => x.Passengers);
+            var allPassengers =
+                _dbContext
+                .OutboundFlights
+                .AsEnumerable()
+                .Where(x => x.FlightNumber == flightNumber)
+                .Select(z => z.Aircraft.Cabin)
+                .SelectMany(c => 
+                    c
+                    .Zones
+                    .SelectMany(p => 
+                        p
+                        .Passengers
+                        .Select(q => new PassengerDetailsViewModel { 
+                            FirstName = q.FirstName,
+                            LastName = q.LastName,
+                            Gender = q.Gender.ToString(),
+                            Nationality = q.Nationality,
+                            Destination = c.Aircraft.OutboundFlight.Destination 
+                     
+                }))
+                .ToList())
+                .OrderBy(g => g.FirstName)
+                .ToList();
 
-            foreach (var zone in zones)
-            {
-                foreach (var passenger in zone)
-                {
-                    var paxDetailsModel = new PassengerDetailsViewModel
-                    {
-                        FirstName = passenger.FirstName,
-                        Gender = passenger.Gender.ToString(),
-                        LastName = passenger.LastName,
-                        Nationality = passenger.Nationality
-                    };
-                    listOfDetailsViewModels.Add(paxDetailsModel);
-                }
-            }
 
             var passengerViewModel = new PassengerViewModel()
             {
-                Passengers = listOfDetailsViewModels
+                Passengers = allPassengers
             };
 
             return passengerViewModel;
