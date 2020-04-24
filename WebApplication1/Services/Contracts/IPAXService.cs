@@ -17,5 +17,11 @@
         Task<PassengerOffloadEditViewModel> GetPassengerByFullName(string passengerName);
 
         Task<Passenger> GetPassengerById(int id);
+
+        Task OffloadPassenger(int id);
+
+        Task EditPassengerData(PassengerOffloadEditInputModel editInputModel,int id);
+
+
     }
 }

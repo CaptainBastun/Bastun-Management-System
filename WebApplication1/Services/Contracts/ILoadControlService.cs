@@ -10,14 +10,6 @@
     {
         Task<int> CalculateTotalPaxWeight(string flightNumber);
 
-        Task<IEnumerable<Passenger>> GetPassengersByZoneAlpha(string flightNumber);
-
-        Task<IEnumerable<Passenger>> GetPassengersByZoneBravo(string flightNumber);
-
-        Task<IEnumerable<Passenger>> GetPassengersByZoneCharlie(string flightNumber);
-
-        Task<IEnumerable<Passenger>> GetPassengersByZoneDelta(string flightNumber);
-
 
         Task AddLoadingInstruction(OutboundFlight flight,BulkLoadingInstructionInputModel loadingInstructionInputModel);
     }

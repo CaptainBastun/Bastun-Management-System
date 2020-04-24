@@ -30,6 +30,10 @@
 
         public List<int> DetermineNumberOfHoldsToCreate(LoadingInstruction activeLoadingInstruction)
         {
+            if (activeLoadingInstruction == null)
+            {
+                throw  new NullReferenceException("No such loading instruction found");
+            }
 
             var amountOfHoldsToCreate = new List<int>();
 

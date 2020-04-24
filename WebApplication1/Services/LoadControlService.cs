@@ -44,6 +44,7 @@ namespace BMS.Services
                 "M",
                 "F",
                 "C",
+                "i"
             };
 
             for (int i = 0; i < genders.Length; i++)
@@ -66,92 +67,6 @@ namespace BMS.Services
             }
 
             return allPaxWeightsByGender.Sum();
-        }
-
-        public async Task<IEnumerable<Passenger>> GetPassengersByZoneAlpha(string flightNumber)
-        {
-            if (string.IsNullOrWhiteSpace(flightNumber) || string.IsNullOrEmpty(flightNumber))
-            {
-                throw  new ArgumentException("Input data is invalid");
-            }
-
-            var flight = await _flightsService.GetOutboundFlightByFlightNumber(flightNumber);
-
-            var allPassengers =
-                flight
-                    .Aircraft
-                    .Cabin
-                    .Zones
-                    .Where(z => z.ZoneType == "A")
-                    .SelectMany(p => p.Passengers)
-                    .ToList();
-
-            return allPassengers;
-        }
-
-        public async Task<IEnumerable<Passenger>> GetPassengersByZoneBravo(string flightNumber)
-        {
-            if (string.IsNullOrWhiteSpace(flightNumber) || string.IsNullOrEmpty(flightNumber))
-            {
-                throw  new ArgumentException("Input data is invalid");
-            }
-
-            var flight = await _flightsService.GetOutboundFlightByFlightNumber(flightNumber);
-
-            var allPassengersFromZoneBravo =
-                flight
-                    .Aircraft
-                    .Cabin
-                    .Zones
-                    .Where(z => z.ZoneType == "B")
-                    .SelectMany(p => p.Passengers)
-                    .ToList();
-
-            return allPassengersFromZoneBravo;
-
-        }
-
-        public async Task<IEnumerable<Passenger>> GetPassengersByZoneCharlie(string flightNumber)
-        {
-            if (string.IsNullOrWhiteSpace(flightNumber) || string.IsNullOrEmpty(flightNumber))
-            {
-                throw new ArgumentException("Input data is invalid");
-            }
-
-            var flight = await _flightsService.GetOutboundFlightByFlightNumber(flightNumber);
-
-            var allPassengers =
-                flight
-                    .Aircraft
-                    .Cabin
-                    .Zones
-                    .Where(z => z.ZoneType == "C")
-                    .SelectMany(p => p.Passengers)
-                    .ToList();
-
-            return allPassengers;
-
-        }
-
-        public async Task<IEnumerable<Passenger>> GetPassengersByZoneDelta(string flightNumber)
-        {
-            if (string.IsNullOrEmpty(flightNumber) || string.IsNullOrWhiteSpace(flightNumber))
-            {
-                throw  new ArgumentException("Input data is invalid");
-            }
-
-            var outboundFlight = await _flightsService.GetOutboundFlightByFlightNumber(flightNumber);
-
-            var allPassengersFromZoneDelta =
-                outboundFlight
-                    .Aircraft
-                    .Cabin
-                    .Zones
-                    .Where(x => x.ZoneType == "A")
-                    .SelectMany(p => p.Passengers)
-                    .ToList();
-
-            return allPassengersFromZoneDelta;
         }
 
         public async Task AddLoadingInstruction(OutboundFlight flight, BulkLoadingInstructionInputModel inputModel)

@@ -30,14 +30,22 @@
         {
             if (ModelState.IsValid)
             {
-                await _paxService.CreatePassenger(inputModel);
-                return Redirect("Register");
+                try
+                {
+                    await _paxService.CreatePassenger(inputModel);
+                    return View();
+                }
+                catch (NullReferenceException exception)
+                {
+                    ModelState.AddModelError(string.Empty, exception.Message);
+                    return View();
+                }
             }
 
             return RedirectToAction("Index", "Home");
         }
 
-        
+
         [HttpGet]
         public IActionResult OffloadEdit()
         {
@@ -53,17 +61,9 @@
                 return View("OffloadEdit");
             }
 
-            try
-            {
                 var offloadEditViewModel = await _paxService.GetPassengerByFullName(fullNameInputModel.FullName);
                 return View("OffloadEditPassenger", offloadEditViewModel);
-            }
-            catch (Exception exception)
-            {
-                ModelState.AddModelError(string.Empty, exception.Message);
-            }
-
-            return Ok();
+                
         }
 
         [HttpPost]
@@ -72,10 +72,25 @@
             return View(offloadEditViewModel);
         }
 
-        [HttpPost]
-        public IActionResult OffloadEditPassenger(PassengerOffloadEditInputModel passengerOffloadEditInput)
+        [HttpGet]
+        public IActionResult OffloadEditPassenger()
         {
-            return Ok();
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Offload(int id)
+        {
+            await _paxService.OffloadPassenger(id);
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditPassenger(PassengerOffloadEditViewModel offloadEdit, int id)
+        {
+            await _paxService.EditPassengerData(offloadEdit.OffloadEditInputModel,id);
+
+            return RedirectToAction("Index", "Home");
         }
       
     }

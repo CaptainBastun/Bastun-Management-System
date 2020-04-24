@@ -1,4 +1,6 @@
-﻿namespace BMS.Services
+﻿using System.Collections.Generic;
+
+namespace BMS.Services
 {
     using AutoMapper;
     using BMS.Data.Models;
@@ -10,6 +12,7 @@
     using BMS.Services.Contracts;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Reflection;
     using System.Linq;
     using System.Threading.Tasks;
     using WebApplication1.Data;
@@ -36,26 +39,64 @@
             int passengerRow = GetPassengerRow(inputModel.SeatNumber);
             string currentZoneType = DetermineZoneType(passengerRow);
 
+            if (currentZoneType == null)
+            {
+                throw  new NullReferenceException("No such seat found in aircraft");
+            }
+
             string passengerWeight = DeterminePassengerWeight(passenger.Gender.ToString());
             passenger.Weight = (PAXWeight)Enum.Parse(typeof(PAXWeight), passengerWeight);
 
-            var zone =
+            var test =
                 outboundFlight
-                .Aircraft
-                .Cabin
-                .Zones
-                .FirstOrDefault(x => !x.IsZoneFull() && x.ZoneType == currentZoneType);
+                    .Aircraft
+                    .Cabin
+                    .Zones
+                    .Select(x => x)
+                    .ToList();
 
-            zone.AddPassenger(passenger);
-     
+         
+
+            var currentZone =
+                outboundFlight
+                    .Aircraft
+                    .Cabin
+                    .Zones
+                    .FirstOrDefault(z => z.ZoneType == currentZoneType);
+
+             
+
+            if (currentZone == null)
+            {
+                throw  new NullReferenceException("No such seat found in aircraft");
+            }
+
+            if (currentZone.IsZoneFull())
+            {
+                currentZone =
+                    outboundFlight
+                        .Aircraft
+                        .Cabin
+                        .Zones
+                        .FirstOrDefault(z => !z.IsZoneFull());
+
+            }
+
+            if (currentZone == null)
+            {
+                throw  new NullReferenceException("Aircraft is already full!");
+            }
+
+            currentZone.AddPassenger(passenger);
+
             await _dbContext.Passengers.AddAsync(passenger);
             await _dbContext.SaveChangesAsync();
 
         }
 
-        private int GetPassengerRow(string passengerseat)
+        private int GetPassengerRow(string passengerSeat)
         {
-            return int.Parse(passengerseat.Remove(passengerseat.Length-1, 1));
+            return int.Parse(passengerSeat.Remove(passengerSeat.Length-1, 1));
         }
 
         private string DetermineZoneType(int passengerRow)
@@ -75,7 +116,7 @@
                 return "C";
             }
 
-            if (passengerRow > 30 || passengerRow <= 32)
+            if (passengerRow > 30 && passengerRow <= 32)
             {
                 return "D";
             }
@@ -172,6 +213,69 @@
             }
 
             return await _dbContext.Passengers.FirstOrDefaultAsync(x => x.PaxId == id);
+        }
+
+        public async Task OffloadPassenger(int id)
+        {
+            _dbContext.Passengers.Remove(await GetPassengerById(id));
+        }
+
+        public async Task EditPassengerData(PassengerOffloadEditInputModel passenger,int id)
+        {
+            var passengerToEdit = await GetPassengerById(id);
+
+            if (passenger == null || id <= 0)
+            {
+                throw  new ArgumentException("Invalid data entered");
+            }
+
+            var allValuesToSetNames =
+                passenger
+                    .GetType()
+                    .GetProperties();
+
+            var propertiesToChange = new Dictionary<string, object>();
+
+            foreach (var valueWillSet in allValuesToSetNames)
+            {
+                var value =
+                    passenger.GetType()
+                        .GetProperty(valueWillSet.Name)
+                        .GetValue(passenger, null);
+
+                if (value != null || (int)value != 0)
+                {
+                    propertiesToChange.Add(valueWillSet.Name, value);
+                }
+            }
+
+            var passengerProperties =
+                passengerToEdit
+                    .GetType()
+                    .GetProperties();
+            var passengerType = typeof(Passenger);
+            foreach (var property in passengerProperties)
+            {
+                string propertyName = property.Name;
+
+                if (propertiesToChange.ContainsKey(propertyName))
+                {
+                    var currentPassengerProperty = passengerType.GetProperty(propertyName);
+
+                    if (propertyName == "Gender")
+                    {
+                        var genderFromDictionary = propertiesToChange[propertyName];
+                        var parsedGender = (Gender)Enum.Parse(typeof(Gender), genderFromDictionary.ToString());
+                        currentPassengerProperty.SetValue(passengerToEdit,parsedGender);
+                        continue;
+                    }
+
+                    currentPassengerProperty.SetValue(passengerToEdit, propertiesToChange[propertyName]);
+                }
+            }
+
+            await _dbContext.SaveChangesAsync();
+
         }
     }
 }
