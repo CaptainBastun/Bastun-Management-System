@@ -47,24 +47,12 @@ namespace BMS.Services
             string passengerWeight = DeterminePassengerWeight(passenger.Gender.ToString());
             passenger.Weight = (PAXWeight)Enum.Parse(typeof(PAXWeight), passengerWeight);
 
-            var test =
-                outboundFlight
-                    .Aircraft
-                    .Cabin
-                    .Zones
-                    .Select(x => x)
-                    .ToList();
-
-         
-
             var currentZone =
                 outboundFlight
                     .Aircraft
                     .Cabin
                     .Zones
-                    .FirstOrDefault(z => z.ZoneType == currentZoneType);
-
-             
+                    .FirstOrDefault(z => z.ZoneType == currentZoneType); 
 
             if (currentZone == null)
             {
@@ -276,6 +264,43 @@ namespace BMS.Services
 
             await _dbContext.SaveChangesAsync();
 
+        }
+
+        public async Task CreateSuitcase(PAXSuitcaseInputModel suitcaseInputModel)
+        {
+            if (suitcaseInputModel == null)
+            {
+                throw new NullReferenceException("Suitcase data is invalid");
+            }
+
+            var flight = await _flightService.GetOutboundFlightByFlightNumber(suitcaseInputModel.FlightNumber);
+
+            if (flight == null)
+            {
+                throw new NullReferenceException("Invalid flight number entered");
+            }
+
+            var currentCompartment =
+                flight
+                .Aircraft
+                .BaggageHold
+                .Compartments
+                .FirstOrDefault(x => !x.IsHoldFull());
+
+            if (currentCompartment == null)
+            {
+                throw new NullReferenceException("Aircraft baggage hold is full!");
+            }
+
+            var suitcase = _mapper.Map<Suitcase>(suitcaseInputModel);
+            suitcase.Compartment = currentCompartment;
+            suitcase.CompartmentId = currentCompartment.Id;
+
+            currentCompartment.AddSuitcase(suitcase);
+
+            await _dbContext.Suitcases.AddAsync(suitcase);
+            await _dbContext.SaveChangesAsync();
+            
         }
     }
 }

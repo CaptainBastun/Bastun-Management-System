@@ -438,12 +438,6 @@ namespace BMS.Migrations
                     b.Property<int>("CompartmentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PassengerPaxId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PaxId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Weight")
                         .HasColumnType("int");
 
@@ -451,9 +445,7 @@ namespace BMS.Migrations
 
                     b.HasIndex("CompartmentId");
 
-                    b.HasIndex("PassengerPaxId");
-
-                    b.ToTable("Suitcase");
+                    b.ToTable("Suitcases");
                 });
 
             modelBuilder.Entity("BMS.Data.WeightForm", b =>
@@ -842,12 +834,6 @@ namespace BMS.Migrations
                         .WithMany("Suitcases")
                         .HasForeignKey("CompartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BMS.Data.Models.Passenger", "Passenger")
-                        .WithMany("Suitcases")
-                        .HasForeignKey("PassengerPaxId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

@@ -40,8 +40,8 @@
             CreateMap<Passenger, PassengerOffloadEditViewModel>()
                 .ForMember(dest => dest.Gender, src => src.MapFrom(g => g.Gender.ToString()))
                 .ForMember(dest => dest.Id, src => src.MapFrom(i => i.PaxId));
-                
 
+            CreateMap<PAXSuitcaseInputModel, Suitcase>();
         }
     }
 }

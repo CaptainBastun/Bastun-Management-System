@@ -25,7 +25,5 @@ namespace BMS.Data.Models.Contracts
 
         public PAXWeight Weight { get; set; }
 
-        public ICollection<Suitcase> Suitcases { get; set; }
-
     }
 }

@@ -23,12 +23,6 @@
         [Range(PAXSuitcaseWeightConstants.SuitcaseMinWeight, PAXSuitcaseWeightConstants.SuitcaseMaxWeight, ErrorMessage = InvalidErrorMessages.PAXSuitcaseWeightIsInvalid)]
         public int Weight { get; set; }
 
-        
-        [Required]
-        public int PaxId { get; set; }
-
-        [Required]
-        public virtual Passenger Passenger { get; set; }
 
         public int CompartmentId { get; set; }
 

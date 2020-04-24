@@ -22,6 +22,8 @@
 
         Task EditPassengerData(PassengerOffloadEditInputModel editInputModel,int id);
 
+        Task CreateSuitcase(PAXSuitcaseInputModel suitcaseInputModel);
+
 
     }
 }

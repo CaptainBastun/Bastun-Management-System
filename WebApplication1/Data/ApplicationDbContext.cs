@@ -39,7 +39,7 @@
 
         public DbSet<AircraftCabinZone> CabinZones { get; set; }
 
-
+        public DbSet<Suitcase> Suitcases { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

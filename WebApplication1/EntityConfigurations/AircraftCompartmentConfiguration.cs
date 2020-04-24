@@ -14,9 +14,7 @@
             builder.HasKey(x => x.Id);
 
             builder.HasMany(x => x.Suitcases)
-                .WithOne(x => x.Compartment)
-                .HasForeignKey(x => x.CompartmentId)
-                .OnDelete(DeleteBehavior.Restrict); 
+                .WithOne(x => x.Compartment);
         }
     }
 }

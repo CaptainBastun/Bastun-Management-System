@@ -11,10 +11,7 @@
 
     public class Passenger : IPassenger
     {
-        public Passenger()
-        {
-           Suitcases = new List<Suitcase>();
-        }
+       
 
         [Key]
         public int PaxId { get; set; }
@@ -40,8 +37,6 @@
 
         [Required(ErrorMessage = InvalidPAXErrorMessages.PAXPassportNumberIsRequired)]
         public string PassportNumber { get; set; }
-
-        public virtual ICollection<Suitcase> Suitcases { get; set; }
 
         public int AircraftCabinZoneId { get; set; }
         public virtual AircraftCabinZone Zone { get; set; }

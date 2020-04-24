@@ -30,19 +30,18 @@
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    await _paxService.CreatePassenger(inputModel);
-                    return View();
-                }
-                catch (NullReferenceException exception)
-                {
-                    ModelState.AddModelError(string.Empty, exception.Message);
-                    return View();
-                }
+                await _paxService.CreatePassenger(inputModel);
+                return View();
             }
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateSuitcase(PAXInputModel inputModel)
+        {
+                await _paxService.CreateSuitcase(inputModel.SuitcaseInputModel);
+                return View("Register");  
         }
 
 
