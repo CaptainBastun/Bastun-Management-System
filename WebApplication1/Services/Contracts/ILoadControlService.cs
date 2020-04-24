@@ -8,9 +8,16 @@
     using System.Threading.Tasks;
     public interface ILoadControlService
     {
-        void CalculatePAXWeightByGender();
+        Task<int> CalculateTotalPaxWeight(string flightNumber);
 
-        void GetPassengersByZoneDistribution();
+        Task<IEnumerable<Passenger>> GetPassengersByZoneAlpha(string flightNumber);
+
+        Task<IEnumerable<Passenger>> GetPassengersByZoneBravo(string flightNumber);
+
+        Task<IEnumerable<Passenger>> GetPassengersByZoneCharlie(string flightNumber);
+
+        Task<IEnumerable<Passenger>> GetPassengersByZoneDelta(string flightNumber);
+
 
         Task AddLoadingInstruction(OutboundFlight flight,BulkLoadingInstructionInputModel loadingInstructionInputModel);
     }

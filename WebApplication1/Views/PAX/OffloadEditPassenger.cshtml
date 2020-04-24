@@ -33,10 +33,9 @@
            <label>Current passport number:@Model.PassportNumber</label>
            <input asp-for="@Model.OffloadEditInputModel.PassportNumber" class="form-control" placeholder="New passport number" />
        </div>
-       <button type="submit" class="btn btn-primary w-50">Edit</button>
+       <div class="form-row">
+           <button type="submit" class="btn btn-primary btn-lg w-50">Edit</button>
+           <a class="btn btn-lg btn-primary w-50"asp-controller="PAX" asp-action="Offload" asp-route-id="@Model.Id">Offload</a>
+       </div>
    </form>
 </div>
-<div class="col">
-    <a asp-controller="PAX" asp-action="Offload" asp-route-id="@Model.Id">Offload</a>
-</div>
-
