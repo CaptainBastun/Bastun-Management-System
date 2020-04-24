@@ -37,8 +37,10 @@
                     _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
                     return RedirectToAction("InboundMessages", "Messages");
                 }
+                TempData["Error"] = "Arrival movement is invalid";
+                return View();
             }
-            return View();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpGet]
@@ -55,11 +57,14 @@
                 if (await _movementParser.ParseDepartureMovement(movementInput.Movement))
                 {
                     _emailSender.Send(movementInput.OpsEmail, movementInput.Movement, SendEmailConstants.MovementSubject);
-                    return RedirectToAction("OutboundMessages", "Messages");
+                    return RedirectToAction("Index", "Home");
                 }
+                TempData["Error"] = "Departure movement is invalid";
+                return View();
+               
             }
 
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

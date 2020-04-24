@@ -4,9 +4,9 @@
     ViewData["Title"] = "Add weight form";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    @if (TempData["Succes"] != null)
+    @if (TempData["Error"] != null)
     {
-        @await Component.InvokeAsync("SuccessAlert", new { message = TempData["Success"] });
+        @await Component.InvokeAsync("ErrorAlert", new { message = TempData["Error"] });
     }
     <form asp-controller="FuelAndWeight" asp-action="RegisterWeightForm">
         <div class="form-row">
@@ -36,9 +36,5 @@
             </div>
            </div>
         <button type="submit" class="btn btn-lg btn-primary w-100">Submit</button>
-        @if (TempData["Error"] != null) 
-        {
-            @await Component.InvokeAsync("ErrorAlert", new { message = TempData["Error"] });
-        }
     </form>
 

@@ -3,6 +3,10 @@
 }
 @using BMS.Models
 @model FuelFormInputModel
+@if (TempData["Error"] != null)
+{
+    @await Component.InvokeAsync("ErrorAlert",new { meesage = TempData["Error"] });
+}
 <form asp-controller="FuelAndWeight" asp-action="RegisterFuelForm">
     <div class="form-row">
         <div class="col form-group">

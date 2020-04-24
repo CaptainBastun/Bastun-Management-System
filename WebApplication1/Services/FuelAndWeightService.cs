@@ -33,6 +33,11 @@
 
             var outboundFlight = await _flightService.GetOutboundFlightByFlightNumber(fuelFormInputModel.FlightNumber);
 
+            if (outboundFlight == null)
+            {
+                return false;
+            }
+
             if (outboundFlight.Aircraft != null)
             {
                 var newFuelForm = _mapper.Map<FuelForm>(fuelFormInputModel);
@@ -61,6 +66,11 @@
             }
 
             var outboundFlight = await _flightService.GetOutboundFlightByFlightNumber(weightInputModel.FlightNumber);
+
+            if (outboundFlight == null)
+            {
+                return false;
+            }
 
             if (outboundFlight != null)
             {

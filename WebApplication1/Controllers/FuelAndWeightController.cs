@@ -21,7 +21,7 @@
         [HttpGet]
         public IActionResult FuelForm()
         {
-            return this.View();
+            return View();
         }
 
         [HttpPost]
@@ -31,8 +31,7 @@
             {
                 if (await _fuelAndWeightService.AddFuelForm(fuelInputModel))
                 {
-                    TempData["Success"] = SuccessMessages.FuelForm;
-                    return View("FuelForm");
+                    return RedirectToAction("Index", "Home");
                 }
 
                 TempData["Error"] = FuelAndWeightErrorMessages.FuelFormInvalid;
@@ -55,11 +54,11 @@
             {
                 if (await _fuelAndWeightService.AddWeightForm(weightInputModel))
                 {
-                    TempData["Success"] = SuccessMessages.WeightForm;
-                    return View();
+                    return RedirectToAction("Index", "Home");
                 }
 
                 TempData["Error"] = FuelAndWeightErrorMessages.WeightFormInvalid;
+                return View();
             }
 
             return View();

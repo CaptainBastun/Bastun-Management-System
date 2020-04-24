@@ -89,16 +89,5 @@
             return File(fileContents, "application/pdf");
         }
 
-        [HttpGet]
-        public IActionResult DepartureControl()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Depart()
-        {
-            return Ok();
-        }
     }
 }
