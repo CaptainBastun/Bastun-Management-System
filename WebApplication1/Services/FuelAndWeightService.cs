@@ -5,6 +5,7 @@
     using BMS.Data.Models;
     using BMS.Models;
     using BMS.Services.Contracts;
+    using BMS.GlobalData.Validation;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -23,8 +24,13 @@
             _flightService = flightService;
             _mapper = mapper;
         }
-        public async Task AddFuelForm(FuelFormInputModel fuelFormInputModel)
+        public async Task<bool> AddFuelForm(FuelFormInputModel fuelFormInputModel)
         {
+            if (FuelAndWeightValidation.IsFuelFormInputDataValid(fuelFormInputModel))
+            {
+                return false;
+            }
+
             var outboundFlight = await _flightService.GetOutboundFlightByFlightNumber(fuelFormInputModel.FlightNumber);
 
             if (outboundFlight.Aircraft != null)
@@ -41,11 +47,19 @@
                await _dbContext.FuelForms.AddAsync(newFuelForm);
                await _dbContext.SaveChangesAsync();
 
+                return true;
             }
+
+            return false;
         }
 
-        public async Task AddWeightForm(WeightFormInputModel weightInputModel)
+        public async Task<bool> AddWeightForm(WeightFormInputModel weightInputModel)
         {
+            if (FuelAndWeightValidation.IsWeightInputDataValid(weightInputModel))
+            {
+                return false;
+            }
+
             var outboundFlight = await _flightService.GetOutboundFlightByFlightNumber(weightInputModel.FlightNumber);
 
             if (outboundFlight != null)
@@ -59,7 +73,11 @@
 
                 await _dbContext.WeightForms.AddAsync(newWeightForm);
                 await _dbContext.SaveChangesAsync();
+
+                return true;
             }
+
+            return false;
         }
     }
 }

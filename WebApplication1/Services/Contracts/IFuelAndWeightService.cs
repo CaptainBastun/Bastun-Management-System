@@ -4,8 +4,8 @@
     using System.Threading.Tasks;
     public interface IFuelAndWeightService
     {
-        Task AddFuelForm(FuelFormInputModel fuelFormInputModel);
+        Task<bool> AddFuelForm(FuelFormInputModel fuelFormInputModel);
 
-        Task AddWeightForm(WeightFormInputModel weightInputModel);
+        Task<bool> AddWeightForm(WeightFormInputModel weightInputModel);
     }
 }

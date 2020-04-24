@@ -11,6 +11,7 @@
     {
         Task CreatePassenger(PAXInputModel inputModel);
 
+        Task<bool> CheckIfPassengerByFullNameExists(string fullName);
 
         PassengerViewModel GetAllPassengers(string flightNumber);
 

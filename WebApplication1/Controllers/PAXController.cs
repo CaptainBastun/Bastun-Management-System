@@ -41,7 +41,7 @@
         public async Task<IActionResult> CreateSuitcase(PAXInputModel inputModel)
         {
                 await _paxService.CreateSuitcase(inputModel.SuitcaseInputModel);
-                return View("Register");  
+                return RedirectToAction("Index", "Home");  
         }
 
 
@@ -54,14 +54,21 @@
         [HttpPost]
         public async Task<IActionResult> GetPassengerByFullNameData(PassengerFullNameInputModel fullNameInputModel)
         {
+            if (!await _paxService.CheckIfPassengerByFullNameExists(fullNameInputModel.FullName))
+            {
+                TempData["Error"] = "No such passenger exists";
+                return View("OffloadEdit");
+            }
+
+
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError(string.Empty, InvalidPAXErrorMessages.PaxFullNameInvalid);
                 return View("OffloadEdit");
             }
 
-                var offloadEditViewModel = await _paxService.GetPassengerByFullName(fullNameInputModel.FullName);
-                return View("OffloadEditPassenger", offloadEditViewModel);
+            var offloadEditViewModel = await _paxService.GetPassengerByFullName(fullNameInputModel.FullName);
+            return View("OffloadEditPassenger", offloadEditViewModel);
                 
         }
 

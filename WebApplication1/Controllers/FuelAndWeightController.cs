@@ -1,5 +1,6 @@
 ﻿namespace BMS.Controllers
 {
+    using BMS.GlobalData;
     using BMS.Models;
     using BMS.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
@@ -28,11 +29,17 @@
         {
             if (ModelState.IsValid)
             {
-                await _fuelAndWeightService.AddFuelForm(fuelInputModel);
-                return RedirectToAction("Index", "Home");
+                if (await _fuelAndWeightService.AddFuelForm(fuelInputModel))
+                {
+                    TempData["Success"] = SuccessMessages.FuelForm;
+                    return View("FuelForm");
+                }
+
+                TempData["Error"] = FuelAndWeightErrorMessages.FuelFormInvalid;
+                return View("FuelForm");
             }
 
-            return View();
+            return View("FuelForm");
         }
 
         [HttpGet]
@@ -46,8 +53,13 @@
         {
             if (ModelState.IsValid)
             {
-                await _fuelAndWeightService.AddWeightForm(weightInputModel);
-                return RedirectToAction("Index", "Home");
+                if (await _fuelAndWeightService.AddWeightForm(weightInputModel))
+                {
+                    TempData["Success"] = SuccessMessages.WeightForm;
+                    return View();
+                }
+
+                TempData["Error"] = FuelAndWeightErrorMessages.WeightFormInvalid;
             }
 
             return View();

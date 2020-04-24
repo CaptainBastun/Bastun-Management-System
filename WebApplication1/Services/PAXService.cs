@@ -170,6 +170,33 @@ namespace BMS.Services
             return passengerViewModel;
         }
 
+        public async Task<bool> CheckIfPassengerByFullNameExists(string fullName)
+        {
+           
+            string[] names =
+                fullName
+                .Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            if (names.Length <= 1)
+            {
+                return false;
+            }
+
+            var user = await
+                _dbContext
+                .Passengers
+                .Where(x => x.FirstName == names[0] && x.LastName == names[1])
+                .FirstOrDefaultAsync();
+
+            if (user != null)
+            {
+                return true;
+            }
+
+            return false;
+
+        }
+
         public async Task<PassengerOffloadEditViewModel> GetPassengerByFullName(string passengerFullName)
         {
             string[] passengerNames =
