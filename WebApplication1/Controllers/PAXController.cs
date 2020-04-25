@@ -63,7 +63,7 @@
 
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError(string.Empty, InvalidPAXErrorMessages.PaxFullNameInvalid);
+                TempData["Error"] = "Passenger full name is invalid";
                 return View("OffloadEdit");
             }
 

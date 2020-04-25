@@ -833,7 +833,7 @@ namespace BMS.Migrations
                     b.HasOne("BMS.Data.Models.BaggageHolds.AircraftBaggageHolds.Compartment", "Compartment")
                         .WithMany("Suitcases")
                         .HasForeignKey("CompartmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

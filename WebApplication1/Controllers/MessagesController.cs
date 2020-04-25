@@ -35,8 +35,10 @@
             {
                 if (await _loadMessageParser.ParseInboundLoadDistributionMessage(messageInputModel.Message))
                 {
-                    return RedirectToAction("InboundMessages");
+                    return View("InboundMessages");
                 }
+                TempData["Error"] = "Load distribution message is invalid";
+                return View("Inbound messages");
             } 
 
           return RedirectToAction("Index", "Home");

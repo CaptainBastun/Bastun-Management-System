@@ -3,6 +3,10 @@
 }
 @using BMS.Models;
 @model MessageInputModel 
+@if (TempData["Error"] != null)
+{
+    @await Component.InvokeAsync("ErrorAlert", new {message = TempData["Error"]})
+}
 <div class="col">
     <form id="ldmForm" asp-controller="Messages" asp-action="InboundLDM">
         <div class="form-group">
