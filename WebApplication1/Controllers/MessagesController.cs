@@ -38,7 +38,7 @@
                     return View("InboundMessages");
                 }
                 TempData["Error"] = "Load distribution message is invalid";
-                return View("Inbound messages");
+                return View("InboundMessages");
             } 
 
           return RedirectToAction("Index", "Home");
@@ -61,6 +61,8 @@
                 {
                     return RedirectToAction("OutboundMessages");
                 }
+                TempData["Error"] = "Load distribution message is invalid";
+                return View("OutboundMessages");
             }
 
             return RedirectToAction("Index", "Home");

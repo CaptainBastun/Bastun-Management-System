@@ -38,6 +38,11 @@
                messageContent
                .Split("\r\n", StringSplitOptions.None);
 
+            if (splitMessage.Length <= 1)
+            {
+                return false;
+            }
+
             if (_flightDataValidation.IsInboundLoadDistributionMessageFlightDataValid(splitMessage))
             {
                 var ldmFlightInfoMatch = _ldmFlightInfoRegex.Match(splitMessage[1]);
@@ -59,6 +64,12 @@
                         {
                             int[] loadSummaryInfo = _parserLoadDistributionMessageUtility.ParseLoadSummaryInfo(splitMessage[3]);
                             var inboundFlight = await _flightsService.GetInboundFlightByFlightNumber(inboundFlightNumber);
+
+                            if (inboundFlight == null)
+                            {
+                                return false;
+                            }
+
                             var loadDistributionMessageDTO = new LoadDistributionMessageDTO(crewConfiguration, paxFigures, totalWeightInCompartments, weightInEachCompartment, loadSummaryInfo);
                             _messageService.CreateInboundLDM(inboundFlight, loadDistributionMessageDTO);
                         }
@@ -76,6 +87,11 @@
            string[] splitMessage =
                    messageContent
                    .Split("\r\n", StringSplitOptions.None);
+
+            if (splitMessage.Length <= 1)
+            {
+                return false;
+            }
 
             if (_flightDataValidation.IsOutboundLoadDistributionMessageFlightDataValid(splitMessage))
             {
@@ -97,6 +113,11 @@
                         {
                             int[] loadSummaryInfo = _parserLoadDistributionMessageUtility.ParseLoadSummaryInfo(splitMessage[3]);
                             var outboundFlight = await _flightsService.GetOutboundFlightByFlightNumber(outboundFlightNumber);
+                            if (outboundFlight == null)
+                            {
+                                return false;
+                            }
+
                             var loadDistributionMessageDTO = new LoadDistributionMessageDTO(crewConfiguration, paxFigures, totalWeightInCompartments, weightInEachCompartment, loadSummaryInfo);
                            _messageService.CreateOutboundLDM(outboundFlight, loadDistributionMessageDTO);
 
