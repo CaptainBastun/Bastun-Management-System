@@ -23,7 +23,7 @@
             return messageType == "UCM";
         }
 
-        public static bool IsFlightInfoNotNullOrWhitespace(string flightNumber, string registration, string date, string station)
+        public static bool IsFlightInfoNotNullOrWhitespace(string flightNumber, string registration, string date)
         {
             if (string.IsNullOrWhiteSpace(flightNumber))
             {
@@ -40,11 +40,7 @@
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(station))
-            {
-                return false;
-            }
-
+   
             return true;
         }
     }

@@ -32,9 +32,9 @@
                     string flightNumber = match.Groups["flt"].Value;
                     string date = match.Groups["date"].Value;
                     string registration = match.Groups["reg"].Value;
-                    string station = match.Groups["origin"].Value;
+                
 
-                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration,date,station))
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration,date))
                     {
                         if (_flightsService.CheckIfFlightIsInbound(flightNumber))
                         {
@@ -66,7 +66,7 @@
                     string date = match.Groups["date"].Value;
                     string station = match.Groups["origin"].Value;
 
-                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration,date, station))
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration,date))
                     {
                         if (_flightsService.CheckIfFlightIsInbound(flightNumber))
                         {
@@ -123,7 +123,7 @@
                     string station = match.Groups["origin"].Value;
 
 
-                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration, date, station))
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration, date))
                     {
                         if (_flightsService.CheckIfFlightIsOutbound(flightNumber))
                         {
@@ -152,7 +152,7 @@
                     string registration = match.Groups["reg"].Value;
                     string station = match.Groups["origin"].Value;
 
-                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration, date, station))
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration, date))
                     {
                         if (_flightsService.CheckIfFlightIsOutbound(flightNumber))
                         {
@@ -170,9 +170,9 @@
 
         public bool IsOutboundLoadDistributionMessageFlightDataValid(string[] splitMessageContent)
         {
-            if (MessageValidation.IsCPMMessageTypeValid(splitMessageContent[0]))
+            if (MessageValidation.IsLoadDistributionMessageTypeValid(splitMessageContent[0]))
             {
-                var flightRegex = new Regex(FlightInfoConstants.IsFlightInfoValid);
+                var flightRegex = new Regex(FlightInfoConstants.IsLDMFlightInfoValid);
                 var match = flightRegex.Match(splitMessageContent[1]);
 
                 if (match.Success)
@@ -180,9 +180,9 @@
                     string flightNumber = match.Groups["flt"].Value;
                     string date = match.Groups["date"].Value;
                     string registration = match.Groups["reg"].Value;
-                    string station = match.Groups["origin"].Value;
+                 
 
-                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration, date, station))
+                    if (MessageValidation.IsFlightInfoNotNullOrWhitespace(flightNumber, registration, date))
                     {
                         if (_flightsService.CheckIfFlightIsOutbound(flightNumber))
                         {

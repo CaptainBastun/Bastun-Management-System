@@ -1,5 +1,6 @@
 ﻿namespace BMS.Controllers
 {
+    using BMS.GlobalData;
     using BMS.Models;
     using BMS.Services.Contracts;
     using Microsoft.AspNetCore.Authorization;
@@ -35,6 +36,7 @@
             {
                 if (await _loadMessageParser.ParseInboundLoadDistributionMessage(messageInputModel.Message))
                 {
+                    _emailSender.Send(messageInputModel.OpsEmail, messageInputModel.Message, SendEmailConstants.LoadDistributionMessageSubject);
                     return View("InboundMessages");
                 }
                 TempData["Error"] = "Load distribution message is invalid";
@@ -59,6 +61,7 @@
             {
                 if (await _loadMessageParser.ParseOutboundLoadDistributionMessage(messageInputModel.Message))
                 {
+                    _emailSender.Send(messageInputModel.OpsEmail, messageInputModel.Message, SendEmailConstants.LoadDistributionMessageSubject);    
                     return RedirectToAction("OutboundMessages");
                 }
                 TempData["Error"] = "Load distribution message is invalid";

@@ -10,5 +10,9 @@
     {
         [Required(ErrorMessage = InvalidErrorMessages.MessageIsRequired)]
         public string Message { get; set; }
+
+        [Required(ErrorMessage = "Ops email is required")]
+        [EmailAddress]
+        public string OpsEmail { get; set; }
     }
 }

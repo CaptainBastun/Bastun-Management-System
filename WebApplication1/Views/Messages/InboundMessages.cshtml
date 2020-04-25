@@ -14,6 +14,10 @@
             <textarea asp-for="@Model.Message" class="form-control w-100" rows="3"></textarea>
             <span asp-validation-for="@Model.Message"></span>
         </div>
+        <div class="form-group">
+            <input asp-for="@Model.OpsEmail" class="form-control" placeholder="Enter ops email to send movement to" />
+            <span asp-validation-for="@Model.OpsEmail"></span>
+        </div>
         <button type="submit" class="btn btn-primary w-100">Submit</button>
     </form>
 </div>
