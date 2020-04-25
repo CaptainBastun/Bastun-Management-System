@@ -16,7 +16,6 @@ BMS supports the following functionalities:
  
  Explanation for the way in which some of the project functionalities are supposed to be used:
  
- 
  -Movements:
  A movement is the landing and takeoff of an aircraft at an airport.
  Arrival movements dictate when a flight has landed at an airport and shows the touchdown and on-block times.
