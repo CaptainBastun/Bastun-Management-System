@@ -6,9 +6,9 @@
 
     public interface IAircraftCabinBaggageHoldService
     {
-        Task CreateCabinAndZones(OutboundFlight flight);
+        Task<bool> CreateCabinAndZones(OutboundFlight flight);
 
-        Task CreateBaggageHoldAndCompartments(OutboundFlight flight);
+        Task<bool> CreateBaggageHoldAndCompartments(OutboundFlight flight);
 
 
     }

@@ -34,9 +34,14 @@
             return aircraftType == "B763" || aircraftType == "B788";
         }
 
-        public async Task RegisterAircraft(AircraftInputModel aircraftInputModel)
+        public async Task<bool> RegisterAircraft(AircraftInputModel aircraftInputModel)
         {
             var outboundFlightToRegisterAircraftTo = await _flightsService.GetOutboundFlightByFlightNumber(aircraftInputModel.FlightNumber);
+
+            if (outboundFlightToRegisterAircraftTo == null)
+            {
+                return false;
+            }
 
             var aircraft = _mapper.Map<Aircraft>(aircraftInputModel);
             aircraft.OutboundFlight = outboundFlightToRegisterAircraftTo;
@@ -45,9 +50,21 @@
             await _dbContext.Aircraft.AddAsync(aircraft);
             await _dbContext.SaveChangesAsync();
 
-            await _cabinBaggageHoldService.CreateBaggageHoldAndCompartments(outboundFlightToRegisterAircraftTo);
-            await _cabinBaggageHoldService.CreateCabinAndZones(outboundFlightToRegisterAircraftTo);
-            
+            bool isHoldAndCompartmentsCreated = await _cabinBaggageHoldService.CreateBaggageHoldAndCompartments(outboundFlightToRegisterAircraftTo);
+
+            if (!isHoldAndCompartmentsCreated)
+            {
+                return false;
+            }
+
+           bool isCabinAndZonesCreated = await _cabinBaggageHoldService.CreateCabinAndZones(outboundFlightToRegisterAircraftTo);
+
+            if (!isCabinAndZonesCreated)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public Aircraft GetAicraftByRegistration(string registration)

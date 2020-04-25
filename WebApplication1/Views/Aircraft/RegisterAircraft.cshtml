@@ -5,6 +5,12 @@
 @using BMS.Models;
 @using BMS.Data.Models.Enums;
 @model AircraftInputModel
+
+@if (TempData["Error"] != null)
+{
+    @await Component.InvokeAsync("ErrorAlert", new { message = TempData["Error"] });
+}
+
 <div class="container-fluid">
     <div class="row">
         <div class="col">

@@ -28,6 +28,27 @@
             return zonesCapacity;
         }
 
+        public bool IsLoadingInstructionValid(LoadingInstruction instruction)
+        {
+            if (instruction == null)
+            {
+                return false;
+            }
+
+            if (instruction.HoldFivePieces < 0 || instruction.HoldFourPieces < 0  || instruction.HoldThreePieces < 0 || instruction.HoldTwoPieces < 0
+                 || instruction.HoldOnePieces < 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool IsSeatMapValid(string seatMap)
+        {
+            return seatMap == null;
+        }
+
         public List<int> DetermineNumberOfHoldsToCreate(LoadingInstruction activeLoadingInstruction)
         {
             if (activeLoadingInstruction == null)

@@ -21,7 +21,7 @@
         }
 
 
-        public async Task CreateCabinAndZones(OutboundFlight flight)
+        public async Task<bool> CreateCabinAndZones(OutboundFlight flight)
         {
             var aircraftCabin = new AircraftCabin
             {
@@ -32,11 +32,18 @@
             await _dbContext.AircraftCabins.AddAsync(aircraftCabin);
             await _dbContext.SaveChangesAsync();
 
+            if (!_utilityService.IsSeatMapValid(flight.SeatMap))
+            {
+                return false;
+            }
+
             var numberOfZonesToCreate = _utilityService.DetermineCabinZonesCapacity(flight.SeatMap);
             await CreateZone(numberOfZonesToCreate, flight.Aircraft.Cabin);
+
+            return true;
         }
 
-        public async Task CreateBaggageHoldAndCompartments(OutboundFlight outbound)
+        public async Task<bool> CreateBaggageHoldAndCompartments(OutboundFlight outbound)
         {
             var baggageHold = new AircraftBaggageHold();
             outbound.Aircraft.BaggageHold = baggageHold;
@@ -47,8 +54,15 @@
            await _dbContext.AircraftBaggageHolds.AddAsync(baggageHold);
            await _dbContext.SaveChangesAsync();
 
+            if (!_utilityService.IsLoadingInstructionValid(outbound.LoadingInstruction))
+            {
+                return false;
+            }
+
             var numberOfCompartmentsToCreate = _utilityService.DetermineNumberOfHoldsToCreate(outbound.LoadingInstruction);
             await CreateCompartments(numberOfCompartmentsToCreate, outbound.Aircraft.BaggageHold);
+
+            return true;
         }
 
         private async Task CreateCompartments(List<int> compartmentPieces, AircraftBaggageHold baggageHold)

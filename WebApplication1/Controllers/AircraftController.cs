@@ -28,8 +28,12 @@
         {
             if (ModelState.IsValid)
             {
-               await _aircraftService.RegisterAircraft(aircraftInputModel);
-               return View();
+                if (await _aircraftService.RegisterAircraft(aircraftInputModel))
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                TempData["Error"] = "Invalid data entered";
+                return View();
             }
 
             return RedirectToAction("Index", "Home");
