@@ -20,15 +20,15 @@ BMS supports the following functionalities:
  Arrival movements dictate when a flight has landed at an airport and shows the touchdown and on-block times.  
  Arrival movements are supposed to be entered in this format only:  
 MVT
-(Inbound flight number)/(Day of flight).(Aircraft registration).(Handling station)
-AA(TouchdownTime)/(Onblock)
-SI(Additional information here) - if there is no supplementary information, simply enter NIL
+(Inbound flight number)/(Day of flight).(Aircraft registration).(Handling station)  
+AA(TouchdownTime)/(Onblock)  
+SI(Additional information here) - if there is no supplementary information, simply enter NIL  
 
-Departure movements are supposed to be entered in this format only:
-MVT
-(Outbound flight number)/(Day of flight).(Aircraft registration).(Handling station)
-AD(Offblock time)/(Takeoff time) ETA 2345 (Arrival station)
-PAX(Total outbound passengers)
-SI(Additional information here) - if there is no additional information, simply enter NIL
+Departure movements are supposed to be entered in this format only:  
+MVT  
+(Outbound flight number)/(Day of flight).(Aircraft registration).(Handling station)  
+AD(Offblock time)/(Takeoff time) ETA 2345 (Arrival station)  
+PAX(Total outbound passengers)  
+SI(Additional information here) - if there is no additional information, simply enter NIL  
  
  
