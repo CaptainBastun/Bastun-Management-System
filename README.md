@@ -2,7 +2,7 @@ Cumula is a detached departure control system for providing ground-handling serv
 
 The aim of this project is to simplify the use of ground-handling software in the aviation industry since I found that the majority of such software has an old and difficult to use interface with most of the necessary functionality for dispatching an aircraft not being segregated into neat and easy to use modules, along with generally failing to take the human factor into account and multiple flights being delayed as a result of bad software. The aim of this project has been to solve this problem in a manner that takes the handling agent into account and makes their job much easier.
 
-BMS supports the following functionalities:
+Cumula supports the following functionalities:
  -Creation of inbound and outbound flights  
  -Creation and sending of arrival and departure movements to the prerequisite operating department  
  -Creating and sending messages for both inbound and outbound flights  
@@ -11,8 +11,7 @@ BMS supports the following functionalities:
  -The check-in of passengers for a particular flight and registering their suitcases  
  -Creating a Loading Instruction which shows how an aircraft is supposed to be loaded  
  -Creating a Loadsheet which shows the distribution of paying loads in the aircraft  
- -Creation of a passenger manifest for the outbound leg of a flight  
- -A system of departure control system with built in support for delay codes and reasons behind the potential delay of a flight  
+ -Creation of a passenger manifest for the outbound leg of a flight   
  
  Explanation for the way in which some of the project functionalities are supposed to be used:  
  -Movements:  
