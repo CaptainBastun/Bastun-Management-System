@@ -1,4 +1,4 @@
-BMS is a detached departure control system for providing ground-handling services in the aviation industry. 
+Cumula is a detached departure control system for providing ground-handling services in the aviation industry. 
 
 The aim of this project is to simplify the use of ground-handling software in the aviation industry since I found that the majority of such software has an old and difficult to use interface with most of the necessary functionality for dispatching an aircraft not being segregated into neat and easy to use modules, along with generally failing to take the human factor into account and multiple flights being delayed as a result of bad software. The aim of this project has been to solve this problem in a manner that takes the handling agent into account and makes their job much easier.
 
